@@ -1,6 +1,6 @@
 export class Vector {
-  private x: number;
-  private y: number;
+  private _x: number;
+  private _y: number;
 
   constructor();
 
@@ -10,50 +10,50 @@ export class Vector {
 
   constructor(a?: number | Vector, b?: number) {
     if (a === undefined && b === undefined) {
-      this.x = this.y = 0;
+      this._x = this._y = 0;
       return;
     }
 
     if (a instanceof Vector) {
-      this.x = a.x ?? 0;
-      this.y = a.y ?? 0;
+      this._x = a._x ?? 0;
+      this._y = a._y ?? 0;
     } else {
-      this.x = a ?? 0;
-      this.y = b ?? 0;
+      this._x = a ?? 0;
+      this._y = b ?? 0;
     }
   }
 
-  public static from(coord: VectorData): Vector {
-    return new Vector(coord.x, coord.y);
+  public get x(): number {
+    return this._x;
   }
 
-  public getX(): number {
-    return this.x;
+  public get y(): number {
+    return this._y;
   }
 
-  public getY(): number {
-    return this.y;
+  public static from(data: VectorData): Vector {
+    return new Vector(data.x, data.y);
   }
 
   public setX(x: number): void {
-    this.x = x;
+    this._x = x;
   }
 
   public setY(y: number): void {
-    this.y = y;
+    this._y = y;
   }
 
   public set(x: number, y: number): void {
-    this.x = x;
-    this.y = y;
+    this._x = x;
+    this._y = y;
   }
 
   public add(vector: Vector): Vector {
-    return new Vector(this.x + vector.getX(), this.y + vector.getY());
+    return new Vector(this.x + vector.x, this.y + vector.y);
   }
 
   public subtract(vector: Vector): Vector {
-    return new Vector(this.x - vector.getX(), this.y - vector.getY());
+    return new Vector(this.x - vector.x, this.y - vector.y);
   }
 
   public multiply(scalar: number): Vector {
@@ -61,15 +61,19 @@ export class Vector {
   }
 
   public divide(scalar: number): Vector {
+    if (scalar === 0) {
+      throw new Error("ゼロ除算は許可されていません");
+    }
+
     return new Vector(this.x / scalar, this.y / scalar);
   }
 
   public dot(vector: Vector): number {
-    return this.x * vector.getX() + this.y * vector.getY();
+    return this.x * vector.x + this.y * vector.y;
   }
 
   public cross(vector: Vector): number {
-    return this.x * vector.getY() - this.y * vector.getX();
+    return this.x * vector.y - this.y * vector.x;
   }
 
   public lengthSquared(): number {
@@ -81,8 +85,12 @@ export class Vector {
   }
 
   public normalize(): Vector {
-    const mag = this.length();
-    return new Vector(this.x / mag, this.y / mag);
+    const length = this.length();
+    if (length === 0) {
+      return new Vector(0, 0);
+    }
+
+    return new Vector(this.x / length, this.y / length);
   }
 
   public clone(): Vector {
@@ -90,7 +98,7 @@ export class Vector {
   }
 
   public equals(vector: Vector): boolean {
-    return this.x === vector.getX() && this.y === vector.getY();
+    return this.x === vector.x && this.y === vector.y;
   }
 
   public toString(): string {
@@ -98,8 +106,8 @@ export class Vector {
   }
 
   public distance(vector: Vector): number {
-    const dx = this.x - vector.getX();
-    const dy = this.y - vector.getY();
+    const dx = this.x - vector.x;
+    const dy = this.y - vector.y;
     return Math.sqrt(dx * dx + dy * dy);
   }
 
@@ -118,8 +126,8 @@ export class Vector {
 
   public lerp(vector: Vector, t: number): Vector {
     return new Vector(
-      this.x + t * (vector.getX() - this.x),
-      this.y + t * (vector.getY() - this.y),
+      this.x + t * (vector.x - this.x),
+      this.y + t * (vector.y - this.y),
     );
   }
 

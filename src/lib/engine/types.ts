@@ -5,21 +5,17 @@ type VectorData = {
 
 type EntityOption = {
   id: string;
-  posX: number;
-  posY: number;
-  size: number;
+  position: VectorData;
+  velocity: VectorData;
+  diameter: number;
   mass: number;
-  stiff: number;
-  speedX?: number;
-  speedY?: number;
-  rotate?: number;
-  rotateSpeed?: number;
-  targets?: Target[];
-  parent: string;
+  stiffness: number;
+  targets: Target[];
+  parentId: string;
 }
 
 type Target = {
-  readonly name: string;
+  readonly entityId: string;
   readonly distance: number;
-  readonly stiff: number;
+  readonly stiffness: number;
 }
