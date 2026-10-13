@@ -19,3 +19,5 @@ type Target = {
   readonly distance: number;
   readonly stiffness: number;
 }
+
+export type { VectorData, EntityOption, Target };

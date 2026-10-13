@@ -1,3 +1,5 @@
+import type { VectorData } from "../types";
+
 export class Vector {
   private _x: number;
   private _y: number;
