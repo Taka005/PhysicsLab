@@ -1,5 +1,5 @@
 import { Vector } from "../utils/Vector";
-import type { EntityOption, Target } from "../types";
+import type { EntityOption } from "../types";
 import { Connection } from "../utils/Connection";
 
 export class Entity {
@@ -24,7 +24,7 @@ export class Entity {
     this.connection = new Connection(option.targets);
     this.parentId = option.parentId;
   }
-  
+
   public get radius(): number {
     return this.diameter / 2;
   }
@@ -33,6 +33,10 @@ export class Entity {
     if(this.mass === 0) return 0;
 
     return 1/this.mass;
+  }
+
+  public get isStop(): boolean {
+    return this.position.equals(this.prePosition);
   }
 
   public savePosition(): void{

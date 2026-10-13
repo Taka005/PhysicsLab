@@ -1,8 +1,8 @@
 import type { VectorData } from "../types";
 
 export class Vector {
-  private _x: number;
-  private _y: number;
+  public x: number;
+  public y: number;
 
   constructor();
 
@@ -12,50 +12,46 @@ export class Vector {
 
   constructor(a?: number | Vector, b?: number) {
     if (a === undefined && b === undefined) {
-      this._x = this._y = 0;
+      this.x = this.y = 0;
       return;
     }
 
     if (a instanceof Vector) {
-      this._x = a._x ?? 0;
-      this._y = a._y ?? 0;
+      this.x = a.x ?? 0;
+      this.y = a.y ?? 0;
     } else {
-      this._x = a ?? 0;
-      this._y = b ?? 0;
+      this.x = a ?? 0;
+      this.y = b ?? 0;
     }
-  }
-
-  public get x(): number {
-    return this._x;
-  }
-
-  public get y(): number {
-    return this._y;
   }
 
   public static from(data: VectorData): Vector {
     return new Vector(data.x, data.y);
   }
 
-  public setX(x: number): void {
-    this._x = x;
-  }
-
-  public setY(y: number): void {
-    this._y = y;
-  }
-
   public set(x: number, y: number): void {
-    this._x = x;
-    this._y = y;
+    this.x = x;
+    this.y = y;
   }
 
-  public add(vector: Vector): Vector {
-    return new Vector(this.x + vector.x, this.y + vector.y);
+  public add(vector: Vector): Vector;
+  public add(scalar: number): Vector;
+  public add(value: Vector | number): Vector {
+    if(value instanceof Vector){
+      return new Vector(this.x + value.x, this.y + value.y);
+    }
+
+    return new Vector(this.x + value, this.y + value);
   }
 
-  public subtract(vector: Vector): Vector {
-    return new Vector(this.x - vector.x, this.y - vector.y);
+  public subtract(vector: Vector): Vector;
+  public subtract(scalar: number): Vector;
+  public subtract(value: Vector | number): Vector {
+    if(value instanceof Vector){
+      return new Vector(this.x - value.x, this.y - value.y);
+    }
+
+    return new Vector(this.x - value, this.y - value);
   }
 
   public multiply(scalar: number): Vector {
@@ -101,6 +97,10 @@ export class Vector {
 
   public equals(vector: Vector): boolean {
     return this.x === vector.x && this.y === vector.y;
+  }
+
+  public nearlyEquals(vector: Vector, epsilon: number = 1e-10) {
+    return Math.abs(this.x - vector.x) < epsilon && Math.abs(this.y - vector.y) < epsilon;
   }
 
   public toString(): string {
