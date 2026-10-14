@@ -1,5 +1,6 @@
 import { EngineBaseOption, Target } from "./types";
 import { Entity } from "./objects/Entity";
+import { BaseGround } from "./objects/BaseGround";
 
 export class EngineBase{
   public pps: number;
@@ -43,6 +44,25 @@ export class EngineBase{
 
     target.position.x -= correction.x*target.invMass;
     target.position.y -= correction.y*target.invMass;
+  }
+
+  protected solveGroundPosition(entity: Entity,ground: BaseGround): void{
+    if(entity.invMass == 0) return;
+
+    const cross = ground.solvePosition(entity.position);
+
+    const diff = cross.subtract(entity.position);
+
+    const distanceSquared = diff.lengthSquared();
+    if(distanceSquared > (entity.radius + ground.width/2) * (entity.radius + ground.width/2)) return;
+
+    const distance = Math.sqrt(distanceSquared);
+
+    const move = (distance - (entity.radius + ground.width/2))/(distance*entity.invMass + this.CORRECTION_NUMBER) * entity.stiffness;
+    const correction = diff.multiply(move);
+
+    entity.position.x += correction.x;
+    entity.position.y += correction.y;
   }
 
   protected solveConnection(source: Entity,target: Entity,targetData: Target): void{

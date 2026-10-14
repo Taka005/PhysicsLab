@@ -3,7 +3,7 @@ export type VectorData = {
   y: number;
 }
 
-export type ObjectType = "circle";
+export type ObjectType = "circle" | "line";
 
 export type EntityOption = {
   id: string;
@@ -33,6 +33,12 @@ export interface BaseGroundOption extends BaseOption {
 export interface CircleOption extends BaseBodyOption {
   type: "circle";
   diameter: number;
+}
+
+export interface LineOption extends BaseGroundOption {
+  type: "line";
+  start: VectorData;
+  end: VectorData;
 }
 
 export interface BaseCreateOption {
