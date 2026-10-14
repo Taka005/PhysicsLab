@@ -13,7 +13,6 @@ export type EntityOption = {
   mass: number;
   stiffness: number;
   connections: Target[];
-  parentId: string;
 }
 
 export interface BaseOption{
@@ -53,10 +52,17 @@ export interface CircleCreateOption extends BaseCreateOption {
   diameter: number;
 }
 
-export type EngineBaseOption = {
+export interface EngineBaseOption {
   pps: number;
   gravity: number;
   friction: number;
+}
+
+export interface EngineOption extends EngineBaseOption {
+  playBackSpeed?: number;
+  trackingInterval?: number;
+  trackingLimit?: number;
+  worldSize?: number;
 }
 
 export type Target = {

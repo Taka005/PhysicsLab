@@ -19,14 +19,6 @@ export abstract class BaseBody{
     return this.entities.length;
   }
 
-  public setId(id: string): void {
-    this.id = id;
-
-    this.entities.forEach(entity => {
-      entity.parentId = id;
-    });
-  }
-
   public isStop(): boolean {
     return this.entities.every(entity => entity.isStop);
   }
@@ -89,7 +81,6 @@ export abstract class BaseBody{
   protected addEntity(entityOption: EntityOption): Entity {
     const entity = new Entity(entityOption);
 
-    entity.parentId = this.id;
     this.entities.push(entity);
 
     return entity;

@@ -11,7 +11,6 @@ export class Entity {
   public mass: number;
   public stiffness: number;
   public connection: Connection;
-  public parentId: string;
 
   constructor(option: EntityOption) {
     this.id = option.id;
@@ -22,7 +21,6 @@ export class Entity {
     this.mass = option.mass;
     this.stiffness = option.stiffness;
     this.connection = new Connection(option.connections);
-    this.parentId = option.parentId;
   }
 
   public get radius(): number {
@@ -51,8 +49,7 @@ export class Entity {
       diameter: this.diameter,
       mass: this.mass,
       stiffness: this.stiffness,
-      connections: this.connection.targets,
-      parentId: this.parentId
+      connections: this.connection.targets
     };
   }
 }

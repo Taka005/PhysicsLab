@@ -45,8 +45,7 @@ export class Circle extends BaseBody{
       diameter: option.diameter,
       mass: option.mass,
       stiffness: option.stiffness,
-      connections: [],
-      parentId: option.id
+      connections: []
     };
 
     return new Circle({
