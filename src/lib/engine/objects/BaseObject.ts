@@ -38,8 +38,8 @@ export abstract class BaseObject{
     return new Vector(averageX, averageY);
   }
 
-  public set position(position: Vector) {
-    const diff = position.subtract(this.position);
+  public set position(value: Vector) {
+    const diff = value.subtract(this.position);
 
     this.entities.forEach(entity => {
       entity.position.x += diff.x;
@@ -58,9 +58,9 @@ export abstract class BaseObject{
     return new Vector(averageX, averageY);
   }
 
-  public set velocity(velocity: Vector) {
+  public set velocity(value: Vector) {
     this.entities.forEach(entity => {
-      entity.velocity = velocity;
+      entity.velocity = value;
     });
   }
 
@@ -68,9 +68,9 @@ export abstract class BaseObject{
     return this.entities.reduce((sum, entity) => sum + entity.mass, 0);
   }
 
-  public set mass(mass: number) {
+  public set mass(value: number) {
     this.entities.forEach(entity => {
-      entity.mass = mass / this.count;
+      entity.mass = value / this.count;
     });
   }
 
@@ -78,9 +78,9 @@ export abstract class BaseObject{
     return this.entities.reduce((sum, entity) => sum + entity.stiffness, 0) / this.count;
   }
 
-  public set stiffness(stiffness: number) {
+  public set stiffness(value: number) {
     this.entities.forEach(entity => {
-      entity.stiffness = stiffness;
+      entity.stiffness = value;
     });
   }
 

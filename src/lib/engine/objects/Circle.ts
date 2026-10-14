@@ -8,6 +8,10 @@ export class Circle extends BaseObject{
     super(option);
 
     this.diameter = option.diameter;
+
+    if(this.entities.length === 0){
+
+    }
   }
 
   public override toJSON(): CircleOption {
