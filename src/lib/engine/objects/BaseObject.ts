@@ -1,14 +1,14 @@
 import { Entity } from "./Entity";
 import { Vector } from "../utils/Vector";
-import type { EntityOption } from "../types";
+import type { EntityOption, BaseObjectOption } from "../types";
 
-export abstract class BaseObject {
+export abstract class BaseObject{
   public id: string;
   public readonly entities: Entity[] = [];
 
-  constructor(id: string, entities?: EntityOption[]) {
-    this.id = id;
-    this.addAllEntities(entities ?? []);
+  constructor(option: BaseObjectOption) {
+    this.id = option.id;
+    this.addAllEntities(option.entities ?? []);
   }
 
   public get count(): number {
@@ -60,7 +60,7 @@ export abstract class BaseObject {
     });
   }
 
-  public abstract toJSON(): unknown;
-  public abstract Clone(): BaseObject;
+  public abstract toJSON(): BaseObjectOption;
+  public abstract Clone(): this;
   public abstract Equals(target: BaseObject): boolean;
 }

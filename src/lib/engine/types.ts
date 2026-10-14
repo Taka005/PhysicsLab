@@ -1,9 +1,17 @@
-type VectorData = {
+export type VectorData = {
   x: number;
   y: number;
 }
 
-type EntityOption = {
+export type ObjectType = "circle";
+
+export interface BaseObjectOption {
+  type: ObjectType;
+  id: string;
+  entities: EntityOption[];
+}
+
+export type EntityOption = {
   id: string;
   position: VectorData;
   velocity: VectorData;
@@ -14,16 +22,14 @@ type EntityOption = {
   parentId: string;
 }
 
-type EngineBaseOption = {
+export type EngineBaseOption = {
   pps: number;
   gravity: number;
   friction: number;
 }
 
-type Target = {
+export type Target = {
   readonly entityId: string;
   readonly distance: number;
   readonly stiffness: number;
 }
-
-export type { VectorData, EntityOption, Target, EngineBaseOption };
