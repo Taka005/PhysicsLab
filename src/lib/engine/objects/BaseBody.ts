@@ -1,14 +1,14 @@
 import { Entity } from "./Entity";
 import { Vector } from "../utils/Vector";
-import type { EntityOption, BaseObjectOption } from "../types";
+import type { EntityOption, BaseBodyOption } from "../types";
 import { createId } from "../utils/createId";
 
-export abstract class BaseObject{
+export abstract class BaseBody{
   public id: string;
   public readonly trackingId: string;
   public readonly entities: Entity[] = [];
 
-  constructor(option: BaseObjectOption) {
+  constructor(option: BaseBodyOption) {
     this.id = option.id;
     this.trackingId = option.trackingId ?? createId(10);
 
@@ -101,7 +101,7 @@ export abstract class BaseObject{
     });
   }
 
-  public abstract toJSON(): BaseObjectOption;
-  public abstract clone(): BaseObject;
-  public abstract equals(target: BaseObject): boolean;
+  public abstract toJSON(): BaseBodyOption;
+  public abstract clone(): BaseBody;
+  public abstract equals(target: BaseBody): boolean;
 }

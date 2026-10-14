@@ -21,7 +21,7 @@ export class Entity {
     this.diameter = option.diameter;
     this.mass = option.mass;
     this.stiffness = option.stiffness;
-    this.connection = new Connection(option.targets);
+    this.connection = new Connection(option.connections);
     this.parentId = option.parentId;
   }
 
@@ -51,7 +51,7 @@ export class Entity {
       diameter: this.diameter,
       mass: this.mass,
       stiffness: this.stiffness,
-      targets: this.connection.targets,
+      connections: this.connection.targets,
       parentId: this.parentId
     };
   }

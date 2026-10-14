@@ -1,7 +1,7 @@
 import { CircleOption, CircleCreateOption, EntityOption } from "../types";
-import { BaseObject } from "./BaseObject";
+import { BaseBody } from "./BaseBody";
 
-export class Circle extends BaseObject{
+export class Circle extends BaseBody{
   public diameter: number;
 
   constructor(option: CircleOption){
@@ -24,7 +24,7 @@ export class Circle extends BaseObject{
     return new Circle(this.toJSON());
   }
 
-  public override equals(target: BaseObject): boolean {
+  public override equals(target: BaseBody): boolean {
     if(!(target instanceof Circle)) return false;
 
     return (
@@ -45,7 +45,7 @@ export class Circle extends BaseObject{
       diameter: option.diameter,
       mass: option.mass,
       stiffness: option.stiffness,
-      targets: [],
+      connections: [],
       parentId: option.id
     };
 

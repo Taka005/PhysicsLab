@@ -12,18 +12,25 @@ export type EntityOption = {
   diameter: number;
   mass: number;
   stiffness: number;
-  targets: Target[];
+  connections: Target[];
   parentId: string;
 }
 
-export interface BaseObjectOption {
+export interface BaseOption{
   type: ObjectType;
   id: string;
+}
+
+export interface BaseBodyOption extends BaseOption {
   trackingId?: string;
   entities: EntityOption[];
 }
 
-export interface CircleOption extends BaseObjectOption {
+export interface BaseGroundOption extends BaseOption {
+  width: number;
+}
+
+export interface CircleOption extends BaseBodyOption {
   type: "circle";
   diameter: number;
 }
