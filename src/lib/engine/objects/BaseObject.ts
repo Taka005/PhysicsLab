@@ -5,11 +5,13 @@ import { createId } from "../utils/createId";
 
 export abstract class BaseObject{
   public id: string;
-  public readonly trackingId: string = createId(10);
+  public readonly trackingId: string;
   public readonly entities: Entity[] = [];
 
   constructor(option: BaseObjectOption) {
     this.id = option.id;
+    this.trackingId = option.trackingId ?? createId(10);
+
     this.addAllEntities(option.entities ?? []);
   }
 

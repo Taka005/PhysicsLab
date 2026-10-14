@@ -19,11 +19,24 @@ export type EntityOption = {
 export interface BaseObjectOption {
   type: ObjectType;
   id: string;
-  trackingId: string;
+  trackingId?: string;
   entities: EntityOption[];
 }
 
 export interface CircleOption extends BaseObjectOption {
+  type: "circle";
+  diameter: number;
+}
+
+export interface BaseCreateOption {
+  id: string;
+  mass: number;
+  stiffness: number;
+  position: VectorData;
+  velocity: VectorData;
+}
+
+export interface CircleCreateOption extends BaseCreateOption {
   diameter: number;
 }
 

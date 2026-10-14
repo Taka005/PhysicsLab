@@ -1,4 +1,4 @@
-import { CircleOption } from "../types";
+import { CircleOption, CircleCreateOption, EntityOption } from "../types";
 import { BaseObject } from "./BaseObject";
 
 export class Circle extends BaseObject{
@@ -8,10 +8,6 @@ export class Circle extends BaseObject{
     super(option);
 
     this.diameter = option.diameter;
-
-    if(this.entities.length === 0){
-
-    }
   }
 
   public override toJSON(): CircleOption {
@@ -31,19 +27,37 @@ export class Circle extends BaseObject{
   public override equals(target: BaseObject): boolean {
     if(!(target instanceof Circle)) return false;
 
-    const circle = target as Circle;
-
     return (
-      this.id == circle.id &&
-      this.diameter == circle.diameter &&
-      this.position.equals(circle.position) &&
-      this.velocity.equals(circle.velocity) &&
-      this.mass == circle.mass &&
-      this.stiffness == circle.stiffness
+      this.id == target.id &&
+      this.diameter == target.diameter &&
+      this.position.equals(target.position) &&
+      this.velocity.equals(target.velocity) &&
+      this.mass == target.mass &&
+      this.stiffness == target.stiffness
     );
   }
 
-  public static fromJSON(option: CircleOption): Circle{
+  public static create(option: CircleCreateOption): Circle {
+    const entityOption: EntityOption = {
+      id: option.id,
+      position: option.position,
+      velocity: option.velocity,
+      diameter: option.diameter,
+      mass: option.mass,
+      stiffness: option.stiffness,
+      targets: [],
+      parentId: option.id
+    };
+
+    return new Circle({
+      type: "circle",
+      id: option.id,
+      diameter: option.diameter,
+      entities: [entityOption]
+    });
+  }
+
+  public static from(option: CircleOption): Circle{
     return new Circle(option);
   }
 }
