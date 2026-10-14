@@ -42,8 +42,45 @@ export abstract class BaseObject{
     const diff = position.subtract(this.position);
 
     this.entities.forEach(entity => {
-      entity.position = entity.position.add(diff);
-      entity.prePosition = entity.prePosition.add(diff);
+      entity.position.x += diff.x;
+      entity.position.y += diff.y;
+      entity.prePosition.x += diff.x;
+      entity.prePosition.y += diff.y;
+    });
+  }
+
+  public get velocity(): Vector {
+    if (this.entities.length === 0) return new Vector(0, 0);
+
+    const averageX = this.entities.reduce((sum, entity) => sum + entity.velocity.x, 0) / this.entities.length;
+    const averageY = this.entities.reduce((sum, entity) => sum + entity.velocity.y, 0) / this.entities.length;
+
+    return new Vector(averageX, averageY);
+  }
+
+  public set velocity(velocity: Vector) {
+    this.entities.forEach(entity => {
+      entity.velocity = velocity;
+    });
+  }
+
+  public get mass(): number {
+    return this.entities.reduce((sum, entity) => sum + entity.mass, 0);
+  }
+
+  public set mass(mass: number) {
+    this.entities.forEach(entity => {
+      entity.mass = mass / this.count;
+    });
+  }
+
+  public get stiffness(): number {
+    return this.entities.reduce((sum, entity) => sum + entity.stiffness, 0) / this.count;
+  }
+
+  public set stiffness(stiffness: number) {
+    this.entities.forEach(entity => {
+      entity.stiffness = stiffness;
     });
   }
 
@@ -63,6 +100,6 @@ export abstract class BaseObject{
   }
 
   public abstract toJSON(): BaseObjectOption;
-  public abstract Clone(): this;
-  public abstract Equals(target: BaseObject): boolean;
+  public abstract clone(): BaseObject;
+  public abstract equals(target: BaseObject): boolean;
 }

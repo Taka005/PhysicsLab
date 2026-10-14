@@ -5,12 +5,6 @@ export type VectorData = {
 
 export type ObjectType = "circle";
 
-export interface BaseObjectOption {
-  type: ObjectType;
-  id: string;
-  entities: EntityOption[];
-}
-
 export type EntityOption = {
   id: string;
   position: VectorData;
@@ -20,6 +14,17 @@ export type EntityOption = {
   stiffness: number;
   targets: Target[];
   parentId: string;
+}
+
+export interface BaseObjectOption {
+  type: ObjectType;
+  id: string;
+  trackingId: string;
+  entities: EntityOption[];
+}
+
+export interface CircleOption extends BaseObjectOption {
+  diameter: number;
 }
 
 export type EngineBaseOption = {
