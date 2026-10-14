@@ -1,9 +1,11 @@
 import { Entity } from "./Entity";
 import { Vector } from "../utils/Vector";
 import type { EntityOption, BaseObjectOption } from "../types";
+import { createId } from "../utils/createId";
 
 export abstract class BaseObject{
   public id: string;
+  public readonly trackingId: string = createId(10);
   public readonly entities: Entity[] = [];
 
   constructor(option: BaseObjectOption) {
