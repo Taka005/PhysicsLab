@@ -1,9 +1,11 @@
 import { EngineBase } from "./EngineBase";
-import { EngineOption } from "./types";
+import { BaseBody } from "./objects/BaseBody";
+import { Circle } from "./objects/Circle";
+import { Line } from "./objects/Line";
+import { BaseCreateOption, EngineOption } from "./types";
+import { ContentManager } from "./utils/ContentManager";
 
 export class Engine extends EngineBase {
-  public static readonly DEFAULT_ID_LENGTH: number  = 12;
-
   public isStarted: boolean = false;
 
   public isTrackingMode: boolean = false;
@@ -20,6 +22,8 @@ export class Engine extends EngineBase {
 
   private trackingCount: number = 0;
 
+  private content: ContentManager = new ContentManager();
+
   constructor(option: EngineOption) {
     super(option);
 
@@ -27,5 +31,55 @@ export class Engine extends EngineBase {
     this.trackingInterval = option.trackingInterval ?? 1000;
     this.trackingLimit = option.trackingLimit ?? 100;
     this.worldSize = option.worldSize ?? 1000;
+  }
+
+  private update(): void{
+
+  }
+
+  public step(): void{
+    for(let i = 0;i < this.content.entitiesCount;i++){
+      const source = this.content.entities[i];
+
+      for(let j = 0;j < this.content.groundsCount;j++){
+        const ground = this.content.grounds[j];
+
+        this.solveGroundPosition(source,ground);
+      }
+
+      for(let j = i + 1;j < this.content.entitiesCount;j++){
+        const target = this.content.entities[j];
+
+        this.solvePosition(source,target);
+      }
+    }
+
+    for(let i = 0;i < this.content.entitiesCount;i++){
+      const entity = this.content.entities[i];
+
+      this.updateVelocity(entity);
+      this.solveVelocity(entity);
+    }
+  }
+
+  public spawn(option: BaseCreateOption): BaseBody {
+    if(Circle.isCircleCreateOption(option)){
+      const circle = Circle.create(option);
+
+      this.content.addBody(circle);
+
+      return circle;
+    }else if(Line.isLineCreateOption(option)){
+      const line = Line.create(option);
+
+      this.content.addGround(line);
+    }
+
+    throw new Error("存在しないオブジェクトタイプです"); 
+  }
+
+  public deSpawn(id: string): void {
+    this.content.removeBody(id);
+    this.content.removeGround(id);
   }
 }

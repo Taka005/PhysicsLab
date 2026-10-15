@@ -1,4 +1,4 @@
-import { CircleOption, CircleCreateOption, EntityOption } from "../types";
+import { CircleOption, CircleCreateOption, EntityOption, BaseCreateOption } from "../types";
 import { BaseBody } from "./BaseBody";
 
 export class Circle extends BaseBody{
@@ -54,6 +54,10 @@ export class Circle extends BaseBody{
       diameter: option.diameter,
       entities: [entityOption]
     });
+  }
+
+  public static isCircleCreateOption(option: BaseCreateOption): option is CircleCreateOption {
+    return option.type == "circle";
   }
 
   public static from(option: CircleOption): Circle{

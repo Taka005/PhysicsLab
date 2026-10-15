@@ -41,15 +41,30 @@ export interface LineOption extends BaseGroundOption {
 }
 
 export interface BaseCreateOption {
+  type: ObjectType;
   id: string;
+}
+
+export interface BaseCreateBodyOption extends BaseCreateOption {
   mass: number;
   stiffness: number;
   position: VectorData;
   velocity: VectorData;
 }
 
-export interface CircleCreateOption extends BaseCreateOption {
+export interface BaseCreateGroundOption extends BaseCreateOption {
+  width: number;
+}
+
+export interface CircleCreateOption extends BaseCreateBodyOption {
+  type: "circle";
   diameter: number;
+}
+
+export interface LineCreateOption extends BaseCreateGroundOption {
+  type: "line";
+  start: VectorData;
+  end: VectorData;
 }
 
 export interface EngineBaseOption {

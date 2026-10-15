@@ -1,5 +1,5 @@
 import { BaseGround } from "./BaseGround";
-import { LineOption } from "../types";
+import { BaseCreateOption, LineCreateOption, LineOption } from "../types";
 import { Vector } from "../utils/Vector";
 
 export class Line extends BaseGround {
@@ -51,5 +51,23 @@ export class Line extends BaseGround {
       start: this.start,
       end: this.end
     }
+  }
+
+  public static create(option: LineCreateOption): Line {
+    return new Line({
+      type: option.type,
+      id: option.id,
+      width: option.width,
+      start: option.start,
+      end: option.end
+    });
+  }
+
+  public static isLineCreateOption(option: BaseCreateOption): option is LineCreateOption {
+    return option.type == "line";
+  }
+
+  public static from(option: LineOption): Line {
+    return new Line(option);
   }
 }
