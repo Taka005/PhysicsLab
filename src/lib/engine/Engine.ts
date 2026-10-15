@@ -33,11 +33,54 @@ export class Engine extends EngineBase {
     this.worldSize = option.worldSize ?? 1000;
   }
 
-  private update(): void{
+  public start(): void {
+    if(this.isStarted) return;
 
+    this.isStarted = true;
+
+    this.update();
+  }
+
+  public stop(): void {
+    this.isStarted = false;
+  }
+
+  public clear(isAll: boolean = false): void {
+    this.content.removeAllBodies();
+
+    if(isAll){
+      this.content.removeAllGrounds();
+      this.content.removeAllTrackBodies();
+    }
+  }
+
+  private update(): void{
+    if(!this.isStarted) return;
+
+    this.step();
+
+    setTimeout(this.update,(1000/this.pps)/this.playBackSpeed);
   }
 
   public step(): void{
+    const trackingLimit = this.isDynamicTrackingMode ? this.trackingLimit*this.content.bodiesCount : this.trackingLimit;
+
+    this.trackingCount += 1000/this.pps;
+
+    if(this.trackingCount >= this.trackingInterval){
+      const noStopBodies = this.content.bodies.filter(obj => !obj.isStop);
+
+      for(let i = 0;noStopBodies.length < 0;i++){
+        this.content.addTrackBody(noStopBodies[i]);
+      }
+
+      while(this.content.trackBodiesCount > trackingLimit){
+        this.content.removeAllTrackBodies();
+      }
+
+      this.trackingCount %= this.trackingInterval;
+    }
+
     for(let i = 0;i < this.content.entitiesCount;i++){
       const source = this.content.entities[i];
 

@@ -5,6 +5,7 @@ import { Entity } from "../objects/Entity";
 export class ContentManager {
   public bodies: BaseBody[] = [];
   public grounds: BaseGround[] = [];
+  public trackBodies: BaseBody[] = [];
   private cacheEntities: Entity[] | null = [];
 
   public get bodiesCount(): number {
@@ -13,6 +14,10 @@ export class ContentManager {
 
   public get groundsCount(): number {
     return this.grounds.length;
+  }
+
+  public get trackBodiesCount(): number {
+    return this.trackBodies.length;
   }
 
   public get entitiesCount(): number {
@@ -56,11 +61,31 @@ export class ContentManager {
     this.grounds.push(ground);
   }
 
+  public addTrackBody(body: BaseBody): void {
+    this.trackBodies.push(body);
+  }
+
   public removeBody(id: string): void {
     this.bodies = this.bodies.filter(body => body.id !== id);
   }
 
   public removeGround(id: string): void {
     this.grounds = this.grounds.filter(ground => ground.id !== id);
+  }
+
+  public removeFirstTrackBody(){
+    this.trackBodies.shift();
+  }
+
+  public removeAllBodies(){
+    this.bodies = [];
+  }
+
+  public removeAllGrounds(){
+    this.grounds = [];
+  }
+
+  public removeAllTrackBodies(){
+    this.trackBodies = [];
   }
 }
