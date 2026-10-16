@@ -85,3 +85,8 @@ export type Target = {
   readonly distance: number;
   readonly stiffness: number;
 }
+
+export type ViewportOption = {
+  offset: VectorData;
+  zoomRatio: number;
+}

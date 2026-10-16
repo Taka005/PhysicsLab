@@ -2,8 +2,9 @@ import { EngineBase } from "./EngineBase";
 import { BaseBody } from "./objects/BaseBody";
 import { Circle } from "./objects/Circle";
 import { Line } from "./objects/Line";
-import { BaseCreateOption, EngineOption } from "./types";
+import { BaseCreateOption, EngineOption, ViewportOption } from "./types";
 import { ContentManager } from "./utils/ContentManager";
+import { Viewport } from "./utils/Viewport";
 
 export class Engine extends EngineBase {
   public isStarted: boolean = false;
@@ -20,17 +21,21 @@ export class Engine extends EngineBase {
 
   public worldSize: number;
 
+  public readonly viewport: Viewport;
+
   private trackingCount: number = 0;
 
-  private content: ContentManager = new ContentManager();
+  private readonly content: ContentManager = new ContentManager();
 
-  constructor(option: EngineOption) {
-    super(option);
+  constructor(engineOption: EngineOption,viewportOption: ViewportOption) {
+    super(engineOption);
 
-    this.playBackSpeed = option.playBackSpeed ?? 1;
-    this.trackingInterval = option.trackingInterval ?? 1000;
-    this.trackingLimit = option.trackingLimit ?? 100;
-    this.worldSize = option.worldSize ?? 1000;
+    this.viewport = new Viewport(viewportOption);
+
+    this.playBackSpeed = engineOption.playBackSpeed ?? 1;
+    this.trackingInterval = engineOption.trackingInterval ?? 1000;
+    this.trackingLimit = engineOption.trackingLimit ?? 100;
+    this.worldSize = engineOption.worldSize ?? 1000;
   }
 
   public start(): void {
@@ -118,7 +123,7 @@ export class Engine extends EngineBase {
       this.content.addGround(line);
     }
 
-    throw new Error("存在しないオブジェクトタイプです"); 
+    throw new Error("存在しないオブジェクトタイプです");
   }
 
   public deSpawn(id: string): void {
