@@ -1,5 +1,6 @@
 import { BaseBody } from "../objects/BaseBody";
 import { BaseGround } from "../objects/BaseGround";
+import { BaseObject } from "../objects/BaseObject";
 import { Entity } from "../objects/Entity";
 
 export class ContentManager {
@@ -7,6 +8,10 @@ export class ContentManager {
   public grounds: BaseGround[] = [];
   public trackBodies: BaseBody[] = [];
   private cacheEntities: Entity[] | null = [];
+
+  public get objects(): BaseObject[]{
+    return [...this.bodies,...this.grounds];
+  }
 
   public get bodiesCount(): number {
     return this.bodies.length;
@@ -23,7 +28,7 @@ export class ContentManager {
   public get entitiesCount(): number {
     return this.entities.length;
   }
-  
+
   public get entities(): Entity[] {
     if(this.cacheEntities != null) return this.cacheEntities;
 

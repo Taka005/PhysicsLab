@@ -15,17 +15,17 @@ export type EntityOption = {
   connections: Target[];
 }
 
-export interface BaseOption{
+export interface BaseObjectOption{
   type: ObjectType;
   id: string;
 }
 
-export interface BaseBodyOption extends BaseOption {
+export interface BaseBodyOption extends BaseObjectOption {
   trackingId?: string;
   entities: EntityOption[];
 }
 
-export interface BaseGroundOption extends BaseOption {
+export interface BaseGroundOption extends BaseObjectOption {
   width: number;
 }
 

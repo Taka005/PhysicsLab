@@ -1,7 +1,8 @@
 import { Application, Container, Graphics } from "pixi.js";
-import { Engine } from "@/lib/engine";
+import { Engine, Line } from "@/lib/engine";
 import { CircleView } from "./views/CircleView";
 import { Circle } from "@/lib/engine";
+import { LineView } from "./views/LineView";
 
 export class Renderer {
   private app: Application = new Application();
@@ -48,24 +49,26 @@ export class Renderer {
 
     const activeIds = new Set<string>();
 
-    const bodies = this.engine.getBodies();
-    for(let i = 0;i<bodies.length;i++){
-      const body = bodies[i];
+    const objects = this.engine.getObjects();
+    for(let i = 0;i<objects.length;i++){
+      const object = objects[i];
 
-      activeIds.add(body.id);
+      activeIds.add(object.id);
 
-      let view = this.viewMap.get(body.id);
+      let view = this.viewMap.get(object.id);
 
       if(!view){
         const graphics = new Graphics();
         this.mainContainer.addChild(graphics);
-        this.viewMap.set(body.id, graphics);
+        this.viewMap.set(object.id, graphics);
         view = graphics;
       }
 
       if(view instanceof Graphics){
-        if(body instanceof Circle){
-          CircleView.draw(view,body);
+        if(object instanceof Circle){
+          CircleView.draw(view,object);
+        }else if(object instanceof Line){
+          LineView.draw(view,object)
         }
       }
     }

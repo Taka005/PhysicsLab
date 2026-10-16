@@ -2,14 +2,15 @@ import { Entity } from "./Entity";
 import { Vector } from "../utils/Vector";
 import type { EntityOption, BaseBodyOption } from "../types";
 import { createId } from "../utils/createId";
+import { BaseObject } from "./BaseObject";
 
-export abstract class BaseBody{
-  public id: string;
+export abstract class BaseBody extends BaseObject{
   public readonly trackingId: string;
   public readonly entities: Entity[] = [];
 
   constructor(option: BaseBodyOption) {
-    this.id = option.id;
+    super(option);
+
     this.trackingId = option.trackingId ?? createId(10);
 
     this.addAllEntities(option.entities ?? []);

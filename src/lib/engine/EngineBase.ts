@@ -61,8 +61,8 @@ export class EngineBase{
     const move = (distance - (entity.radius + ground.width/2))/(distance*entity.invMass + this.CORRECTION_NUMBER) * entity.stiffness;
     const correction = diff.multiply(move);
 
-    entity.position.x += correction.x;
-    entity.position.y += correction.y;
+    entity.position.x += correction.x*entity.invMass;
+    entity.position.y += correction.y*entity.invMass;
   }
 
   protected solveConnection(source: Entity,target: Entity,targetData: Target): void{

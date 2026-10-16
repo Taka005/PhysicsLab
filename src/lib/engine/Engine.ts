@@ -1,6 +1,6 @@
 import { EngineBase } from "./EngineBase";
 import { BaseBody } from "./objects/BaseBody";
-import { BaseGround } from "./objects/BaseGround";
+import { BaseObject } from "./objects/BaseObject";
 import { Circle } from "./objects/Circle";
 import { Line } from "./objects/Line";
 import { BaseCreateOption, EngineOption, ViewportOption } from "./types";
@@ -39,12 +39,8 @@ export class Engine extends EngineBase {
     this.worldSize = engineOption.worldSize ?? 1000;
   }
 
-  public getBodies(): BaseBody[]{
-    return this.content.bodies;
-  }
-
-  public getGrounds(): BaseGround[]{
-    return this.content.grounds;
+  public getObjects(): BaseObject[]{
+    return this.content.objects;
   }
 
   public start(): void {
@@ -96,6 +92,12 @@ export class Engine extends EngineBase {
     }
 
     for(let i = 0;i < this.content.entitiesCount;i++){
+      const entity = this.content.entities[i];
+
+      this.updatePosition(entity);
+    }
+
+    for(let i = 0;i < this.content.entitiesCount;i++){
       const source = this.content.entities[i];
 
       for(let j = 0;j < this.content.groundsCount;j++){
@@ -130,7 +132,7 @@ export class Engine extends EngineBase {
     }
   }
 
-  public spawn(option: BaseCreateOption): BaseBody {
+  public spawn(option: BaseCreateOption): BaseObject {
     if(Circle.isCircleCreateOption(option)){
       const circle = Circle.create(option);
 
@@ -141,6 +143,8 @@ export class Engine extends EngineBase {
       const line = Line.create(option);
 
       this.content.addGround(line);
+
+      return line;
     }
 
     throw new Error("存在しないオブジェクトタイプです");

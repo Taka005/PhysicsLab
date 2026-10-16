@@ -1,12 +1,13 @@
 import { BaseGroundOption } from "../types";
 import { Vector } from "../utils/Vector";
+import { BaseObject } from "./BaseObject";
 
-export abstract class BaseGround {
-  public id: string;
+export abstract class BaseGround extends BaseObject{
   public width: number;
 
   constructor(option: BaseGroundOption) {
-    this.id = option.id;
+    super(option);
+
     this.width = option.width;
   }
 
