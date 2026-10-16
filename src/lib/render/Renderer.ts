@@ -9,6 +9,7 @@ export class Renderer {
   private mainContainer: Container = new Container();
   private trackingContainer: Container = new Container();
   private viewMap: Map<string,Graphics> = new Map();
+  private isInitialized = false;
 
   constructor(engine: Engine){
     this.engine = engine;
@@ -23,6 +24,10 @@ export class Renderer {
       antialias: true,
     });
 
+    if (this.isInitialized) return;
+
+    this.isInitialized = true;
+
     this.app.stage.addChild(this.trackingContainer);
     this.app.stage.addChild(this.mainContainer);
 
@@ -31,6 +36,8 @@ export class Renderer {
   }
 
   public render(): void {
+    if (!this.isInitialized) return;
+
     if(this.engine.isTrackingMode){
       this.trackingContainer.scale.set(this.engine.viewport.zoomRatio, this.engine.viewport.zoomRatio);
       this.trackingContainer.position.set(this.engine.viewport.offset.x, this.engine.viewport.offset.y);
@@ -73,6 +80,11 @@ export class Renderer {
   }
 
   public destroy() {
+    if (!this.isInitialized) {
+      this.isInitialized = true;
+      return;
+    }
+
     this.app.destroy(true, { children: true });
     this.viewMap.clear();
   }

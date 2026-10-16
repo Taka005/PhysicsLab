@@ -73,7 +73,7 @@ export class Engine extends EngineBase {
 
     this.step();
 
-    setTimeout(this.update,(1000/this.pps)/this.playBackSpeed);
+    setTimeout(() => this.update(),(1000/this.pps)/this.playBackSpeed);
   }
 
   public step(): void{
@@ -116,6 +116,17 @@ export class Engine extends EngineBase {
 
       this.updateVelocity(entity);
       this.solveVelocity(entity);
+    }
+
+    for(let i = 0;i < this.content.bodiesCount;i++){
+      const body = this.content.bodies[i];
+
+      if(
+        Math.abs(body.position.x) > this.worldSize||
+        Math.abs(body.position.x) > this.worldSize
+      ){
+        this.deSpawn(body.id);
+      }
     }
   }
 
