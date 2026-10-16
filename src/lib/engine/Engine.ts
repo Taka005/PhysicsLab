@@ -1,5 +1,6 @@
 import { EngineBase } from "./EngineBase";
 import { BaseBody } from "./objects/BaseBody";
+import { BaseGround } from "./objects/BaseGround";
 import { Circle } from "./objects/Circle";
 import { Line } from "./objects/Line";
 import { BaseCreateOption, EngineOption, ViewportOption } from "./types";
@@ -36,6 +37,14 @@ export class Engine extends EngineBase {
     this.trackingInterval = engineOption.trackingInterval ?? 1000;
     this.trackingLimit = engineOption.trackingLimit ?? 100;
     this.worldSize = engineOption.worldSize ?? 1000;
+  }
+
+  public getBodies(): BaseBody[]{
+    return this.content.bodies;
+  }
+
+  public getGrounds(): BaseGround[]{
+    return this.content.grounds;
   }
 
   public start(): void {
