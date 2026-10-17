@@ -74,10 +74,10 @@ export interface EngineBaseOption {
 }
 
 export interface EngineOption extends EngineBaseOption {
-  playBackSpeed?: number;
-  trackingInterval?: number;
-  trackingLimit?: number;
-  worldSize?: number;
+  playBackSpeed: number;
+  trackingInterval: number;
+  trackingLimit: number;
+  worldSize: number;
 }
 
 export type Target = {
@@ -89,4 +89,19 @@ export type Target = {
 export type ViewportOption = {
   offset: VectorData;
   zoomRatio: number;
+}
+
+export type ObjectSaveData = {
+  bodies: BaseBodyOption[];
+  grounds: BaseGroundOption[];
+}
+
+export type SaveData = {
+  saveAt: Date;
+  engine: EngineOption;
+  viewport: ViewportOption;
+  objects: {
+    bodies: BaseBodyOption[];
+    grounds: BaseGroundOption[];
+  };
 }

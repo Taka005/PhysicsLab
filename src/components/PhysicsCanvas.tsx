@@ -13,6 +13,10 @@ export default function PhysicsCanvas() {
 
     const engine = new Engine(
       {
+        playBackSpeed: 1,
+        trackingInterval: 1000,
+        trackingLimit: 100,
+        worldSize: 1000,
         pps: 120,
         gravity: 100,
         friction: 0.001

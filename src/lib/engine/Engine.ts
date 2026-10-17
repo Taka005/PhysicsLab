@@ -1,9 +1,8 @@
 import { EngineBase } from "./EngineBase";
-import { BaseBody } from "./objects/BaseBody";
 import { BaseObject } from "./objects/BaseObject";
 import { Circle } from "./objects/Circle";
 import { Line } from "./objects/Line";
-import { BaseCreateOption, EngineOption, ViewportOption } from "./types";
+import { BaseCreateOption, EngineOption, SaveData, ViewportOption } from "./types";
 import { ContentManager } from "./utils/ContentManager";
 import { Viewport } from "./utils/Viewport";
 
@@ -33,10 +32,10 @@ export class Engine extends EngineBase {
 
     this.viewport = new Viewport(viewportOption);
 
-    this.playBackSpeed = engineOption.playBackSpeed ?? 1;
-    this.trackingInterval = engineOption.trackingInterval ?? 1000;
-    this.trackingLimit = engineOption.trackingLimit ?? 100;
-    this.worldSize = engineOption.worldSize ?? 1000;
+    this.playBackSpeed = engineOption.playBackSpeed;
+    this.trackingInterval = engineOption.trackingInterval;
+    this.trackingLimit = engineOption.trackingLimit;
+    this.worldSize = engineOption.worldSize;
   }
 
   public getObjects(): BaseObject[]{
@@ -164,5 +163,28 @@ export class Engine extends EngineBase {
   public deSpawn(id: string): void {
     this.content.removeBody(id);
     this.content.removeGround(id);
+  }
+
+  public export(): SaveData{
+    return {
+      saveAt: new Date(),
+      engine:{
+        playBackSpeed: this.playBackSpeed,
+        trackingInterval: this.trackingInterval,
+        trackingLimit: this.trackingLimit,
+        worldSize: this.worldSize,
+        pps: this.pps,
+        gravity: this.gravity,
+        friction: this.friction
+      },
+      viewport:{
+        offset: this.viewport.offset.toJSON(),
+        zoomRatio: this.viewport.zoomRatio
+      },
+      objects:{
+        bodies: this.content.bodies.map(body=>body.toJSON()),
+        grounds: this.content.grounds.map(ground=>ground.toJSON())
+      }
+    }
   }
 }
