@@ -5,7 +5,7 @@ export class CircleView{
   public static draw(graphics: Graphics,circle: Circle){
     graphics.clear();
 
-    graphics.circle(0,0,circle.diameter);
+    graphics.circle(0,0,circle.radius);
     graphics.fill({ color: "red"});
     graphics.position.set(circle.position.x,circle.position.y);
   }

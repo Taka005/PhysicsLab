@@ -14,7 +14,7 @@ export class Line extends BaseGround {
   }
 
   public override solvePosition(position: Vector): Vector {
-    const flag = ((position.x - this.start.x)*(this.end.x - this.start.x) + (position.y - this.start.y)*(this.end.y - this.start.y))/this.start.subtract(this.end).lengthSquared();
+    const flag = ((position.x - this.start.x)*(this.end.x - this.start.x) + (position.y - this.start.y)*(this.end.y - this.start.y))/Vector.lengthSquared(this.start,this.end);
 
     if(flag <= 0){
       return this.start;

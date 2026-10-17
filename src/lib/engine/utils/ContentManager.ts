@@ -37,6 +37,10 @@ export class ContentManager {
     return this.cacheEntities;
   }
 
+  public getEntity(id: string): Entity | undefined{
+    return this.entities.find(entity => entity.id === id);
+  }
+
   private isExistedId(id: string): boolean {
     return (
       this.getBody(id) != null||

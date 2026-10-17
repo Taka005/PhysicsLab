@@ -1,6 +1,7 @@
 import { EngineBaseOption, Target } from "./types";
 import { Entity } from "./objects/Entity";
 import { BaseGround } from "./objects/BaseGround";
+import { Vector } from "./utils/Vector";
 
 export class EngineBase{
   public pps: number;
@@ -23,7 +24,7 @@ export class EngineBase{
     const totalInvMass = source.invMass + target.invMass;
     if(totalInvMass == 0) return;
 
-    const diff = target.position.subtract(source.position);
+    const diff = Vector.subtract(target.position,source.position);
     const totalRadius = source.radius + target.radius;
 
     if(
@@ -69,7 +70,7 @@ export class EngineBase{
     const totalInvMass = source.invMass + target.invMass;
     if(totalInvMass == 0) return;
 
-    const diff = target.position.subtract(source.position);
+    const diff = Vector.subtract(target.position,source.position);
 
     const distance = diff.length()
 

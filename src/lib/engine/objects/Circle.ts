@@ -10,6 +10,10 @@ export class Circle extends BaseBody{
     this.diameter = option.diameter;
   }
 
+  public get radius(): number {
+    return this.diameter / 2;
+  }
+
   public override toJSON(): CircleOption {
     return {
       type: "circle",

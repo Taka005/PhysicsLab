@@ -37,7 +37,7 @@ export default function PhysicsCanvas() {
         window.innerHeight
       );
 
-      engine.spawn({ type: "circle", id: "ball1", position: { x: 50, y: 50 },velocity: { x: 50, y: 50 }, diameter: 20, mass: 10, stiffness: 0.8} as CircleCreateOption);
+      engine.spawn({ type: "circle", id: "ball1", position: { x: 50, y: 50 },velocity: { x: 50, y: 50 }, diameter: 10, mass: 10, stiffness: 0.8} as CircleCreateOption);
 
       engine.spawn({ type: "line", id: "line1", start: { x: 0, y: 100 },end: { x: 200, y: 200 }, width: 20} as LineCreateOption);
 

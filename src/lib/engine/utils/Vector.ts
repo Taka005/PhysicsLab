@@ -25,6 +25,16 @@ export class Vector {
     }
   }
 
+  public static subtract(a: Vector,b: Vector): Vector{
+    return new Vector(a.x - b.x,a.y - b.y);
+  }
+
+  public static lengthSquared(a: Vector,b: Vector): number{
+    const diff = this.subtract(a,b);
+
+    return diff.x * diff.x + diff.y * diff.y;
+  }
+
   public static from(data: VectorData): Vector {
     return new Vector(data.x, data.y);
   }

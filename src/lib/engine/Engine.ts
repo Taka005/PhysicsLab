@@ -111,6 +111,17 @@ export class Engine extends EngineBase {
 
         this.solvePosition(source,target);
       }
+
+      for(let j = i + 1;j < source.connection.targets.length;j++){
+        const targetData = source.connection.targets[j];
+        const target = this.content.getEntity(targetData.entityId);
+
+        if(target == null){
+          source.connection.remove(targetData.entityId);
+        }else{
+          this.solveConnection(source,target,targetData);
+        }
+      }
     }
 
     for(let i = 0;i < this.content.entitiesCount;i++){
