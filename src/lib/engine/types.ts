@@ -91,13 +91,7 @@ export type ViewportOption = {
   zoomRatio: number;
 }
 
-export type ObjectSaveData = {
-  bodies: BaseBodyOption[];
-  grounds: BaseGroundOption[];
-}
-
 export type SaveData = {
-  saveAt: Date;
   engine: EngineOption;
   viewport: ViewportOption;
   objects: {

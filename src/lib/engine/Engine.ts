@@ -2,6 +2,7 @@ import { EngineBase } from "./EngineBase";
 import { BaseObject } from "./objects/BaseObject";
 import { Circle } from "./objects/Circle";
 import { Line } from "./objects/Line";
+import { saveDataSchema } from "./schema";
 import { BaseCreateOption, EngineOption, SaveData, ViewportOption } from "./types";
 import { ContentManager } from "./utils/ContentManager";
 import { Viewport } from "./utils/Viewport";
@@ -165,9 +166,41 @@ export class Engine extends EngineBase {
     this.content.removeGround(id);
   }
 
-  public export(): SaveData{
-    return {
-      saveAt: new Date(),
+  public import(saveData: string): void {
+    const rawData = JSON.parse(saveData);
+
+    const validData = saveDataSchema.parse(rawData);
+
+    this.stop();
+
+    this.setOption(validData.engine);
+    this.viewport.setOption(validData.viewport);
+
+    this.content.bodies = validData.objects.bodies
+      .map(body=>{
+        if(Circle.isCircleOption(body)){
+          return Circle.from(body);
+        }
+
+        return null;
+      })
+      .filter(body=>body != null);
+
+    this.content.grounds = validData.objects.grounds
+      .map(ground=>{
+        if(Line.isLineOption(ground)){
+          return Line.from(ground);
+        }
+
+        return null;
+      })
+      .filter(ground=>ground != null);
+
+    this.start();
+  }
+
+  public export(): string {
+    const exportData: SaveData = {
       engine:{
         playBackSpeed: this.playBackSpeed,
         trackingInterval: this.trackingInterval,
@@ -186,5 +219,17 @@ export class Engine extends EngineBase {
         grounds: this.content.grounds.map(ground=>ground.toJSON())
       }
     }
+
+    return JSON.stringify(exportData);
+  }
+
+  public setOption(option: EngineOption): void {
+    this.playBackSpeed = option.playBackSpeed;
+    this.trackingInterval = option.trackingInterval;
+    this.trackingLimit = option.trackingLimit;
+    this.worldSize = option.worldSize;
+    this.pps = option.pps;
+    this.gravity = option.gravity;
+    this.friction = option.friction;
   }
 }

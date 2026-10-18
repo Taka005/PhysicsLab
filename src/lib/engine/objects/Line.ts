@@ -1,5 +1,5 @@
 import { BaseGround } from "./BaseGround";
-import { BaseCreateOption, LineCreateOption, LineOption } from "../types";
+import { BaseCreateOption, BaseGroundOption, LineCreateOption, LineOption } from "../types";
 import { Vector } from "../utils/Vector";
 
 export class Line extends BaseGround {
@@ -64,6 +64,10 @@ export class Line extends BaseGround {
   }
 
   public static isLineCreateOption(option: BaseCreateOption): option is LineCreateOption {
+    return option.type == "line";
+  }
+
+  public static isLineOption(option: BaseGroundOption): option is LineOption {
     return option.type == "line";
   }
 

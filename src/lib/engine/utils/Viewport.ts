@@ -16,4 +16,9 @@ export class Viewport{
       zoomRatio: this.zoomRatio
     }
   }
+
+  public setOption(option: ViewportOption): void {
+    this.offset = Vector.from(option.offset);
+    this.zoomRatio = option.zoomRatio;
+  }
 }
