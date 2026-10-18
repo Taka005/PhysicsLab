@@ -82,7 +82,15 @@ export class Renderer {
     }
   }
 
-  public destroy() {
+  public resize(width: number,height: number){
+    if (!this.isInitialized) return;
+
+    this.app.renderer.resize(width, height);
+
+    this.app.render();
+  }
+
+  public destroy():void {
     if (!this.isInitialized) {
       this.isInitialized = true;
       return;

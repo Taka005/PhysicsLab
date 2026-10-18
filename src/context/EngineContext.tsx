@@ -19,7 +19,7 @@ export function EngineProvider({ children }: { children: React.ReactNode }) {
         playBackSpeed: 1,
         trackingInterval: 1000,
         trackingLimit: 100,
-        worldSize: 1000,
+        worldSize: 5000,
         pps: 120,
         gravity: 100,
         friction: 0.001,
@@ -32,6 +32,11 @@ export function EngineProvider({ children }: { children: React.ReactNode }) {
 
     engineRef.current = engine;
     setIsInitialized(true);
+
+    return () => {
+      engineRef.current = null;
+      setIsInitialized(false);
+    };
   }, []);
 
   return (
