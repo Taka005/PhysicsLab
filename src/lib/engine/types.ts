@@ -99,3 +99,11 @@ export type SaveData = {
     grounds: BaseGroundOption[];
   };
 }
+
+export type EngineSnapShot = {
+  isStarted: boolean;
+  isTrackingMode: boolean;
+  isDynamicTrackingMode: boolean;
+  playBackSpeed: number;
+  worldSize: number;
+}

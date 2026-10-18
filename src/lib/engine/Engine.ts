@@ -3,7 +3,7 @@ import { BaseObject } from "./objects/BaseObject";
 import { Circle } from "./objects/Circle";
 import { Line } from "./objects/Line";
 import { saveDataSchema } from "./schema";
-import { BaseCreateOption, EngineOption, SaveData, ViewportOption } from "./types";
+import { BaseCreateOption, EngineOption, EngineSnapShot, SaveData, ViewportOption } from "./types";
 import { ContentManager } from "./utils/ContentManager";
 import { Viewport } from "./utils/Viewport";
 
@@ -28,6 +28,10 @@ export class Engine extends EngineBase {
 
   private readonly content: ContentManager = new ContentManager();
 
+  private listeners = new Set<() => void>();
+
+  private snapshot: EngineSnapShot = this.createSnapshot();
+
   constructor(engineOption: EngineOption,viewportOption: ViewportOption) {
     super(engineOption);
 
@@ -39,6 +43,33 @@ export class Engine extends EngineBase {
     this.worldSize = engineOption.worldSize;
   }
 
+  private createSnapshot(): EngineSnapShot{
+    return {
+      isStarted: this.isStarted,
+      isTrackingMode: this.isTrackingMode,
+      isDynamicTrackingMode: this.isDynamicTrackingMode,
+      playBackSpeed: this.playBackSpeed,
+      worldSize: this.worldSize
+    };
+  }
+
+  private notify() {
+    this.snapshot = this.createSnapshot();
+    this.listeners.forEach((listener) => listener());
+  }
+
+  public subscribe = (listener: () => void) => {
+    this.listeners.add(listener);
+
+    return () => {
+      this.listeners.delete(listener);
+    };
+  };
+
+  public getSnapshot = () => {
+    return this.snapshot;
+  };
+
   public getObjects(): BaseObject[]{
     return this.content.objects;
   }
@@ -48,11 +79,15 @@ export class Engine extends EngineBase {
 
     this.isStarted = true;
 
+    this.notify();
+
     this.update();
   }
 
   public stop(): void {
     this.isStarted = false;
+
+    this.notify();
   }
 
   public clear(isAll: boolean = false): void {
@@ -80,7 +115,7 @@ export class Engine extends EngineBase {
     if(this.trackingCount >= this.trackingInterval){
       const noStopBodies = this.content.bodies.filter(obj => !obj.isStop);
 
-      for(let i = 0;noStopBodies.length < 0;i++){
+      for(let i = 0;noStopBodies.length > i;i++){
         this.content.addTrackBody(noStopBodies[i]);
       }
 
@@ -136,7 +171,7 @@ export class Engine extends EngineBase {
 
       if(
         Math.abs(body.position.x) > this.worldSize||
-        Math.abs(body.position.x) > this.worldSize
+        Math.abs(body.position.y) > this.worldSize
       ){
         this.deSpawn(body.id);
       }
