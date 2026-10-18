@@ -1,34 +1,16 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { Engine } from "@/lib/engine";
 import { Renderer } from "@/lib/render";
 import { CircleCreateOption, LineCreateOption } from "@/lib/engine/types";
+import { useEngine } from "@/context/EngineContext";
 
 export default function PhysicsCanvas() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const engine = useEngine();
 
   useEffect(() => {
-    if (!canvasRef.current) return;
-
-    const engine = new Engine(
-      {
-        playBackSpeed: 1,
-        trackingInterval: 1000,
-        trackingLimit: 100,
-        worldSize: 1000,
-        pps: 120,
-        gravity: 100,
-        friction: 0.001
-      },
-      {
-        offset:{
-          x: 0,
-          y: 0
-        },
-        zoomRatio: 1
-      }
-    );
+    if (!canvasRef.current || !engine) return;
 
     const renderer = new Renderer(engine);
 
@@ -62,11 +44,10 @@ export default function PhysicsCanvas() {
     initPixi();
 
     return () => {
-      engine.stop();
       cancelAnimationFrame(animationFrameId);
       renderer.destroy();
     };
-  }, []);
+  }, [engine]);
 
   return (
     <div style={{ width: "100vw", height: "100vh", overflow: "hidden" }}>
