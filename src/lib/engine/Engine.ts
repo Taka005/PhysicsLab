@@ -49,7 +49,10 @@ export class Engine extends EngineBase {
       isTrackingMode: this.isTrackingMode,
       isDynamicTrackingMode: this.isDynamicTrackingMode,
       playBackSpeed: this.playBackSpeed,
-      worldSize: this.worldSize
+      worldSize: this.worldSize,
+      gravity: this.gravity,
+      pps: this.pps,
+      friction: this.friction
     };
   }
 

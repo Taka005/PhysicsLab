@@ -2,16 +2,24 @@
 
 import { useEngine } from "@/context/EngineContext";
 import { useEngineState } from "@/hooks/useEngineState";
+import { ChangeEvent, useState } from "react";
 
 export default function ControllPanel() {
   const engine = useEngine();
   const state = useEngineState();
+  const [gravityValue, setGravityValue] = useState<number>(state?.gravity ?? 0);
 
   if (!engine||!state) return;
 
+  const handleGravityChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(e.target.value);
+    setGravityValue(value);
+
+    engine.gravity = value;
+  };
+
   return (
     <div className="w-80 h-full bg-white rounded-lg shadow-sm p-4 flex flex-col gap-4 overflow-y-auto">
-      <h2 className="text-lg font-bold text-gray-800 border-b pb-2">操作パネル</h2>
       <div className="flex flex-col gap-2">
         {state.isStarted ? (
           <button
@@ -28,6 +36,25 @@ export default function ControllPanel() {
             実行
           </button>
         )}
+      </div>
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-between items-center">
+          <label htmlFor="gravity-range" className="text-sm font-semibold text-gray-700">
+            重力
+          </label>
+          <span className="text-sm text-gray-600 font-mono">
+            {gravityValue}
+          </span>
+        </div>
+        <input
+          type="range"
+          min="0"
+          max="1000"
+          step="1"
+          value={gravityValue}
+          onChange={handleGravityChange}
+          className="w-full accent-blue-600 cursor-pointer"
+        />
       </div>
     </div>
   )

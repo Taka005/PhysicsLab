@@ -106,4 +106,7 @@ export type EngineSnapShot = {
   isDynamicTrackingMode: boolean;
   playBackSpeed: number;
   worldSize: number;
+  gravity: number;
+  pps: number;
+  friction: number;
 }
