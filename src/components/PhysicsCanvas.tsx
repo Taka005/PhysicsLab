@@ -60,8 +60,6 @@ export default function PhysicsCanvas() {
 
       engine.spawn({ type: "line", id: "line2", start: { x: 200, y: 200 },end: { x: 500, y: 200 }, width: 10} as LineCreateOption);
 
-      engine.start();
-
       const loop = () => {
         renderer.render();
         animationFrameId = requestAnimationFrame(loop);

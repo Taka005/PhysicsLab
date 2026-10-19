@@ -30,7 +30,7 @@ export class Engine extends EngineBase {
 
   private listeners = new Set<() => void>();
 
-  private snapshot: EngineSnapShot = this.createSnapshot();
+  private snapshot: EngineSnapShot;
 
   constructor(engineOption: EngineOption,viewportOption: ViewportOption) {
     super(engineOption);
@@ -41,6 +41,8 @@ export class Engine extends EngineBase {
     this.trackingInterval = engineOption.trackingInterval;
     this.trackingLimit = engineOption.trackingLimit;
     this.worldSize = engineOption.worldSize;
+
+    this.snapshot = this.createSnapshot();
   }
 
   private createSnapshot(): EngineSnapShot{
@@ -233,8 +235,6 @@ export class Engine extends EngineBase {
         return null;
       })
       .filter(ground=>ground != null);
-
-    this.start();
   }
 
   public export(): string {
