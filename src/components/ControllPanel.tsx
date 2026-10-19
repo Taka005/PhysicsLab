@@ -34,14 +34,6 @@ export default function ControllPanel() {
     engine.playBackSpeed = value;
   };
 
-  useEffect(() => {
-    if (state) {
-      if (state.gravity !== undefined) setGravityValue(state.gravity);
-      if (state.friction !== undefined) setFrictionValue(state.friction);
-      if (state.playBackSpeed !== undefined) setPlayBackSpeedValue(state.playBackSpeed);
-    }
-  }, [state]);
-
   return (
     <div className="w-80 h-full bg-white rounded-lg shadow-sm p-4 flex flex-col gap-4 overflow-y-auto">
       <div className="flex flex-col gap-2">

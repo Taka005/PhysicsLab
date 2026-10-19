@@ -213,20 +213,25 @@ export class Engine extends EngineBase {
 
     this.stop();
 
+    this.clear(true);
+
     this.setOption(validData.engine);
     this.viewport.setOption(validData.viewport);
 
-    this.content.bodies = validData.objects.bodies
-      .map(body=>{
-        if(Circle.isCircleOption(body)){
-          return Circle.from(body);
-        }
+    this.content.setBodies(
+      validData.objects.bodies
+        .map(body=>{
+          if(Circle.isCircleOption(body)){
+            return Circle.from(body);
+          }
 
-        return null;
-      })
-      .filter(body=>body != null);
+          return null;
+        })
+        .filter(body=>body != null)
+    );
 
-    this.content.grounds = validData.objects.grounds
+    this.content.setGrounds(
+      validData.objects.grounds
       .map(ground=>{
         if(Line.isLineOption(ground)){
           return Line.from(ground);
@@ -234,7 +239,8 @@ export class Engine extends EngineBase {
 
         return null;
       })
-      .filter(ground=>ground != null);
+      .filter(ground=>ground != null)
+    );
   }
 
   public export(): string {
@@ -269,5 +275,7 @@ export class Engine extends EngineBase {
     this.pps = option.pps;
     this.gravity = option.gravity;
     this.friction = option.friction;
+
+    this.notify();
   }
 }

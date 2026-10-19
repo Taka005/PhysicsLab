@@ -37,6 +37,15 @@ export class ContentManager {
     return this.cacheEntities;
   }
 
+  public setBodies(value: BaseBody[]) {
+    this.bodies = value;
+    this.cacheEntities = null;
+  }
+
+  public setGrounds(value: BaseGround[]) {
+    this.grounds = value;
+  }
+
   public getEntity(id: string): Entity | undefined{
     return this.entities.find(entity => entity.id === id);
   }
