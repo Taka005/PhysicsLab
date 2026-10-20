@@ -11,7 +11,7 @@ export function useEngineState() {
     isDynamicTrackingMode: false,
     playBackSpeed: 1,
     worldSize: 5000,
-    gravity: 100,
+    gravity: 200,
     pps: 120,
     friction: 0.001
   }), []);

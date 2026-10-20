@@ -21,7 +21,7 @@ export function EngineProvider({ children }: { children: React.ReactNode }) {
         trackingLimit: 100,
         worldSize: 5000,
         pps: 120,
-        gravity: 100,
+        gravity: 200,
         friction: 0.001,
       },
       {
