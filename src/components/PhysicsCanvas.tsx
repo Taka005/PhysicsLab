@@ -14,6 +14,10 @@ export default function PhysicsCanvas() {
   const { spawnConfig } = useSpawnState();
   const [clickedPoints, setClickedPoints] = useState<Point[]>([]);
 
+  useEffect(() => {
+    setClickedPoints([]);
+  }, [spawnConfig.type]);
+
   const getRequiredPointsCount = (type: string) => {
     switch (type) {
       case "circle":
@@ -66,7 +70,7 @@ export default function PhysicsCanvas() {
       }
     },
     onUp: (point, e) => {
-      
+
     },
   });
 
