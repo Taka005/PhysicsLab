@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Renderer } from "@/lib/render";
 import { CircleCreateOption } from "@/lib/engine/types";
 import { useEngine } from "@/context/EngineContext";
