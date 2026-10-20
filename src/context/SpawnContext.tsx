@@ -3,9 +3,11 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 
 export type SpawnConfig = {
-  diameter: number;
-  mass: number;
-  stiffness: number;
+  type: string;
+  diameter?: number;
+  mass?: number;
+  stiffness?: number;
+  width?: number;
 };
 
 type SpawnContextType = {
@@ -17,9 +19,11 @@ const SpawnContext = createContext<SpawnContextType | undefined>(undefined);
 
 export function SpawnProvider({ children }: { children: ReactNode }) {
   const [spawnConfig, setSpawnConfig] = useState<SpawnConfig>({
+    type: "circle",
     diameter: 15,
     mass: 10,
     stiffness: 0.8,
+    width: 10
   });
 
   const updateSpawnConfig = (newConfig: Partial<SpawnConfig>) => {

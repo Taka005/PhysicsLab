@@ -2,14 +2,12 @@ import { useEngine } from "@/context/EngineContext";
 import { useEngineState } from "@/hooks/useEngineState";
 import SliderField from "./SliderField";
 import { useSpawnState } from "@/context/SpawnContext";
-import { useState } from "react";
 import SelectField from "./SelectField";
 
 export default function SpawnSettings() {
   const engine = useEngine();
   const state = useEngineState();
   const { spawnConfig, updateSpawnConfig } = useSpawnState();
-  const [selectedShape, setSelectedShape] = useState<string>("circle");
 
   const shapeOptions = [
     { label: "円", value: "circle" },
@@ -21,43 +19,61 @@ export default function SpawnSettings() {
   return (
     <>
       <SelectField
-        label="生成するオブジェクト"
-        value={selectedShape}
+        label="生成タイプ"
+        value={spawnConfig.type ?? "circle"}
         options={shapeOptions}
         onChange={(e) => {
-          setSelectedShape(e.target.value);
+          updateSpawnConfig({ type: e.target.value });
         }}
       />
-      <SliderField
-        label="直径"
-        value={spawnConfig.diameter}
-        min="0"
-        max="100"
-        step="1"
-        onChange={(e) => {
-          updateSpawnConfig({ diameter: parseFloat(e.target.value) });
-        }}
-      />
-      <SliderField
-        label="質量"
-        value={spawnConfig.mass}
-        min="0"
-        max="100"
-        step="1"
-        onChange={(e) => {
-          updateSpawnConfig({ mass: parseFloat(e.target.value) });
-        }}
-      />
-      <SliderField
-        label="剛性"
-        value={spawnConfig.stiffness}
-        min="0.1"
-        max="1"
-        step="0.1"
-        onChange={(e) => {
-          updateSpawnConfig({ stiffness: parseFloat(e.target.value) });
-        }}
-      />
+      {spawnConfig.type === "circle" && (
+        <>
+          <SliderField
+            label="直径"
+            value={spawnConfig.diameter ?? 15}
+            min="0"
+            max="100"
+            step="1"
+            onChange={(e) => {
+              updateSpawnConfig({ diameter: parseFloat(e.target.value) });
+            }}
+          />
+          <SliderField
+            label="質量"
+            value={spawnConfig.mass ?? 10}
+            min="0"
+            max="100"
+            step="1"
+            onChange={(e) => {
+              updateSpawnConfig({ mass: parseFloat(e.target.value) });
+            }}
+          />
+          <SliderField
+            label="剛性"
+            value={spawnConfig.stiffness ?? 0.8}
+            min="0.1"
+            max="1"
+            step="0.1"
+            onChange={(e) => {
+              updateSpawnConfig({ stiffness: parseFloat(e.target.value) });
+            }}
+          />
+        </>
+      )}
+      {spawnConfig.type === "line" && (
+        <>
+          <SliderField
+            label="幅"
+            value={spawnConfig.width ?? 10}
+            min="1"
+            max="50"
+            step="1"
+            onChange={(e) => {
+              updateSpawnConfig({ width: parseFloat(e.target.value) });
+            }}
+          />
+        </>
+      )}
     </>
   );
 }

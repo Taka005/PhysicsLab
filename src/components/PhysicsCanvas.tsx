@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Renderer } from "@/lib/render";
-import { CircleCreateOption } from "@/lib/engine/types";
+import { CircleCreateOption, LineCreateOption } from "@/lib/engine/types";
 import { useEngine } from "@/context/EngineContext";
-import { useCanvasInteraction } from "@/hooks/useCanvasInteraction";
+import { Point, useCanvasInteraction } from "@/hooks/useCanvasInteraction";
 import { useSpawnState } from "@/context/SpawnContext";
 
 export default function PhysicsCanvas() {
@@ -12,20 +12,52 @@ export default function PhysicsCanvas() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const engine = useEngine();
   const { spawnConfig } = useSpawnState();
+  const [clickedPoints, setClickedPoints] = useState<Point[]>([]);
+
+  const getRequiredPointsCount = (type: string) => {
+    switch (type) {
+      case "circle":
+        return 1;
+      case "line":
+        return 2;
+      default:
+        return 1;
+    }
+  };
+
+  const requiredCount = getRequiredPointsCount(spawnConfig.type);
 
   const { handlers } = useCanvasInteraction({
     canvasRef,
     onDown: (point, e) => {
       if (engine) {
-        engine.spawn({
-          type: "circle",
-          id: `ball_${Date.now()}`,
-          position: { x: point.x, y: point.y },
-          velocity: { x: 0, y: 0 },
-          diameter: spawnConfig.diameter,
-          mass: spawnConfig.mass,
-          stiffness: spawnConfig.stiffness,
-        } as CircleCreateOption);
+        const nextPoints = [...clickedPoints, point];
+
+      if (nextPoints.length >= requiredCount) {
+        if (spawnConfig.type === "circle") {
+          engine.spawn({
+            type: "circle",
+            id: `ball_${Date.now()}`,
+            position: { x: nextPoints[0].x, y: nextPoints[0].y },
+            velocity: { x: 0, y: 0 },
+            diameter: spawnConfig.diameter,
+            mass: spawnConfig.mass,
+            stiffness: spawnConfig.stiffness,
+          } as CircleCreateOption);
+        }else if(spawnConfig.type === "line"){
+          engine.spawn({
+            type: "line",
+            id: `line_${Date.now()}`,
+            start: { x: nextPoints[0].x, y: nextPoints[0].y },
+            end: { x: nextPoints[1].x, y: nextPoints[1].y },
+            width: spawnConfig.width,
+          } as LineCreateOption);
+        }
+
+        setClickedPoints([]);
+      }else{
+        setClickedPoints(nextPoints);
+      }
       }
     },
     onMove: (point, isDragging, e) => {
