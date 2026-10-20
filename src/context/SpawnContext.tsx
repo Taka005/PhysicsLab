@@ -8,6 +8,8 @@ export type SpawnConfig = {
   mass?: number;
   stiffness?: number;
   width?: number;
+  velocityX?: number;
+  velocityY?: number;
 };
 
 type SpawnContextType = {
@@ -23,7 +25,9 @@ export function SpawnProvider({ children }: { children: ReactNode }) {
     diameter: 15,
     mass: 10,
     stiffness: 0.8,
-    width: 10
+    width: 10,
+    velocityX: 0,
+    velocityY: 0
   });
 
   const updateSpawnConfig = (newConfig: Partial<SpawnConfig>) => {

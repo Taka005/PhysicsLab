@@ -13,7 +13,7 @@ export default function SpawnSettings() {
     { label: "円", value: "circle" },
     { label: "直線", value: "line" },
   ];
-  
+
   if (!engine||!state) return null;
 
   return (
@@ -56,6 +56,26 @@ export default function SpawnSettings() {
             step="0.1"
             onChange={(e) => {
               updateSpawnConfig({ stiffness: parseFloat(e.target.value) });
+            }}
+          />
+          <SliderField
+            label="初速度X"
+            value={spawnConfig.velocityX ?? 0}
+            min="-300"
+            max="300"
+            step="1"
+            onChange={(e) => {
+              updateSpawnConfig({ velocityX: parseFloat(e.target.value) });
+            }}
+          />
+          <SliderField
+            label="初速度Y"
+            value={spawnConfig.velocityY ?? 0}
+            min="-300"
+            max="300"
+            step="1"
+            onChange={(e) => {
+              updateSpawnConfig({ velocityY: parseFloat(e.target.value) });
             }}
           />
         </>

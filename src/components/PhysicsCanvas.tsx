@@ -43,7 +43,7 @@ export default function PhysicsCanvas() {
             type: "circle",
             id: `ball_${Date.now()}`,
             position: { x: nextPoints[0].x, y: nextPoints[0].y },
-            velocity: { x: 0, y: 0 },
+            velocity: { x: spawnConfig.velocityX, y: spawnConfig.velocityY },
             diameter: spawnConfig.diameter,
             mass: spawnConfig.mass,
             stiffness: spawnConfig.stiffness,
