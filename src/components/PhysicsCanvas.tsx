@@ -5,13 +5,15 @@ import { Renderer } from "@/lib/render";
 import { CircleCreateOption } from "@/lib/engine/types";
 import { useEngine } from "@/context/EngineContext";
 import { useCanvasInteraction } from "@/hooks/useCanvasInteraction";
+import { useSpawnState } from "@/context/SpawnContext";
 
 export default function PhysicsCanvas() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const engine = useEngine();
+  const { spawnConfig } = useSpawnState();
 
-  const { currentPoint, handlers } = useCanvasInteraction({
+  const { handlers } = useCanvasInteraction({
     canvasRef,
     onDown: (point, e) => {
       if (engine) {
@@ -20,9 +22,9 @@ export default function PhysicsCanvas() {
           id: `ball_${Date.now()}`,
           position: { x: point.x, y: point.y },
           velocity: { x: 0, y: 0 },
-          diameter: 15,
-          mass: 10,
-          stiffness: 0.8,
+          diameter: spawnConfig.diameter,
+          mass: spawnConfig.mass,
+          stiffness: spawnConfig.stiffness,
         } as CircleCreateOption);
       }
     },
@@ -32,7 +34,7 @@ export default function PhysicsCanvas() {
       }
     },
     onUp: (point, e) => {
-      console.log("タッチ終了:", point);
+      
     },
   });
 
