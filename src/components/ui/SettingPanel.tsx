@@ -46,7 +46,7 @@ export default function SettingPanel() {
     const blob = new Blob([engine.export()], { type: "text/plain;charset=utf-8" });
     
     const url = URL.createObjectURL(blob);
-
+    
     const a = document.createElement("a");
     a.href = url;
     a.download = "world.json";
@@ -70,13 +70,13 @@ export default function SettingPanel() {
         <div className="flex gap-2">
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex-1 px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-700 transition"
+            className="flex-1 px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-600 transition"
           >
             インポート
           </button>
           <button
-            onClick={() => handleDownload}
-            className="flex-1 px-4 py-2 bg-lime-500 text-white rounded hover:bg-lime-700 transition"
+            onClick={handleDownload}
+            className="flex-1 px-4 py-2 bg-lime-500 text-white rounded hover:bg-lime-600 transition"
           >
             エクスポート
           </button>
