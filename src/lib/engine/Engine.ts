@@ -3,7 +3,7 @@ import { BaseObject } from "./objects/BaseObject";
 import { Circle } from "./objects/Circle";
 import { Curve } from "./objects/Curve";
 import { Line } from "./objects/Line";
-import { saveDataSchema } from "./schema";
+import { saveDataSchema } from "./typeSchema";
 import { BaseCreateOption, EngineOption, EngineSnapShot, SaveData, ViewportOption } from "./types";
 import { ContentManager } from "./utils/ContentManager";
 import { Viewport } from "./utils/Viewport";
@@ -265,7 +265,8 @@ export class Engine extends EngineBase {
       },
       viewport:{
         offset: this.viewport.offset.toJSON(),
-        zoomRatio: this.viewport.zoomRatio
+        zoomRatio: this.viewport.zoomRatio,
+        gridWidth: this.viewport.gridWidth
       },
       objects:{
         bodies: this.content.bodies.map(body=>body.toJSON()),

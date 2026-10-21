@@ -27,6 +27,7 @@ export function EngineProvider({ children }: { children: React.ReactNode }) {
       {
         offset: { x: 0, y: 0 },
         zoomRatio: 1,
+        gridWidth: 50
       }
     );
 

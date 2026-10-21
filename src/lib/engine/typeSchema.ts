@@ -17,7 +17,8 @@ const engineOptionSchema = z.object({
 
 const viewportOptionSchema = z.object({
   offset: vectorDataSchema,
-  zoomRatio: z.number().gt(0)
+  zoomRatio: z.number().gt(0),
+  gridWidth: z.number().gt(0)
 });
 
 const entityOptionSchema = z.object({
@@ -50,12 +51,22 @@ const lineOptionSchema = z.object({
   end: vectorDataSchema
 });
 
+const CurveOptionSchema = z.object({
+  type: z.literal("curve"),
+  id: z.string(),
+  width: z.number().gt(0),
+  start: vectorDataSchema,
+  middle: vectorDataSchema,
+  end: vectorDataSchema
+});
+
 const bodyOptionSchema = z.discriminatedUnion("type",[
   circleOptionSchema
 ]);
 
 const groundOptionSchema = z.discriminatedUnion("type",[
-  lineOptionSchema
+  lineOptionSchema,
+  CurveOptionSchema
 ]);
 
 export const saveDataSchema = z.object({

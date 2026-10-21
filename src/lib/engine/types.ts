@@ -103,6 +103,7 @@ export type Target = {
 export type ViewportOption = {
   offset: VectorData;
   zoomRatio: number;
+  gridWidth: number;
 }
 
 export type SaveData = {
