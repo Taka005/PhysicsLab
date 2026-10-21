@@ -5,6 +5,8 @@ export class Viewport{
   public offset: Vector;
   public zoomRatio: number;
   public gridWidth: number;
+  public isDisplayVector: boolean = false;
+  public isDisplayGrid: boolean = false;
 
   constructor(option: ViewportOption){
     this.offset = Vector.from(option.offset);

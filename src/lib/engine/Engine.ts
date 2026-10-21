@@ -16,6 +16,10 @@ export class Engine extends EngineBase {
 
   public isDynamicTrackingMode: boolean = false;
 
+  public isSetGridCrossMode: boolean = false;
+
+  public isDebugMode: boolean = false;
+
   public playBackSpeed: number;
 
   public trackingInterval: number;
@@ -290,9 +294,22 @@ export class Engine extends EngineBase {
     this.notify();
   }
 
-  public getNearGridCrossPosition(position: Vector): Vector{
-    const worldX = position.x / this.viewport.zoomRatio - this.viewport.offset.x / this.viewport.zoomRatio;
-    const worldY = position.y / this.viewport.zoomRatio - this.viewport.offset.y / this.viewport.zoomRatio;
+  public toWorldPosition(target: Vector): Vector{
+    if(this.isSetGridCrossMode) {
+      target = this.toNearGridCrossPosition(target);
+    }
+
+    target.x -= this.viewport.offset.x;
+    target.y -= this.viewport.offset.y;
+
+    target.divide(this.viewport.zoomRatio);
+
+    return target;
+  }
+
+  public toNearGridCrossPosition(target: Vector): Vector{
+    const worldX = target.x / this.viewport.zoomRatio - this.viewport.offset.x / this.viewport.zoomRatio;
+    const worldY = target.y / this.viewport.zoomRatio - this.viewport.offset.y / this.viewport.zoomRatio;
 
     const nearGridWorldX = Math.round(worldX / this.viewport.gridWidth) * this.viewport.gridWidth;
     const nearGridWorldY = Math.round(worldY / this.viewport.gridWidth) * this.viewport.gridWidth;
