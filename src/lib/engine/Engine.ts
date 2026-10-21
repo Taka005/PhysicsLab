@@ -6,6 +6,7 @@ import { Line } from "./objects/Line";
 import { saveDataSchema } from "./typeSchema";
 import { BaseCreateOption, EngineOption, EngineSnapShot, SaveData, ViewportOption } from "./types";
 import { ContentManager } from "./utils/ContentManager";
+import { Vector } from "./utils/Vector";
 import { Viewport } from "./utils/Viewport";
 
 export class Engine extends EngineBase {
@@ -287,5 +288,18 @@ export class Engine extends EngineBase {
     this.friction = option.friction;
 
     this.notify();
+  }
+
+  public getNearGridCrossPosition(position: Vector): Vector{
+    const worldX = position.x / this.viewport.zoomRatio - this.viewport.offset.x / this.viewport.zoomRatio;
+    const worldY = position.y / this.viewport.zoomRatio - this.viewport.offset.y / this.viewport.zoomRatio;
+
+    const nearGridWorldX = Math.round(worldX / this.viewport.gridWidth) * this.viewport.gridWidth;
+    const nearGridWorldY = Math.round(worldY / this.viewport.gridWidth) * this.viewport.gridWidth;
+
+    const nearGridX = (nearGridWorldX + this.viewport.offset.x / this.viewport.zoomRatio) * this.viewport.zoomRatio;
+    const nearGridY = (nearGridWorldY + this.viewport.offset.y / this.viewport.zoomRatio) * this.viewport.zoomRatio;
+
+    return new Vector(nearGridX,nearGridY);
   }
 }

@@ -13,6 +13,7 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-draggable": "^4.7.2",
+    "sonner": "^2.0.8",
     "zod": "^4.6.7"
   },
   "devDependencies": {

@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import Draggable from "react-draggable";
 import EnvSettings from "./ui/EnvSettings";
 import SpawnSettings from "./ui/SpawnSettings";
+import SettingPanel from "./ui/SettingPanel";
 
 export default function ControlPanel() {
   const engine = useEngine();
@@ -43,19 +44,19 @@ export default function ControlPanel() {
               ステップ
             </button>
           </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setIsSettingOpen(!isSettingOpen)}
-                className="flex-1 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
-              >
-                設定
-              </button>
-              <button
-                onClick={() => engine.clear()}
-                className="flex-1 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
-              >
-                リセット
-              </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setIsSettingOpen(!isSettingOpen)}
+              className="flex-1 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
+            >
+              設定
+            </button>
+            <button
+              onClick={() => engine.clear()}
+              className="flex-1 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+            >
+              リセット
+            </button>
           </div>
         </div>
         <hr className="my-1 border-t border-gray-400" />
@@ -75,9 +76,7 @@ export default function ControlPanel() {
                   ✕
                 </button>
               </div>
-              <div className="p-4 flex flex-col gap-3 text-sm text-gray-700">
-                <p>開発中</p>
-              </div>
+              <SettingPanel/>
             </div>
           </Draggable>
         )}
