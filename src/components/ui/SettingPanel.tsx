@@ -81,6 +81,14 @@ export default function SettingPanel() {
             エクスポート
           </button>
         </div>
+        <div className="flex gap-2">
+          <button
+            onClick={()=>engine.clear(true)}
+            className="flex-1 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+          >
+            すべてリセット
+          </button>
+        </div>
       </div>
     </>
   )
