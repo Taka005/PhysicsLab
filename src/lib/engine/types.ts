@@ -119,6 +119,10 @@ export type EngineSnapShot = {
   isStarted: boolean;
   isTrackingMode: boolean;
   isDynamicTrackingMode: boolean;
+  isSetGridCrossMode: boolean;
+  isDebugMode: boolean;
+  isDisplayGrid: boolean;
+  isDisplayVector: boolean;
   playBackSpeed: number;
   worldSize: number;
   gravity: number;

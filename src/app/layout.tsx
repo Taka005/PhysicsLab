@@ -22,10 +22,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "PhysicsLab",
     description: "物理学実験を簡単にできます",
-    url: "https://physicslab.takadev.jp/",
-    siteName: "physicslab.takadev.jp",
+    url: "https://lab.takadev.jp/",
+    siteName: "lab.takadev.jp",
     type: "website",
-  },
+  }
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
