@@ -32,7 +32,7 @@ export class EngineBase{
       Math.abs(diff.y) >= totalRadius
     ) return;
 
-    const distanceSquared = diff.lengthSquared()
+    const distanceSquared = diff.distanceSquared()
     if(distanceSquared > totalRadius*totalRadius) return;
 
     const distance = Math.sqrt(distanceSquared);
@@ -54,7 +54,7 @@ export class EngineBase{
 
     const diff = cross.subtract(entity.position);
 
-    const distanceSquared = diff.lengthSquared();
+    const distanceSquared = diff.distanceSquared();
     if(distanceSquared > (entity.radius + ground.width/2) * (entity.radius + ground.width/2)) return;
 
     const distance = Math.sqrt(distanceSquared);
@@ -72,7 +72,7 @@ export class EngineBase{
 
     const diff = Vector.subtract(target.position,source.position);
 
-    const distance = diff.length()
+    const distance = diff.distance()
 
     const move = (distance - targetData.distance)/(distance*totalInvMass + this.CORRECTION_NUMBER) * targetData.stiffness;
     const correction = diff.multiply(move);

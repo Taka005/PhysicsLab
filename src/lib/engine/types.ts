@@ -3,7 +3,7 @@ export type VectorData = {
   y: number;
 }
 
-export type ObjectType = "circle" | "line";
+export type ObjectType = "circle" | "line" | "curve";
 
 export type EntityOption = {
   id: string;
@@ -40,6 +40,13 @@ export interface LineOption extends BaseGroundOption {
   end: VectorData;
 }
 
+export interface CurveOption extends BaseGroundOption {
+  type: "curve";
+  start: VectorData;
+  middle: VectorData;
+  end: VectorData;
+}
+
 export interface BaseCreateOption {
   type: ObjectType;
   id: string;
@@ -64,6 +71,13 @@ export interface CircleCreateOption extends BaseCreateBodyOption {
 export interface LineCreateOption extends BaseCreateGroundOption {
   type: "line";
   start: VectorData;
+  end: VectorData;
+}
+
+export interface CurveCreateOption extends BaseCreateGroundOption {
+  type: "curve";
+  start: VectorData;
+  middle: VectorData;
   end: VectorData;
 }
 

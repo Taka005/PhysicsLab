@@ -25,14 +25,22 @@ export class Vector {
     }
   }
 
+  public static add(a: Vector,b: Vector): Vector{
+    return new Vector(a.x + b.x,a.y + b.y);
+  }
+
   public static subtract(a: Vector,b: Vector): Vector{
     return new Vector(a.x - b.x,a.y - b.y);
   }
 
-  public static lengthSquared(a: Vector,b: Vector): number{
+  public static distanceSquared(a: Vector,b: Vector): number{
     const diff = this.subtract(a,b);
 
     return diff.x * diff.x + diff.y * diff.y;
+  }
+
+  public static distance(a: Vector,b: Vector): number{
+    return Math.sqrt(Vector.distanceSquared(a,b));
   }
 
   public static from(data: VectorData): Vector {
@@ -84,16 +92,16 @@ export class Vector {
     return this.x * vector.y - this.y * vector.x;
   }
 
-  public lengthSquared(): number {
+  public distanceSquared(): number {
     return this.x * this.x + this.y * this.y;
   }
 
-  public length(): number {
-    return Math.sqrt(this.lengthSquared());
+  public distance(): number {
+    return Math.sqrt(this.distanceSquared());
   }
 
   public normalize(): Vector {
-    const length = this.length();
+    const length = this.distance();
     if (length === 0) {
       return new Vector(0, 0);
     }
@@ -115,12 +123,6 @@ export class Vector {
 
   public toString(): string {
     return `(${this.x}, ${this.y})`;
-  }
-
-  public distance(vector: Vector): number {
-    const dx = this.x - vector.x;
-    const dy = this.y - vector.y;
-    return Math.sqrt(dx * dx + dy * dy);
   }
 
   public angle(): number {

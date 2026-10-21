@@ -1,6 +1,7 @@
 import { EngineBase } from "./EngineBase";
 import { BaseObject } from "./objects/BaseObject";
 import { Circle } from "./objects/Circle";
+import { Curve } from "./objects/Curve";
 import { Line } from "./objects/Line";
 import { saveDataSchema } from "./schema";
 import { BaseCreateOption, EngineOption, EngineSnapShot, SaveData, ViewportOption } from "./types";
@@ -196,6 +197,12 @@ export class Engine extends EngineBase {
       this.content.addGround(line);
 
       return line;
+    }else if(Curve.isCurveCreateOption(option)){
+      const curve = Curve.create(option);
+
+      this.content.addGround(curve);
+
+      return curve;
     }
 
     throw new Error("存在しないオブジェクトタイプです");
@@ -235,6 +242,8 @@ export class Engine extends EngineBase {
       .map(ground=>{
         if(Line.isLineOption(ground)){
           return Line.from(ground);
+        }else if(Curve.isCurveOption(ground)){
+          return Curve.from(ground);
         }
 
         return null;

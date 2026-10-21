@@ -12,6 +12,7 @@ export default function SpawnSettings() {
   const shapeOptions = [
     { label: "円", value: "circle" },
     { label: "直線", value: "line" },
+    { label: "曲線", value: "curve" },
   ];
 
   if (!engine||!state) return null;
@@ -80,7 +81,7 @@ export default function SpawnSettings() {
           />
         </>
       )}
-      {spawnConfig.type === "line" && (
+      {(spawnConfig.type === "line" || spawnConfig.type === "curve") && (
         <>
           <SliderField
             label="幅"
