@@ -18,6 +18,7 @@ export function useEngineState() {
     trackingLimit: 100,
     playBackSpeed: 1,
     worldSize: 5000,
+    gridWidth: 50,
     gravity: 200,
     pps: 120,
     friction: 0.001

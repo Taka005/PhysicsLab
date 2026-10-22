@@ -17,6 +17,7 @@ export default function SettingPanel() {
   const [isSetGridCrossMode, setIsSetGridCrossMode] = useState<boolean>(state.isSetGridCrossMode);
   const [isDisplayGrid, setIsDisplayGrid] = useState<boolean>(state.isDisplayGrid);
   const [isDisplayVector, setIsDisplayVector] = useState<boolean>(state.isDisplayVector);
+  const [gridWidth, setGridWidth] = useState<number>(state.gridWidth);
   const [trackingInterval, setTrackingInterval] = useState<number>(state.trackingInterval);
   const [trackingLimit, setTrackingLimit] = useState<number>(state.trackingLimit);
 
@@ -66,6 +67,10 @@ export default function SettingPanel() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
+
+  const resetSetting = () =>{
+
+  }
 
   return (
     <>
@@ -134,7 +139,7 @@ export default function SettingPanel() {
         </div>
         <div className="flex-1 gap-2">
           <ToggleSwitch
-            label="グリッド表示"
+            label="グリッドを表示"
             checked={isDisplayGrid}
             onChange={(checked) =>{
               setIsDisplayGrid(checked);
@@ -144,7 +149,7 @@ export default function SettingPanel() {
         </div>
         <div className="flex-1 gap-2">
           <ToggleSwitch
-            label="ベクトル表示"
+            label="ベクトルを表示"
             checked={isDisplayVector}
             onChange={(checked) =>{
               setIsDisplayVector(checked);
@@ -154,10 +159,24 @@ export default function SettingPanel() {
         </div>
         <div className="flex-1 gap-2">
           <SliderField
+            label="グリッド間隔"
+            value={gridWidth}
+            min="5"
+            max="500"
+            step="5"
+            onChange={(e) => {
+              const val = parseFloat(e.target.value);
+              setGridWidth(val);
+              engine.viewport.gridWidth = val;
+            }}
+          />
+        </div>
+        <div className="flex-1 gap-2">
+          <SliderField
             label="トラッキング間隔"
             value={trackingInterval}
             min="100"
-            max="5000"
+            max="3000"
             step="10"
             onChange={(e) => {
               const val = parseFloat(e.target.value);
@@ -183,7 +202,19 @@ export default function SettingPanel() {
         <hr className="my-1 border-t border-gray-400" />
         <div className="flex gap-2">
           <button
-            onClick={()=>engine.clear(true)}
+            onClick={()=>engine.reset()}
+            className="flex-1 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
+          >
+            デフォルト設定に戻す
+          </button>
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={()=>{
+              engine.clear(true);
+
+              toast.success("リセットしました");
+            }}
             className="flex-1 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
           >
             すべてリセット

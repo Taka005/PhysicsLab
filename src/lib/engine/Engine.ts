@@ -64,6 +64,7 @@ export class Engine extends EngineBase {
       worldSize: this.worldSize,
       trackingInterval: this.trackingInterval,
       trackingLimit: this.trackingLimit,
+      gridWidth: this.viewport.gridWidth,
       gravity: this.gravity,
       pps: this.pps,
       friction: this.friction
@@ -86,6 +87,24 @@ export class Engine extends EngineBase {
   public getSnapshot = () => {
     return this.snapshot;
   };
+
+  public reset(): void{
+    this.viewport.reset();
+
+    this.isTrackingMode = false;
+    this.isDynamicTrackingMode = false;
+    this.isDebugMode = false;
+    this.isSetGridCrossMode = false;
+    this.trackingInterval = 100;
+    this.trackingLimit = 100;
+    this.playBackSpeed = 1;
+    this.worldSize = 5000;
+    this.gravity = 200;
+    this.pps = 120;
+    this.friction = 0.001;
+
+    this.notify();
+  }
 
   public getObjects(): BaseObject[]{
     return this.content.objects;

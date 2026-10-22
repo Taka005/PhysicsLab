@@ -127,6 +127,7 @@ export type EngineSnapShot = {
   worldSize: number;
   trackingInterval: number;
   trackingLimit: number;
+  gridWidth: number;
   gravity: number;
   pps: number;
   friction: number;

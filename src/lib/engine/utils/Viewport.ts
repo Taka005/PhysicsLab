@@ -27,4 +27,12 @@ export class Viewport{
     this.zoomRatio = option.zoomRatio;
     this.gridWidth = option.gridWidth;
   }
+
+  public reset(): void{
+    this.offset = new Vector(0,0);
+    this.zoomRatio = 1;
+    this.gridWidth = 50;
+    this.isDisplayGrid= false;
+    this.isDisplayVector = false;
+  }
 }
