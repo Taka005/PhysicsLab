@@ -12,21 +12,21 @@ import { Viewport } from "./utils/Viewport";
 export class Engine extends EngineBase {
   public isStarted: boolean = false;
 
-  public isTrackingMode: boolean = false;
+  private _isTrackingMode = false;
 
-  public isDynamicTrackingMode: boolean = false;
+  public _isDynamicTrackingMode: boolean = false;
 
-  public isSetGridCrossMode: boolean = false;
+  public _isSetGridCrossMode: boolean = false;
 
-  public isDebugMode: boolean = false;
+  public _isDebugMode: boolean = false;
 
-  public playBackSpeed: number;
+  public _playBackSpeed: number;
 
-  public trackingInterval: number;
+  public _trackingInterval: number;
 
-  public trackingLimit: number;
+  public _trackingLimit: number;
 
-  public worldSize: number;
+  public _worldSize: number;
 
   public readonly viewport: Viewport;
 
@@ -41,14 +41,94 @@ export class Engine extends EngineBase {
   constructor(engineOption: EngineOption,viewportOption: ViewportOption) {
     super(engineOption);
 
-    this.viewport = new Viewport(viewportOption);
+    this.viewport = new Viewport(viewportOption,() => this.notify());
 
-    this.playBackSpeed = engineOption.playBackSpeed;
-    this.trackingInterval = engineOption.trackingInterval;
-    this.trackingLimit = engineOption.trackingLimit;
-    this.worldSize = engineOption.worldSize;
+    this._playBackSpeed = engineOption.playBackSpeed;
+    this._trackingInterval = engineOption.trackingInterval;
+    this._trackingLimit = engineOption.trackingLimit;
+    this._worldSize = engineOption.worldSize;
 
     this.snapshot = this.createSnapshot();
+  }
+
+  public get isTrackingMode(): boolean{
+    return this._isTrackingMode;
+  }
+
+  public set isTrackingMode(value: boolean){
+    this._isTrackingMode = value;
+    this.notify();
+  }
+
+  public get isDynamicTrackingMode(): boolean{
+    return this._isDynamicTrackingMode;
+  }
+
+  public set isDynamicTrackingMode(value: boolean) {
+    this._isDynamicTrackingMode = value;
+    this.notify();
+  }
+
+  public get isSetGridCrossMode(): boolean{
+    return this._isSetGridCrossMode;
+  }
+
+  public set isSetGridCrossMode(value: boolean) {
+    this._isSetGridCrossMode = value;
+    this.notify();
+  }
+
+  public get isDebugMode(): boolean{
+    return this._isDebugMode;
+  }
+
+  public set isDebugMode(value: boolean) {
+    this._isDebugMode = value;
+    this.notify();
+  }
+
+  public get playBackSpeed(): number{
+    return this._playBackSpeed;
+  }
+
+  public set playBackSpeed(value: number) {
+    if(value <= 0) throw new Error("再生速度は0を超える必要があります");
+
+    this._playBackSpeed = value;
+    this.notify();
+  }
+
+  public get trackingInterval(): number{
+    return this._trackingInterval;
+  }
+
+  public set trackingInterval(value: number) {
+    if(value <= 0) throw new Error("トラッキング間隔は0を超える必要があります");
+
+    this._trackingInterval = value;
+    this.notify();
+  }
+
+  public get trackingLimit(): number{
+    return this._trackingLimit;
+  }
+
+  public set trackingLimit(value: number) {
+    if(value <= 0) throw new Error("最大トラッキング数は0を超える必要があります");
+
+    this._trackingLimit = value;
+    this.notify();
+  }
+
+  public get worldSize(): number{
+    return this._worldSize;
+  }
+
+  public set worldSize(value: number) {
+    if(value <= 0) throw new Error("ワールドサイズは0を超える必要があります");
+
+    this._worldSize = value;
+    this.notify();
   }
 
   private createSnapshot(): EngineSnapShot{
@@ -95,7 +175,7 @@ export class Engine extends EngineBase {
     this.isDynamicTrackingMode = false;
     this.isDebugMode = false;
     this.isSetGridCrossMode = false;
-    this.trackingInterval = 100;
+    this.trackingInterval = 1000;
     this.trackingLimit = 100;
     this.playBackSpeed = 1;
     this.worldSize = 5000;

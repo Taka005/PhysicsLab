@@ -2,7 +2,7 @@
 
 import { useEngine } from "@/context/EngineContext";
 import { useEngineState } from "@/hooks/useEngineState";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useRef } from "react";
 import { toast } from "sonner";
 import ToggleSwitch from "./ToggleSwitch";
 import SliderField from "./SliderField";
@@ -11,15 +11,6 @@ export default function SettingPanel() {
   const engine = useEngine();
   const state = useEngineState();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isTrackingMode, setIsTrackingMode] = useState<boolean>(state.isTrackingMode);
-  const [isDynamicTrackingMode, setIsDynamicTrackingMode] = useState<boolean>(state.isDynamicTrackingMode);
-  const [isDebugMode, setIsDebugMode] = useState<boolean>(state.isDebugMode);
-  const [isSetGridCrossMode, setIsSetGridCrossMode] = useState<boolean>(state.isSetGridCrossMode);
-  const [isDisplayGrid, setIsDisplayGrid] = useState<boolean>(state.isDisplayGrid);
-  const [isDisplayVector, setIsDisplayVector] = useState<boolean>(state.isDisplayVector);
-  const [gridWidth, setGridWidth] = useState<number>(state.gridWidth);
-  const [trackingInterval, setTrackingInterval] = useState<number>(state.trackingInterval);
-  const [trackingLimit, setTrackingLimit] = useState<number>(state.trackingLimit);
 
   if (!engine||!state) return null;
 
@@ -96,19 +87,17 @@ export default function SettingPanel() {
         <div className="flex-1 gap-2">
           <ToggleSwitch
             label="トラッキングモード"
-            checked={isTrackingMode}
+            checked={state.isTrackingMode}
             onChange={(checked) =>{
-              setIsTrackingMode(checked);
-              engine.isTrackingMode = checked
+              engine.isTrackingMode = checked;
             }}
           />
         </div>
         <div className="flex-1 gap-2">
           <ToggleSwitch
             label="動的トラッキングモード"
-            checked={isDynamicTrackingMode}
+            checked={state.isDynamicTrackingMode}
             onChange={(checked) =>{
-              setIsDynamicTrackingMode(checked);
               engine.isDynamicTrackingMode = checked
             }}
           />
@@ -116,9 +105,8 @@ export default function SettingPanel() {
         <div className="flex-1 gap-2">
           <ToggleSwitch
             label="グリッド交点設置モード"
-            checked={isSetGridCrossMode}
+            checked={state.isSetGridCrossMode}
             onChange={(checked) =>{
-              setIsSetGridCrossMode(checked);
               engine.isSetGridCrossMode = checked
             }}
           />
@@ -126,9 +114,8 @@ export default function SettingPanel() {
         <div className="flex-1 gap-2">
           <ToggleSwitch
             label="デバッグモード"
-            checked={isDebugMode}
+            checked={state.isDebugMode}
             onChange={(checked) =>{
-              setIsDebugMode(checked);
               engine.isDebugMode = checked
             }}
           />
@@ -136,9 +123,8 @@ export default function SettingPanel() {
         <div className="flex-1 gap-2">
           <ToggleSwitch
             label="グリッドを表示"
-            checked={isDisplayGrid}
+            checked={state.isDisplayGrid}
             onChange={(checked) =>{
-              setIsDisplayGrid(checked);
               engine.viewport.isDisplayGrid = checked
             }}
           />
@@ -146,52 +132,45 @@ export default function SettingPanel() {
         <div className="flex-1 gap-2">
           <ToggleSwitch
             label="ベクトルを表示"
-            checked={isDisplayVector}
+            checked={state.isDisplayVector}
             onChange={(checked) =>{
-              setIsDisplayVector(checked);
-              engine.viewport.isDisplayGrid = checked
+              engine.viewport.isDisplayVector = checked
             }}
           />
         </div>
         <div className="flex-1 gap-2">
           <SliderField
             label="グリッド間隔"
-            value={gridWidth}
+            value={state.gridWidth}
             min="5"
             max="500"
             step="5"
             onChange={(e) => {
-              const val = parseFloat(e.target.value);
-              setGridWidth(val);
-              engine.viewport.gridWidth = val;
+              engine.viewport.gridWidth = parseFloat(e.target.value);
             }}
           />
         </div>
         <div className="flex-1 gap-2">
           <SliderField
             label="トラッキング間隔"
-            value={trackingInterval}
+            value={state.trackingInterval}
             min="100"
             max="3000"
             step="10"
             onChange={(e) => {
-              const val = parseFloat(e.target.value);
-              setTrackingInterval(val);
-              engine.trackingInterval = val;
+              engine.trackingInterval = parseFloat(e.target.value);
             }}
           />
         </div>
         <div className="flex-1 gap-2">
           <SliderField
             label="最大トラッキング数"
-            value={trackingLimit}
+            value={state.trackingLimit}
             min="10"
             max="1000"
             step="10"
             onChange={(e) => {
-              const val = parseFloat(e.target.value);
-              setTrackingLimit(val);
-              engine.trackingLimit = val;
+              engine.trackingLimit = parseFloat(e.target.value);
             }}
           />
         </div>
