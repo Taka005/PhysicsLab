@@ -1,6 +1,6 @@
 import { useCallback, useSyncExternalStore } from "react";
 import { useEngine } from "@/context/EngineContext";
-import { EngineSnapShot } from "@/lib/engine/types";
+import { DEFAULT_ENGINE_VALUE, DEFAULT_VIEWPORT_VALUE, EngineSnapShot } from "@/lib/engine/types";
 
 export function useEngineState() {
   const engine = useEngine();
@@ -14,14 +14,14 @@ export function useEngineState() {
     isSetGridCrossMode: false,
     isDisplayGrid: false,
     isDisplayVector: false,
-    trackingInterval: 1000,
-    trackingLimit: 100,
-    playBackSpeed: 1,
-    worldSize: 5000,
-    gridWidth: 50,
-    gravity: 200,
-    pps: 120,
-    friction: 0.001
+    trackingInterval: DEFAULT_ENGINE_VALUE.trackingInterval,
+    trackingLimit: DEFAULT_ENGINE_VALUE.trackingLimit,
+    playBackSpeed: DEFAULT_ENGINE_VALUE.playBackSpeed,
+    worldSize: DEFAULT_ENGINE_VALUE.worldSize,
+    gridWidth: DEFAULT_VIEWPORT_VALUE.gridWidth,
+    gravity: DEFAULT_ENGINE_VALUE.gravity,
+    pps: DEFAULT_ENGINE_VALUE.pps,
+    friction: DEFAULT_ENGINE_VALUE.friction
   } as EngineSnapShot), []);
 
   const subscribe = engine ? engine.subscribe : emptySubscribe;

@@ -4,7 +4,7 @@ import { Circle } from "./objects/Circle";
 import { Curve } from "./objects/Curve";
 import { Line } from "./objects/Line";
 import { saveDataSchema } from "./typeSchema";
-import { BaseCreateOption, EngineOption, EngineSnapShot, SaveData, ViewportOption } from "./types";
+import { BaseCreateOption, DEFAULT_ENGINE_VALUE, DEFAULT_VIEWPORT_VALUE, EngineOption, EngineSnapShot, SaveData, ViewportOption } from "./types";
 import { ContentManager } from "./utils/ContentManager";
 import { Vector } from "./utils/Vector";
 import { Viewport } from "./utils/Viewport";
@@ -38,8 +38,8 @@ export class Engine extends EngineBase {
 
   private snapshot: EngineSnapShot;
 
-  constructor(engineOption: EngineOption,viewportOption: ViewportOption) {
-    super(engineOption);
+  constructor(engineOption: EngineOption = DEFAULT_ENGINE_VALUE,viewportOption: ViewportOption = DEFAULT_VIEWPORT_VALUE) {
+    super(engineOption,() => this.notify());
 
     this.viewport = new Viewport(viewportOption,() => this.notify());
 
@@ -175,13 +175,13 @@ export class Engine extends EngineBase {
     this.isDynamicTrackingMode = false;
     this.isDebugMode = false;
     this.isSetGridCrossMode = false;
-    this.trackingInterval = 1000;
-    this.trackingLimit = 100;
-    this.playBackSpeed = 1;
-    this.worldSize = 5000;
-    this.gravity = 200;
-    this.pps = 120;
-    this.friction = 0.001;
+    this.trackingInterval = DEFAULT_ENGINE_VALUE.trackingInterval;
+    this.trackingLimit = DEFAULT_ENGINE_VALUE.trackingLimit;
+    this.playBackSpeed = DEFAULT_ENGINE_VALUE.playBackSpeed;
+    this.worldSize = DEFAULT_ENGINE_VALUE.worldSize;
+    this.gravity = DEFAULT_ENGINE_VALUE.gravity;
+    this.pps = DEFAULT_ENGINE_VALUE.pps;
+    this.friction = DEFAULT_ENGINE_VALUE.friction;
 
     this.notify();
   }

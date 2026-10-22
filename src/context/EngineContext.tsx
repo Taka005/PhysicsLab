@@ -14,22 +14,7 @@ export function EngineProvider({ children }: { children: React.ReactNode }) {
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    const engine = new Engine(
-      {
-        playBackSpeed: 1,
-        trackingInterval: 1000,
-        trackingLimit: 100,
-        worldSize: 5000,
-        pps: 120,
-        gravity: 200,
-        friction: 0.001,
-      },
-      {
-        offset: { x: 0, y: 0 },
-        zoomRatio: 1,
-        gridWidth: 50
-      }
-    );
+    const engine = new Engine();
 
     engineRef.current = engine;
     setIsInitialized(true);

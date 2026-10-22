@@ -132,3 +132,19 @@ export type EngineSnapShot = {
   pps: number;
   friction: number;
 }
+
+export const DEFAULT_ENGINE_VALUE: EngineOption = {
+  trackingInterval: 1000,
+  trackingLimit: 100,
+  playBackSpeed: 1,
+  worldSize: 5000,
+  gravity: 200,
+  pps: 120,
+  friction: 0.001
+};
+
+export const DEFAULT_VIEWPORT_VALUE: ViewportOption = {
+  offset: { x: 0, y: 0 },
+  zoomRatio: 1,
+  gridWidth: 50
+};

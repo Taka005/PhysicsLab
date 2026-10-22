@@ -1,19 +1,28 @@
-import { ViewportOption } from "../types";
+import { DEFAULT_VIEWPORT_VALUE, ViewportOption } from "../types";
 import { Vector } from "./Vector";
 
 export class Viewport{
-  public offset: Vector;
-  public zoomRatio: number;
+  public _offset: Vector;
+  public _zoomRatio: number;
   public _gridWidth: number;
   public _isDisplayVector: boolean = false;
   public _isDisplayGrid: boolean = false;
   private onChanged: () => void;
 
   constructor(option: ViewportOption,onChanged: () => void){
-    this.offset = Vector.from(option.offset);
-    this.zoomRatio = option.zoomRatio;
+    this._offset = Vector.from(option.offset);
+    this._zoomRatio = option.zoomRatio;
     this._gridWidth = option.gridWidth;
     this.onChanged = onChanged;
+  }
+
+  public get offset(): Vector{
+    return this._offset;
+  }
+
+  public set offset(value: Vector) {
+    this._offset = value;
+    this.onChanged();
   }
 
   public get isDisplayVector(): boolean{
@@ -45,6 +54,17 @@ export class Viewport{
     this.onChanged();
   }
 
+  public get zoomRatio(): number{
+    return this._zoomRatio;
+  }
+
+  public set zoomRatio(value: number) {
+    if(value <= 0) throw new Error("拡大倍率は0を超える必要があります");
+
+    this._zoomRatio = value;
+    this.onChanged();
+  }
+
   public toJSON(): ViewportOption {
     return {
       offset: this.offset.toJSON(),
@@ -62,9 +82,9 @@ export class Viewport{
   }
 
   public reset(): void{
-    this.offset = new Vector(0,0);
-    this.zoomRatio = 1;
-    this.gridWidth = 50;
+    this.offset = Vector.from(DEFAULT_VIEWPORT_VALUE.offset);
+    this.zoomRatio = DEFAULT_VIEWPORT_VALUE.zoomRatio;
+    this.gridWidth = DEFAULT_VIEWPORT_VALUE.gridWidth;
     this.isDisplayGrid= false;
     this.isDisplayVector = false;
 

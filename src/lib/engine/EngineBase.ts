@@ -4,16 +4,49 @@ import { BaseGround } from "./objects/BaseGround";
 import { Vector } from "./utils/Vector";
 
 export class EngineBase{
-  public pps: number;
-  public gravity: number;
-  public friction: number;
+  public _pps: number;
+  public _gravity: number;
+  public _friction: number;
   public readonly CORRECTION_NUMBER: number = 0.00000001;
   public readonly FRICTION_STRENGTH: number = 0.1;
+  private onChanged: () => void;
 
-  constructor(option: EngineBaseOption){
-    this.pps = option.pps;
-    this.gravity = option.gravity;
-    this.friction = option.friction;
+  constructor(option: EngineBaseOption,onChanged: () => void){
+    this._pps = option.pps;
+    this._gravity = option.gravity;
+    this._friction = option.friction;
+    this.onChanged = onChanged;
+  }
+
+  public get pps(): number{
+    return this._pps;
+  }
+
+  public set pps(value: number) {
+    if(value <= 0) throw new Error("PPSは0を超える必要があります");
+
+    this._pps = value;
+    this.onChanged();
+  }
+
+  public get gravity(): number{
+    return this._gravity;
+  }
+
+  public set gravity(value: number) {
+    if(value <= 0) throw new Error("重力加速度は0を超える必要があります");
+
+    this._gravity = value;
+    this.onChanged();
+  }
+
+  public get friction(): number{
+    return this._friction;
+  }
+
+  public set friction(value: number) {
+    this._friction = value;
+    this.onChanged();
   }
 
   public get deltaTime(): number{
