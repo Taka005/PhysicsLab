@@ -2,7 +2,7 @@
 
 import { useEngine } from "@/context/EngineContext";
 import { useEngineState } from "@/hooks/useEngineState";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import ToggleSwitch from "./ToggleSwitch";
 import SliderField from "./SliderField";
@@ -67,10 +67,6 @@ export default function SettingPanel() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-
-  const resetSetting = () =>{
-
-  }
 
   return (
     <>
