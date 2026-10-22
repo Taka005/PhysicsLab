@@ -14,6 +14,8 @@ export function useEngineState() {
     isSetGridCrossMode: false,
     isDisplayGrid: false,
     isDisplayVector: false,
+    trackingInterval: 100,
+    trackingLimit: 100,
     playBackSpeed: 1,
     worldSize: 5000,
     gravity: 200,

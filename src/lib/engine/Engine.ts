@@ -62,6 +62,8 @@ export class Engine extends EngineBase {
       isDisplayVector: this.viewport.isDisplayVector,
       playBackSpeed: this.playBackSpeed,
       worldSize: this.worldSize,
+      trackingInterval: this.trackingInterval,
+      trackingLimit: this.trackingLimit,
       gravity: this.gravity,
       pps: this.pps,
       friction: this.friction

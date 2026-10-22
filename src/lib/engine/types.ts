@@ -125,6 +125,8 @@ export type EngineSnapShot = {
   isDisplayVector: boolean;
   playBackSpeed: number;
   worldSize: number;
+  trackingInterval: number;
+  trackingLimit: number;
   gravity: number;
   pps: number;
   friction: number;

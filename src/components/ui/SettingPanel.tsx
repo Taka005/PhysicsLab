@@ -5,6 +5,7 @@ import { useEngineState } from "@/hooks/useEngineState";
 import { ChangeEvent, useRef, useState } from "react";
 import { toast } from "sonner";
 import ToggleSwitch from "./ToggleSwitch";
+import SliderField from "./SliderField";
 
 export default function SettingPanel() {
   const engine = useEngine();
@@ -16,6 +17,8 @@ export default function SettingPanel() {
   const [isSetGridCrossMode, setIsSetGridCrossMode] = useState<boolean>(state.isSetGridCrossMode);
   const [isDisplayGrid, setIsDisplayGrid] = useState<boolean>(state.isDisplayGrid);
   const [isDisplayVector, setIsDisplayVector] = useState<boolean>(state.isDisplayVector);
+  const [trackingInterval, setTrackingInterval] = useState<number>(state.trackingInterval);
+  const [trackingLimit, setTrackingLimit] = useState<number>(state.trackingLimit);
 
   if (!engine||!state) return null;
 
@@ -89,7 +92,7 @@ export default function SettingPanel() {
           </button>
         </div>
         <hr className="my-1 border-t border-gray-400" />
-        <div className="flex gap-2">
+        <div className="flex-1 gap-2">
           <ToggleSwitch
             label="トラッキングモード"
             checked={isTrackingMode}
@@ -99,7 +102,7 @@ export default function SettingPanel() {
             }}
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex-1 gap-2">
           <ToggleSwitch
             label="動的トラッキングモード"
             checked={isDynamicTrackingMode}
@@ -109,7 +112,7 @@ export default function SettingPanel() {
             }}
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex-1 gap-2">
           <ToggleSwitch
             label="グリッド交点設置モード"
             checked={isSetGridCrossMode}
@@ -119,7 +122,7 @@ export default function SettingPanel() {
             }}
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex-1 gap-2">
           <ToggleSwitch
             label="デバッグモード"
             checked={isDebugMode}
@@ -129,7 +132,7 @@ export default function SettingPanel() {
             }}
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex-1 gap-2">
           <ToggleSwitch
             label="グリッド表示"
             checked={isDisplayGrid}
@@ -139,13 +142,41 @@ export default function SettingPanel() {
             }}
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex-1 gap-2">
           <ToggleSwitch
             label="ベクトル表示"
             checked={isDisplayVector}
             onChange={(checked) =>{
               setIsDisplayVector(checked);
               engine.viewport.isDisplayGrid = checked
+            }}
+          />
+        </div>
+        <div className="flex-1 gap-2">
+          <SliderField
+            label="トラッキング間隔"
+            value={trackingInterval}
+            min="100"
+            max="5000"
+            step="10"
+            onChange={(e) => {
+              const val = parseFloat(e.target.value);
+              setTrackingInterval(val);
+              engine.trackingInterval = val;
+            }}
+          />
+        </div>
+        <div className="flex-1 gap-2">
+          <SliderField
+            label="最大トラッキング数"
+            value={trackingLimit}
+            min="10"
+            max="1000"
+            step="10"
+            onChange={(e) => {
+              const val = parseFloat(e.target.value);
+              setTrackingLimit(val);
+              engine.trackingLimit = val;
             }}
           />
         </div>

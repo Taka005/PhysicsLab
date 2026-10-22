@@ -65,8 +65,8 @@ export default function ControlPanel() {
         <SpawnSettings/>
       </div>
           {isSettingOpen && (
-          <Draggable handle=".drag-handle" nodeRef={nodeRef}>
-            <div ref={nodeRef} className="absolute top-20 left-20 w-72 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50">
+          <Draggable handle=".drag-handle" nodeRef={nodeRef} bounds="body">
+            <div ref={nodeRef} className="absolute top-10 right-100 w-72 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50">
               <div className="drag-handle bg-gray-500 text-white px-4 py-2 flex justify-between items-center cursor-move text-sm font-semibold">
                 <span>設定</span>
                 <button
