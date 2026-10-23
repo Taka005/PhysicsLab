@@ -1,4 +1,4 @@
-import { BaseBody } from "@/lib/engine/objects/BaseBody";
+import { BaseBody } from "@/lib/engine";
 import { Graphics } from "pixi.js";
 
 export class VectorView{

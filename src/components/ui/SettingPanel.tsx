@@ -143,7 +143,7 @@ export default function SettingPanel() {
             label="グリッド間隔"
             value={state.gridWidth}
             min="5"
-            max="500"
+            max="100"
             step="5"
             onChange={(e) => {
               engine.viewport.gridWidth = parseFloat(e.target.value);
@@ -171,6 +171,18 @@ export default function SettingPanel() {
             step="10"
             onChange={(e) => {
               engine.trackingLimit = parseFloat(e.target.value);
+            }}
+          />
+        </div>
+        <div className="flex-1 gap-2">
+          <SliderField
+            label="ワールドサイズ"
+            value={state.worldSize}
+            min="1000"
+            max="10000"
+            step="100"
+            onChange={(e) => {
+              engine.worldSize = parseFloat(e.target.value);
             }}
           />
         </div>

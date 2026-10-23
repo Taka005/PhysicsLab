@@ -5,6 +5,7 @@ import { LineView } from "./views/LineView";
 import { CurveView } from "./views/CurveView";
 import { VectorView } from "./views/VectorView";
 import { EdgeView } from "./views/EdgeView";
+import { GridView } from "./views/GridView";
 
 export class Renderer {
   private app: Application = new Application();
@@ -13,6 +14,9 @@ export class Renderer {
   private trackingContainer: Container = new Container();
   private viewMap: Map<string,Graphics> = new Map();
   private isInitialized = false;
+  private gridGraphics = new Graphics();
+  private width: number | null = null;
+  private height: number | null = null;
 
   constructor(engine: Engine){
     this.engine = engine;
@@ -27,6 +31,9 @@ export class Renderer {
       antialias: true,
     });
 
+    this.width = width;
+    this.height = height;
+
     if (this.isInitialized) return;
 
     this.isInitialized = true;
@@ -36,6 +43,8 @@ export class Renderer {
 
     this.mainContainer.scale.set(this.engine.viewport.zoomRatio, this.engine.viewport.zoomRatio);
     this.mainContainer.position.set(this.engine.viewport.offset.x, this.engine.viewport.offset.y);
+
+    this.mainContainer.addChild(this.gridGraphics);
   }
 
   public render(): void {
@@ -48,6 +57,12 @@ export class Renderer {
 
     this.mainContainer.scale.set(this.engine.viewport.zoomRatio, this.engine.viewport.zoomRatio);
     this.mainContainer.position.set(this.engine.viewport.offset.x, this.engine.viewport.offset.y);
+
+    if(this.engine.viewport.isDisplayGrid){
+      GridView.draw(this.gridGraphics,this.engine.viewport,this.engine.worldSize,this.width ?? 0,this.height ?? 0);
+    }else{
+      this.gridGraphics.clear();
+    }
 
     const activeIds = new Set<string>();
 
@@ -98,6 +113,9 @@ export class Renderer {
     if (!this.isInitialized) return;
 
     this.app.renderer.resize(width, height);
+
+    this.width = width;
+    this.height = height;
 
     this.app.render();
   }
