@@ -287,8 +287,8 @@ export class Engine extends EngineBase {
       const body = this.content.bodies[i];
 
       if(
-        Math.abs(body.position.x) > this.worldSize||
-        Math.abs(body.position.y) > this.worldSize
+        Math.abs(body.position.x) >= this.worldSize||
+        Math.abs(body.position.y) >= this.worldSize
       ){
         this.deSpawn(body.id);
       }
