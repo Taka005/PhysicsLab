@@ -37,7 +37,7 @@ export default function PhysicsCanvas() {
   const { handlers } = useCanvasInteraction({
     canvasRef,
     onDown: (point, e) => {
-      if (engine) {
+      if(engine){
         const nextPoints = [...clickedPoints, engine.toWorldPosition(Vector.from(point))];
 
         if (nextPoints.length >= requiredCount) {
@@ -83,6 +83,21 @@ export default function PhysicsCanvas() {
     },
     onUp: (point, e) => {
 
+    },
+    onWheel: (e) => {
+      if(engine){
+        if(e.deltaY > 0){
+          engine.viewport.zoomRatio = Math.min(Math.max(engine.viewport.zoomRatio + 0.1, 0.1), 5);
+        }else{
+          engine.viewport.zoomRatio = Math.min(Math.max(engine.viewport.zoomRatio - 0.1, 0.1), 5);
+        }
+      }
+    },
+    onKeyDown: (e) => {
+      console.log("KeyDown:", e.key);
+    },
+    onKeyUp: (e) => {
+      console.log("KeyUp:", e.key);
     },
   });
 
@@ -138,7 +153,7 @@ export default function PhysicsCanvas() {
       ref={containerRef}
       className="flex-1 h-full relative bg-white rounded-lg shadow-sm overflow-hidden"
     >
-      <canvas ref={canvasRef} className="block w-full h-full" {...handlers}/>
+      <canvas tabIndex={0} ref={canvasRef} className="block w-full h-full outline-none" {...handlers}/>
     </div>
   );
 }

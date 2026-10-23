@@ -83,6 +83,38 @@ export default function SettingPanel() {
             エクスポート
           </button>
         </div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => {
+              localStorage.setItem("worldData", engine.export());
+              toast.success("保存しました");
+            }}
+            className="flex-1 px-4 py-2 bg-amber-500 text-white rounded hover:bg-amber-600 transition"
+          >
+            保存
+          </button>
+          <button
+            onClick={() => {
+              const worldData = localStorage.getItem("worldData");
+              if (worldData) {
+                try{
+                  engine.import(worldData);
+
+                  toast.success("ロードしました");
+                }catch{
+                  toast.error("ファイルの読み込みに失敗しました", {
+                    description: "ファイル形式が不正です"
+                  });
+                }
+              }else{
+                toast.error("保存されたデータが存在しません");
+              }
+            }}
+            className="flex-1 px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition"
+          >
+            ロード
+          </button>
+        </div>
         <hr className="my-1 border-t border-gray-400" />
         <div className="flex-1 gap-2">
           <ToggleSwitch
@@ -196,6 +228,14 @@ export default function SettingPanel() {
           />
         </div>
         <hr className="my-1 border-t border-gray-400" />
+        <div className="flex gap-2">
+          <button
+            onClick={()=>engine.clearTrack()}
+            className="flex-1 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
+          >
+            トラッキングを削除
+          </button>
+        </div>
         <div className="flex gap-2">
           <button
             onClick={()=>engine.reset()}

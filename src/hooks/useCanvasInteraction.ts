@@ -1,5 +1,5 @@
 import { useEngine } from "@/context/EngineContext";
-import { useRef, useState, useCallback, RefObject, PointerEvent } from "react";
+import { useRef, useState, useCallback, RefObject, PointerEvent, KeyboardEvent, WheelEvent } from "react";
 
 export interface Point {
   x: number;
@@ -11,6 +11,9 @@ export interface CanvasInteractionOptions {
   onDown?: (pos: Point, e: PointerEvent) => void;
   onMove?: (pos: Point, isDragging: boolean, e: PointerEvent) => void;
   onUp?: (pos: Point, e: PointerEvent) => void;
+  onWheel?: (e: WheelEvent) => void;
+  onKeyDown?: (e: KeyboardEvent) => void;
+  onKeyUp?: (e: KeyboardEvent) => void;
 }
 
 export function useCanvasInteraction({
@@ -18,6 +21,9 @@ export function useCanvasInteraction({
   onDown,
   onMove,
   onUp,
+  onWheel,
+  onKeyDown,
+  onKeyUp
 }: CanvasInteractionOptions) {
   const [currentPoint, setCurrentPoint] = useState<Point | null>(null);
   const isDraggingRef = useRef(false);
@@ -64,6 +70,18 @@ export function useCanvasInteraction({
     }
   }, [currentPoint, getCanvasPoint, onUp]);
 
+  const handleWheel = useCallback((e: WheelEvent) => {
+    onWheel?.(e);
+  }, [onWheel]);
+
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    onKeyDown?.(e);
+  }, [onKeyDown]);
+
+  const handleKeyUp = useCallback((e: KeyboardEvent) => {
+    onKeyUp?.(e);
+  }, [onKeyUp]);
+
   return {
     currentPoint,
     isDragging: isDraggingRef.current,
@@ -72,6 +90,9 @@ export function useCanvasInteraction({
       onPointerMove: handlePointerMove,
       onPointerUp: handlePointerUp,
       onPointerLeave: handlePointerUp,
+      onWheel: handleWheel,
+      onKeyDown: handleKeyDown,
+      onKeyUp: handleKeyUp
     },
   };
 }
