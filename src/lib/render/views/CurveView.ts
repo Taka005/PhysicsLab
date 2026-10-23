@@ -21,6 +21,7 @@ export class CurveView {
       endAngle,
       !clockwise
     );
+    
     graphics.stroke({ width: curve.width, color: "red" });
 
     graphics.circle(curve.start.x, curve.start.y, curve.width / 2);

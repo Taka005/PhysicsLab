@@ -1,9 +1,10 @@
 import { Application, Container, Graphics } from "pixi.js";
-import { Curve, Engine, Line, Circle, BaseBody } from "@/lib/engine";
+import { Curve, Engine, Line, Circle, BaseBody, BaseGround } from "@/lib/engine";
 import { CircleView } from "./views/CircleView";
 import { LineView } from "./views/LineView";
 import { CurveView } from "./views/CurveView";
 import { VectorView } from "./views/VectorView";
+import { EdgeView } from "./views/EdgeView";
 
 export class Renderer {
   private app: Application = new Application();
@@ -76,6 +77,10 @@ export class Renderer {
 
         if(object instanceof BaseBody&&this.engine.viewport.isDisplayVector){
           VectorView.draw(view,object);
+        }
+
+        if(object instanceof BaseGround&&this.engine.isDebugMode){
+          EdgeView.draw(view,object);
         }
       }
     }
