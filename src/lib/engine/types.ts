@@ -135,7 +135,7 @@ export type EngineSnapShot = {
 }
 
 export const DEFAULT_ENGINE_VALUE: EngineOption = {
-  trackingInterval: 1000,
+  trackingInterval: 100,
   trackingLimit: 100,
   playBackSpeed: 1,
   worldSize: 5000,

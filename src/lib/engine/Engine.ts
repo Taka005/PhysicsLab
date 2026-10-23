@@ -1,4 +1,5 @@
 import { EngineBase } from "./EngineBase";
+import { BaseBody } from "./objects/BaseBody";
 import { BaseObject } from "./objects/BaseObject";
 import { Circle } from "./objects/Circle";
 import { Curve } from "./objects/Curve";
@@ -191,6 +192,10 @@ export class Engine extends EngineBase {
     return this.content.objects;
   }
 
+  public getTrackBodies(): BaseBody[]{
+    return this.content.trackBodies;
+  }
+
   public start(): void {
     if(this.isStarted) return;
 
@@ -216,6 +221,10 @@ export class Engine extends EngineBase {
     }
   }
 
+  public clearTrack(): void{
+    this.content.removeAllTrackBodies();
+  }
+
   private update(): void{
     if(!this.isStarted) return;
 
@@ -232,12 +241,12 @@ export class Engine extends EngineBase {
     if(this.trackingCount >= this.trackingInterval){
       const noStopBodies = this.content.bodies.filter(obj => !obj.isStop);
 
-      for(let i = 0;noStopBodies.length > i;i++){
-        this.content.addTrackBody(noStopBodies[i]);
+      for(let i = 0;i < noStopBodies.length;i++){
+        this.content.addTrackBody(noStopBodies[i].clone());
       }
 
       while(this.content.trackBodiesCount > trackingLimit){
-        this.content.removeAllTrackBodies();
+        this.content.trackBodies.shift();
       }
 
       this.trackingCount %= this.trackingInterval;

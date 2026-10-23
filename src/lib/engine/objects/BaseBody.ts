@@ -20,7 +20,7 @@ export abstract class BaseBody extends BaseObject{
     return this.entities.length;
   }
 
-  public isStop(): boolean {
+  public get isStop(): boolean {
     return this.entities.every(entity => entity.isStop);
   }
 

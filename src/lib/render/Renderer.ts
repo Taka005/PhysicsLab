@@ -1,5 +1,5 @@
 import { Application, Container, Graphics } from "pixi.js";
-import { Curve, Engine, Line, Circle, BaseBody, BaseGround } from "@/lib/engine";
+import { Curve, Engine, Line, Circle, BaseBody, BaseGround, BaseObject } from "@/lib/engine";
 import { CircleView } from "./views/CircleView";
 import { LineView } from "./views/LineView";
 import { CurveView } from "./views/CurveView";
@@ -15,6 +15,7 @@ export class Renderer{
   private groundContainer: Container = new Container();
   private objectContainer: Container = new Container();
   private viewMap: Map<string,Graphics> = new Map();
+  private trackingViews: Graphics[] = [];
   private isInitialized = false;
   private gridGraphics = new Graphics();
   private width: number | null = null;
@@ -46,6 +47,8 @@ export class Renderer{
     this.mainContainer.addChild(this.groundContainer);
     this.mainContainer.addChild(this.trackingContainer);
     this.mainContainer.addChild(this.objectContainer);
+
+    this.trackingContainer.alpha = 0.3;
 
     this.updateTransforms()
   }
@@ -85,21 +88,7 @@ export class Renderer{
       }
 
       if(view instanceof Graphics){
-        if(object instanceof Circle){
-          CircleView.draw(view,object);
-        }else if(object instanceof Line){
-          LineView.draw(view,object)
-        }else if(object instanceof Curve){
-          CurveView.draw(view,object);
-        }
-
-        if(object instanceof BaseBody&&this.engine.viewport.isDisplayVector){
-          VectorView.draw(view,object);
-        }
-
-        if(object instanceof BaseGround&&this.engine.viewport.isDisplayEdge){
-          EdgeView.draw(view,object);
-        }
+        this.drawObject(view,object);
       }
     }
 
@@ -109,6 +98,51 @@ export class Renderer{
         view.destroy();
         this.viewMap.delete(name);
       }
+    }
+
+    if(this.engine.isTrackingMode){
+      this.trackingContainer.visible = true;
+
+      const trackBodies = this.engine.getTrackBodies();
+      while (this.trackingViews.length < trackBodies.length) {
+        const graphics = new Graphics();
+        this.trackingContainer.addChild(graphics);
+        this.trackingViews.push(graphics);
+      }
+
+      while (this.trackingViews.length > trackBodies.length) {
+        const view = this.trackingViews.pop();
+        if (view) {
+          view.parent?.removeChild(view);
+          view.destroy();
+        }
+      }
+
+      for (let i = 0; i < trackBodies.length; i++) {
+        const graphics = this.trackingViews[i];
+        const body = trackBodies[i];
+        this.drawObject(graphics, body);
+      }
+    }else{
+      this.trackingContainer.visible = false;
+    }
+  }
+
+  private drawObject(view: Graphics, object: BaseObject): void {
+    if(object instanceof Circle){
+      CircleView.draw(view, object);
+    }else if(object instanceof Line){
+      LineView.draw(view, object);
+    }else if(object instanceof Curve){
+      CurveView.draw(view, object);
+    }
+
+    if(object instanceof BaseBody && this.engine.viewport.isDisplayVector){
+      VectorView.draw(view, object);
+    }
+
+    if(object instanceof BaseGround && this.engine.viewport.isDisplayEdge){
+      EdgeView.draw(view, object);
     }
   }
 
