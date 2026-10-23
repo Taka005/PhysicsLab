@@ -7,11 +7,13 @@ import { VectorView } from "./views/VectorView";
 import { EdgeView } from "./views/EdgeView";
 import { GridView } from "./views/GridView";
 
-export class Renderer {
+export class Renderer{
   private app: Application = new Application();
   private engine: Engine;
   private mainContainer: Container = new Container();
   private trackingContainer: Container = new Container();
+  private groundContainer: Container = new Container();
+  private objectContainer: Container = new Container();
   private viewMap: Map<string,Graphics> = new Map();
   private isInitialized = false;
   private gridGraphics = new Graphics();
@@ -22,7 +24,7 @@ export class Renderer {
     this.engine = engine;
   }
 
-  public async init(canvasElement: HTMLCanvasElement, width: number, height: number) {
+  public async init(canvasElement: HTMLCanvasElement, width: number, height: number){
     await this.app.init({
       canvas: canvasElement,
       width,
@@ -38,25 +40,20 @@ export class Renderer {
 
     this.isInitialized = true;
 
-    this.app.stage.addChild(this.trackingContainer);
     this.app.stage.addChild(this.mainContainer);
 
-    this.mainContainer.scale.set(this.engine.viewport.zoomRatio, this.engine.viewport.zoomRatio);
-    this.mainContainer.position.set(this.engine.viewport.offset.x, this.engine.viewport.offset.y);
-
     this.mainContainer.addChild(this.gridGraphics);
+    this.mainContainer.addChild(this.groundContainer);
+    this.mainContainer.addChild(this.trackingContainer);
+    this.mainContainer.addChild(this.objectContainer);
+
+    this.updateTransforms()
   }
 
-  public render(): void {
+  public render(): void{
     if (!this.isInitialized) return;
 
-    if(this.engine.isTrackingMode){
-      this.trackingContainer.scale.set(this.engine.viewport.zoomRatio, this.engine.viewport.zoomRatio);
-      this.trackingContainer.position.set(this.engine.viewport.offset.x, this.engine.viewport.offset.y);
-    }
-
-    this.mainContainer.scale.set(this.engine.viewport.zoomRatio, this.engine.viewport.zoomRatio);
-    this.mainContainer.position.set(this.engine.viewport.offset.x, this.engine.viewport.offset.y);
+    this.updateTransforms()
 
     if(this.engine.viewport.isDisplayGrid){
       GridView.draw(this.gridGraphics,this.engine.viewport,this.engine.worldSize,this.width ?? 0,this.height ?? 0);
@@ -76,7 +73,13 @@ export class Renderer {
 
       if(!view){
         const graphics = new Graphics();
-        this.mainContainer.addChild(graphics);
+
+        if(object instanceof BaseGround){
+          this.groundContainer.addChild(graphics);
+        }else if(object instanceof BaseBody){
+          this.objectContainer.addChild(graphics);
+        }
+
         this.viewMap.set(object.id, graphics);
         view = graphics;
       }
@@ -102,14 +105,19 @@ export class Renderer {
 
     for (const [name, view] of this.viewMap.entries()) {
       if (!activeIds.has(name)) {
-        this.mainContainer.removeChild(view);
+        view.parent?.removeChild(view);
         view.destroy();
         this.viewMap.delete(name);
       }
     }
   }
 
-  public resize(width: number,height: number){
+  private updateTransforms(): void{
+    this.mainContainer.scale.set(this.engine.viewport.zoomRatio, this.engine.viewport.zoomRatio);
+    this.mainContainer.position.set(this.engine.viewport.offset.x, this.engine.viewport.offset.y);
+  }
+
+  public resize(width: number,height: number): void{
     if (!this.isInitialized) return;
 
     this.app.renderer.resize(width, height);
@@ -120,11 +128,8 @@ export class Renderer {
     this.app.render();
   }
 
-  public destroy():void {
-    if (!this.isInitialized) {
-      this.isInitialized = true;
-      return;
-    }
+  public destroy(): void{
+    if (!this.isInitialized) return;
 
     this.app.destroy(true, { children: true });
     this.viewMap.clear();

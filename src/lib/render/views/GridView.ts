@@ -2,7 +2,13 @@ import { Viewport } from "@/lib/engine";
 import { Graphics } from "pixi.js";
 
 export class GridView{
-  public static draw(graphics: Graphics,viewport: Viewport,worldSize: number, width: number,height: number){
+  public static draw(
+    graphics: Graphics,
+    viewport: Viewport,
+    worldSize: number,
+    width: number,
+    height: number
+  ){
     graphics.clear();
 
     const worldStartX = -viewport.offset.x / viewport.zoomRatio;
@@ -15,11 +21,11 @@ export class GridView{
 
     for(let x = startX; x <= worldEndX; x += viewport.gridWidth){
       const screenX = (x + viewport.offset.x / viewport.zoomRatio) * viewport.zoomRatio;
-      
+
       graphics.moveTo(screenX, 0);
       graphics.lineTo(screenX, height);
 
-      if(Math.abs(x/viewport.zoomRatio) < worldSize){
+      if(Math.abs(x) < worldSize){
         graphics.stroke({ width: 1, color: "gray" });
       }else{
         graphics.stroke({ width: 1, color: "red" });
@@ -32,7 +38,7 @@ export class GridView{
       graphics.moveTo(0, screenY);
       graphics.lineTo(width, screenY);
 
-      if(Math.abs(y/viewport.zoomRatio) < worldSize){
+      if(Math.abs(y) < worldSize){
         graphics.stroke({ width: 1, color: "gray" });
       }else{
         graphics.stroke({ width: 1, color: "red" });

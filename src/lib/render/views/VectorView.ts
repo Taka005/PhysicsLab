@@ -7,6 +7,6 @@ export class VectorView{
 
     graphics.moveTo(body.position.x, body.position.y);
     graphics.lineTo(body.position.x + body.velocity.x, body.position.y + body.velocity.y);
-    graphics.stroke({ width: 1, color: "black" });
+    graphics.stroke({ width: 1, color: "gray" });
   }
 }

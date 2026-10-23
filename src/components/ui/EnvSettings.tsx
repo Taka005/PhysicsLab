@@ -24,8 +24,8 @@ export default function EnvSettings() {
       <SliderField
         label="摩擦"
         value={state.friction}
-        min="-0.5"
-        max="0.5"
+        min="-0.3"
+        max="0.3"
         step="0.001"
         onChange={(e) => {
           const val = parseFloat(e.target.value);
