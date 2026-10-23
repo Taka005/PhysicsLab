@@ -94,7 +94,7 @@ export class Renderer {
           VectorView.draw(view,object);
         }
 
-        if(object instanceof BaseGround&&this.engine.isDebugMode){
+        if(object instanceof BaseGround&&this.engine.viewport.isDisplayEdge){
           EdgeView.draw(view,object);
         }
       }

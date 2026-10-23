@@ -113,15 +113,6 @@ export default function SettingPanel() {
         </div>
         <div className="flex-1 gap-2">
           <ToggleSwitch
-            label="デバッグモード"
-            checked={state.isDebugMode}
-            onChange={(checked) =>{
-              engine.isDebugMode = checked
-            }}
-          />
-        </div>
-        <div className="flex-1 gap-2">
-          <ToggleSwitch
             label="グリッドを表示"
             checked={state.isDisplayGrid}
             onChange={(checked) =>{
@@ -135,6 +126,24 @@ export default function SettingPanel() {
             checked={state.isDisplayVector}
             onChange={(checked) =>{
               engine.viewport.isDisplayVector = checked
+            }}
+          />
+        </div>
+        <div className="flex-1 gap-2">
+          <ToggleSwitch
+            label="エッジを表示"
+            checked={state.isDisplayEdge}
+            onChange={(checked) =>{
+              engine.viewport.isDisplayEdge = checked
+            }}
+          />
+        </div>
+        <div className="flex-1 gap-2">
+          <ToggleSwitch
+            label="デバッグモード"
+            checked={state.isDebugMode}
+            onChange={(checked) =>{
+              engine.isDebugMode = checked
             }}
           />
         </div>

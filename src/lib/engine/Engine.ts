@@ -140,6 +140,7 @@ export class Engine extends EngineBase {
       isSetGridCrossMode: this.isSetGridCrossMode,
       isDisplayGrid: this.viewport.isDisplayGrid,
       isDisplayVector: this.viewport.isDisplayVector,
+      isDisplayEdge: this.viewport.isDisplayEdge,
       playBackSpeed: this.playBackSpeed,
       worldSize: this.worldSize,
       trackingInterval: this.trackingInterval,

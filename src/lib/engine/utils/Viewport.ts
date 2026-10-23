@@ -7,6 +7,7 @@ export class Viewport{
   private _gridWidth: number;
   private _isDisplayVector: boolean = false;
   private _isDisplayGrid: boolean = false;
+  private _isDisplayEdge: boolean = false;
   private onChanged: () => void;
 
   constructor(option: ViewportOption,onChanged: () => void){
@@ -40,6 +41,15 @@ export class Viewport{
 
   public set isDisplayGrid(value: boolean) {
     this._isDisplayGrid = value;
+    this.onChanged();
+  }
+
+  public get isDisplayEdge(): boolean{
+    return this._isDisplayEdge;
+  }
+
+  public set isDisplayEdge(value: boolean) {
+    this._isDisplayEdge = value;
     this.onChanged();
   }
 
@@ -87,6 +97,7 @@ export class Viewport{
     this.gridWidth = DEFAULT_VIEWPORT_VALUE.gridWidth;
     this.isDisplayGrid= false;
     this.isDisplayVector = false;
+    this.isDisplayEdge = false;
 
     this.onChanged();
   }
