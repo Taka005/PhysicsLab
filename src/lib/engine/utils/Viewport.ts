@@ -2,11 +2,11 @@ import { DEFAULT_VIEWPORT_VALUE, ViewportOption } from "../types";
 import { Vector } from "./Vector";
 
 export class Viewport{
-  public _offset: Vector;
-  public _zoomRatio: number;
-  public _gridWidth: number;
-  public _isDisplayVector: boolean = false;
-  public _isDisplayGrid: boolean = false;
+  private _offset: Vector;
+  private _zoomRatio: number;
+  private _gridWidth: number;
+  private _isDisplayVector: boolean = false;
+  private _isDisplayGrid: boolean = false;
   private onChanged: () => void;
 
   constructor(option: ViewportOption,onChanged: () => void){

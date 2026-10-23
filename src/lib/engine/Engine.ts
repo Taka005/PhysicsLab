@@ -14,19 +14,19 @@ export class Engine extends EngineBase {
 
   private _isTrackingMode = false;
 
-  public _isDynamicTrackingMode: boolean = false;
+  private _isDynamicTrackingMode: boolean = false;
 
-  public _isSetGridCrossMode: boolean = false;
+  private _isSetGridCrossMode: boolean = false;
 
-  public _isDebugMode: boolean = false;
+  private _isDebugMode: boolean = false;
 
-  public _playBackSpeed: number;
+  private _playBackSpeed: number;
 
-  public _trackingInterval: number;
+  private _trackingInterval: number;
 
-  public _trackingLimit: number;
+  private _trackingLimit: number;
 
-  public _worldSize: number;
+  private _worldSize: number;
 
   public readonly viewport: Viewport;
 

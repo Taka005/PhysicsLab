@@ -1,9 +1,9 @@
 import { Application, Container, Graphics } from "pixi.js";
-import { Curve, Engine, Line } from "@/lib/engine";
+import { Curve, Engine, Line, Circle, BaseBody } from "@/lib/engine";
 import { CircleView } from "./views/CircleView";
-import { Circle } from "@/lib/engine";
 import { LineView } from "./views/LineView";
 import { CurveView } from "./views/CurveView";
+import { VectorView } from "./views/VectorView";
 
 export class Renderer {
   private app: Application = new Application();
@@ -72,6 +72,10 @@ export class Renderer {
           LineView.draw(view,object)
         }else if(object instanceof Curve){
           CurveView.draw(view,object);
+        }
+
+        if(object instanceof BaseBody&&this.engine.viewport.isDisplayVector){
+          VectorView.draw(view,object);
         }
       }
     }

@@ -117,6 +117,10 @@ export class Vector {
     return this.x === vector.x && this.y === vector.y;
   }
 
+  public isZero(): boolean {
+    return this.x === 0 && this.y === 0;
+  }
+
   public nearlyEquals(vector: Vector, epsilon: number = 1e-10) {
     return Math.abs(this.x - vector.x) < epsilon && Math.abs(this.y - vector.y) < epsilon;
   }
