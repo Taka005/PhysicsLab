@@ -86,10 +86,10 @@ export default function PhysicsCanvas() {
     },
     onWheel: (e) => {
       if(engine){
-        if(e.deltaY > 0){
-          engine.viewport.zoomRatio = Math.min(Math.max(engine.viewport.zoomRatio + 0.1, 0.1), 5);
+        if(e.deltaY < 0){
+          engine.viewport.zoomRatio = Math.min(engine.viewport.zoomRatio + 0.1, 5);
         }else{
-          engine.viewport.zoomRatio = Math.min(Math.max(engine.viewport.zoomRatio - 0.1, 0.1), 5);
+          engine.viewport.zoomRatio = Math.max(engine.viewport.zoomRatio - 0.1, 0.3);
         }
       }
     },

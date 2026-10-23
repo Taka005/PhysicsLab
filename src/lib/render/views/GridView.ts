@@ -14,11 +14,11 @@ export class GridView {
     const startY = Math.floor(worldStartY / viewport.gridWidth) * viewport.gridWidth;
 
     const toScreenX = (x: number): number =>{
-      return (x + viewport.offset.x / viewport.zoomRatio) * viewport.zoomRatio;
+      return x + viewport.offset.x / viewport.zoomRatio;
     }
 
     const toScreenY = (y: number): number =>{
-      return (y + viewport.offset.y / viewport.zoomRatio) * viewport.zoomRatio;
+      return y + viewport.offset.y / viewport.zoomRatio;
     }
 
     for (let x = startX; x <= worldEndX; x += viewport.gridWidth) {
@@ -52,7 +52,7 @@ export class GridView {
     }
 
     for (let y = startY; y <= worldEndY; y += viewport.gridWidth) {
-      const screenY = toScreenX(y);
+      const screenY = toScreenY(y);
 
       if (y < -worldSize || y > worldSize) {
         graphics.moveTo(0, screenY);
