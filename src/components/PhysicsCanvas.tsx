@@ -24,20 +24,34 @@ export default function PhysicsCanvas() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement).tagName)) return;
 
-      if(engine){
-        pressedKeysRef.current.add(e.code);
+      pressedKeysRef.current.add(e.code);
+    };
 
+    let animationId: number;
+
+    const loop = () => {
+       if(engine){
         if(pressedKeysRef.current.has("KeyW")) {
-          engine.viewport.offset.y += 5;
-        }else if(pressedKeysRef.current.has("KeyS")) {
-          engine.viewport.offset.y -= 5;
-        }else if(pressedKeysRef.current.has("KeyA")) {
-          engine.viewport.offset.x += 5;
-        }else if(pressedKeysRef.current.has("KeyD")) {
-          engine.viewport.offset.x -= 5;
+          engine.viewport.offset.y += 3;
+        }
+
+        if(pressedKeysRef.current.has("KeyS")) {
+          engine.viewport.offset.y -= 3;
+        }
+
+        if(pressedKeysRef.current.has("KeyA")) {
+          engine.viewport.offset.x += 3;
+        }
+
+        if(pressedKeysRef.current.has("KeyD")) {
+          engine.viewport.offset.x -= 3;
         }
       }
+
+      animationId = requestAnimationFrame(loop);
     };
+
+    animationId = requestAnimationFrame(loop);
 
     const handleKeyUp = (e: KeyboardEvent) => {
       pressedKeysRef.current.delete(e.code);
@@ -47,6 +61,7 @@ export default function PhysicsCanvas() {
     window.addEventListener("keyup", handleKeyUp);
 
     return () => {
+      cancelAnimationFrame(animationId);
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
