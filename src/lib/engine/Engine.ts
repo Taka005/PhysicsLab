@@ -410,28 +410,14 @@ export class Engine extends EngineBase {
   }
 
   public toWorldPosition(target: Vector): Vector{
-    if(this.isSetGridCrossMode) {
-      target = this.toNearGridCrossPosition(target);
+    let worldX = (target.x - this.viewport.offset.x) / this.viewport.zoomRatio;
+    let worldY = (target.y - this.viewport.offset.y) / this.viewport.zoomRatio;
+
+    if (this.isSetGridCrossMode) {
+      worldX = Math.round(worldX / this.viewport.gridWidth) * this.viewport.gridWidth;
+      worldY = Math.round(worldY / this.viewport.gridWidth) * this.viewport.gridWidth;
     }
 
-    target.x -= this.viewport.offset.x;
-    target.y -= this.viewport.offset.y;
-
-    target.divide(this.viewport.zoomRatio);
-
-    return target;
-  }
-
-  public toNearGridCrossPosition(target: Vector): Vector{
-    const worldX = target.x / this.viewport.zoomRatio - this.viewport.offset.x / this.viewport.zoomRatio;
-    const worldY = target.y / this.viewport.zoomRatio - this.viewport.offset.y / this.viewport.zoomRatio;
-
-    const nearGridWorldX = Math.round(worldX / this.viewport.gridWidth) * this.viewport.gridWidth;
-    const nearGridWorldY = Math.round(worldY / this.viewport.gridWidth) * this.viewport.gridWidth;
-
-    const nearGridX = (nearGridWorldX + this.viewport.offset.x / this.viewport.zoomRatio) * this.viewport.zoomRatio;
-    const nearGridY = (nearGridWorldY + this.viewport.offset.y / this.viewport.zoomRatio) * this.viewport.zoomRatio;
-
-    return new Vector(nearGridX,nearGridY);
+    return new Vector(worldX, worldY);
   }
 }

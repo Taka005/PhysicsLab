@@ -1,5 +1,4 @@
-import { useEngine } from "@/context/EngineContext";
-import { useRef, useState, useCallback, RefObject, PointerEvent, KeyboardEvent, WheelEvent } from "react";
+import { useRef, useState, useCallback, RefObject, PointerEvent, WheelEvent } from "react";
 
 export interface Point {
   x: number;
@@ -12,8 +11,6 @@ export interface CanvasInteractionOptions {
   onMove?: (pos: Point, isDragging: boolean, e: PointerEvent) => void;
   onUp?: (pos: Point, e: PointerEvent) => void;
   onWheel?: (e: WheelEvent) => void;
-  onKeyDown?: (e: KeyboardEvent) => void;
-  onKeyUp?: (e: KeyboardEvent) => void;
 }
 
 export function useCanvasInteraction({
@@ -21,25 +18,22 @@ export function useCanvasInteraction({
   onDown,
   onMove,
   onUp,
-  onWheel,
-  onKeyDown,
-  onKeyUp
+  onWheel
 }: CanvasInteractionOptions) {
   const [currentPoint, setCurrentPoint] = useState<Point | null>(null);
   const isDraggingRef = useRef(false);
-  const engine = useEngine();
 
   const getCanvasPoint = useCallback((e: PointerEvent): Point | null => {
     const canvas = canvasRef.current;
-    if (!canvas||!engine) return null;
+    if (!canvas) return null;
 
     const rect = canvas.getBoundingClientRect();
 
     return {
-      x: (e.clientX - rect.left - engine.viewport.offset.x)*(1/engine.viewport.zoomRatio),
-      y: (e.clientY - rect.top - engine.viewport.offset.y)*(1/engine.viewport.zoomRatio)
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
     };
-  }, [canvasRef,engine]);
+  }, [canvasRef]);
 
   const handlePointerDown = useCallback((e: PointerEvent) => {
     const point = getCanvasPoint(e);
@@ -74,14 +68,6 @@ export function useCanvasInteraction({
     onWheel?.(e);
   }, [onWheel]);
 
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    onKeyDown?.(e);
-  }, [onKeyDown]);
-
-  const handleKeyUp = useCallback((e: KeyboardEvent) => {
-    onKeyUp?.(e);
-  }, [onKeyUp]);
-
   return {
     currentPoint,
     isDragging: isDraggingRef.current,
@@ -90,9 +76,7 @@ export function useCanvasInteraction({
       onPointerMove: handlePointerMove,
       onPointerUp: handlePointerUp,
       onPointerLeave: handlePointerUp,
-      onWheel: handleWheel,
-      onKeyDown: handleKeyDown,
-      onKeyUp: handleKeyUp
+      onWheel: handleWheel
     },
   };
 }

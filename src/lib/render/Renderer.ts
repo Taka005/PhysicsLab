@@ -149,6 +149,10 @@ export class Renderer{
   private updateTransforms(): void{
     this.mainContainer.scale.set(this.engine.viewport.zoomRatio, this.engine.viewport.zoomRatio);
     this.mainContainer.position.set(this.engine.viewport.offset.x, this.engine.viewport.offset.y);
+
+    if (this.isInitialized) {
+      this.app.render();
+    }
   }
 
   public resize(width: number,height: number): void{

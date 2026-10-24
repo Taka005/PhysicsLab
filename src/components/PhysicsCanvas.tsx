@@ -14,10 +14,43 @@ export default function PhysicsCanvas() {
   const engine = useEngine();
   const { spawnConfig } = useSpawnState();
   const [clickedPoints, setClickedPoints] = useState<Point[]>([]);
+  const pressedKeysRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     setClickedPoints([]);
   }, [spawnConfig.type]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement).tagName)) return;
+
+      if(engine){
+        pressedKeysRef.current.add(e.code);
+
+        if(pressedKeysRef.current.has("KeyW")) {
+          engine.viewport.offset.y += 5;
+        }else if(pressedKeysRef.current.has("KeyS")) {
+          engine.viewport.offset.y -= 5;
+        }else if(pressedKeysRef.current.has("KeyA")) {
+          engine.viewport.offset.x += 5;
+        }else if(pressedKeysRef.current.has("KeyD")) {
+          engine.viewport.offset.x -= 5;
+        }
+      }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      pressedKeysRef.current.delete(e.code);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, []);
 
   const getRequiredPointsCount = (type: string) => {
     switch (type) {
@@ -92,13 +125,7 @@ export default function PhysicsCanvas() {
           engine.viewport.zoomRatio = Math.max(engine.viewport.zoomRatio - 0.1, 0.3);
         }
       }
-    },
-    onKeyDown: (e) => {
-      console.log("KeyDown:", e.key);
-    },
-    onKeyUp: (e) => {
-      console.log("KeyUp:", e.key);
-    },
+    }
   });
 
   useEffect(() => {

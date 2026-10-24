@@ -13,69 +13,57 @@ export class GridView {
     const startX = Math.floor(worldStartX / viewport.gridWidth) * viewport.gridWidth;
     const startY = Math.floor(worldStartY / viewport.gridWidth) * viewport.gridWidth;
 
-    const toScreenX = (x: number): number =>{
-      return x + viewport.offset.x / viewport.zoomRatio;
-    }
-
-    const toScreenY = (y: number): number =>{
-      return y + viewport.offset.y / viewport.zoomRatio;
-    }
-
     for (let x = startX; x <= worldEndX; x += viewport.gridWidth) {
-      const screenX = toScreenX(x);
-
       if (x < -worldSize || x > worldSize) {
-        graphics.moveTo(screenX, 0);
-        graphics.lineTo(screenX, height);
+        graphics.moveTo(x, worldStartY);
+        graphics.lineTo(x, worldEndY);
         graphics.stroke({ width: 1, color: "red" });
       } else {
         if (worldStartY < -worldSize) {
-          graphics.moveTo(screenX, toScreenY(worldStartY));
-          graphics.lineTo(screenX, toScreenY(-worldSize));
+          graphics.moveTo(x, worldStartY);
+          graphics.lineTo(x, -worldSize);
           graphics.stroke({ width: 1, color: "red" });
         }
 
         const innerStartY = Math.max(worldStartY, -worldSize);
         const innerEndY = Math.min(worldEndY, worldSize);
         if (innerStartY < innerEndY) {
-          graphics.moveTo(screenX, toScreenY(innerStartY));
-          graphics.lineTo(screenX, toScreenY(innerEndY));
+          graphics.moveTo(x, innerStartY);
+          graphics.lineTo(x, innerEndY);
           graphics.stroke({ width: 1, color: "gray" });
         }
 
         if (worldEndY > worldSize) {
-          graphics.moveTo(screenX, toScreenY(worldSize));
-          graphics.lineTo(screenX, toScreenY(worldEndY));
+          graphics.moveTo(x, worldSize);
+          graphics.lineTo(x, worldEndY);
           graphics.stroke({ width: 1, color: "red" });
         }
       }
     }
 
     for (let y = startY; y <= worldEndY; y += viewport.gridWidth) {
-      const screenY = toScreenY(y);
-
       if (y < -worldSize || y > worldSize) {
-        graphics.moveTo(0, screenY);
-        graphics.lineTo(width, screenY);
+        graphics.moveTo(worldStartX, y);
+        graphics.lineTo(worldEndX, y);
         graphics.stroke({ width: 1, color: "red" });
       } else {
         if (worldStartX < -worldSize) {
-          graphics.moveTo(toScreenX(worldStartX), screenY);
-          graphics.lineTo(toScreenX(-worldSize), screenY);
+          graphics.moveTo(worldStartX, y);
+          graphics.lineTo(-worldSize, y);
           graphics.stroke({ width: 1, color: "red" });
         }
 
         const innerStartX = Math.max(worldStartX, -worldSize);
         const innerEndX = Math.min(worldEndX, worldSize);
         if (innerStartX < innerEndX) {
-          graphics.moveTo(toScreenX(innerStartX), screenY);
-          graphics.lineTo(toScreenX(innerEndX), screenY);
+          graphics.moveTo(innerStartX, y);
+          graphics.lineTo(innerEndX, y);
           graphics.stroke({ width: 1, color: "gray" });
         }
 
         if (worldEndX > worldSize) {
-          graphics.moveTo(toScreenX(worldSize), screenY);
-          graphics.lineTo(toScreenX(worldEndX), screenY);
+          graphics.moveTo(worldSize, y);
+          graphics.lineTo(worldEndX, y);
           graphics.stroke({ width: 1, color: "red" });
         }
       }
