@@ -195,7 +195,7 @@ export default function PhysicsCanvas() {
       ref={containerRef}
       className="flex-1 h-full relative bg-white rounded-lg shadow-sm overflow-hidden"
     >
-      <canvas tabIndex={0} ref={canvasRef} className="block w-full h-full outline-none" {...handlers}/>
+      <canvas ref={canvasRef} className="block w-full h-full" {...handlers}/>
     </div>
   );
 }

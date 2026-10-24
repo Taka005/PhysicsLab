@@ -18,7 +18,7 @@ export default function ControlPanel() {
 
   return (
     <>
-      <div className="w-80 h-full bg-white rounded-lg shadow-sm p-4 flex flex-col gap-4 overflow-y-auto scrollbar-none">
+      <div className="w-80 h-full bg-white rounded-lg shadow-sm p-4 flex flex-col gap-2 overflow-y-auto scrollbar-none">
         <div className="flex flex-col gap-2">
           <div className="flex gap-2">
             {state.isStarted ? (

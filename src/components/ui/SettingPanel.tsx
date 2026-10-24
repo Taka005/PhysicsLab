@@ -61,7 +61,7 @@ export default function SettingPanel() {
 
   return (
     <>
-      <div className="p-4 flex flex-col gap-3 text-sm">
+      <div className="p-4 flex flex-col gap-2 text-sm">
         <input
           type="file"
           ref={fileInputRef}
