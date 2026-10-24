@@ -526,11 +526,11 @@ export class Engine extends EngineBase {
     this.notify();
   }
 
-  public toWorldPosition(target: Vector): Vector{
+  public toWorldPosition(target: Vector,disableGrid: boolean = false): Vector{
     let worldX = (target.x - this.viewport.offset.x) / this.viewport.zoomRatio;
     let worldY = (target.y - this.viewport.offset.y) / this.viewport.zoomRatio;
 
-    if (this.isSetGridCrossMode) {
+    if (this.isSetGridCrossMode&&!disableGrid) {
       worldX = Math.round(worldX / this.viewport.gridWidth) * this.viewport.gridWidth;
       worldY = Math.round(worldY / this.viewport.gridWidth) * this.viewport.gridWidth;
     }
