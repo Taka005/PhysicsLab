@@ -1,129 +1,24 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Renderer } from "@/lib/render";
-import { CircleCreateOption, CurveCreateOption, LineCreateOption } from "@/lib/engine/types";
 import { useEngine } from "@/context/EngineContext";
-import { Point, useCanvasInteraction } from "@/hooks/useCanvasInteraction";
+import { useCanvasInteraction } from "@/hooks/useCanvasInteraction";
 import { useSpawnState } from "@/context/SpawnContext";
-import { Vector } from "@/lib/engine";
+import { useViewportControl } from "@/hooks/useViewportControl";
+import { useSpawnInteraction } from "@/hooks/useSpawnInteraction";
 
 export default function PhysicsCanvas() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const engine = useEngine();
   const { spawnConfig } = useSpawnState();
-  const [clickedPoints, setClickedPoints] = useState<Point[]>([]);
-  const pressedKeysRef = useRef<Set<string>>(new Set());
-
-  useEffect(() => {
-    setClickedPoints([]);
-  }, [spawnConfig.type]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement).tagName)) return;
-
-      pressedKeysRef.current.add(e.code);
-    };
-
-    let animationId: number;
-
-    const loop = () => {
-       if(engine){
-        if(pressedKeysRef.current.has("KeyW")) {
-          engine.viewport.offset.y += 3;
-        }
-
-        if(pressedKeysRef.current.has("KeyS")) {
-          engine.viewport.offset.y -= 3;
-        }
-
-        if(pressedKeysRef.current.has("KeyA")) {
-          engine.viewport.offset.x += 3;
-        }
-
-        if(pressedKeysRef.current.has("KeyD")) {
-          engine.viewport.offset.x -= 3;
-        }
-      }
-
-      animationId = requestAnimationFrame(loop);
-    };
-
-    animationId = requestAnimationFrame(loop);
-
-    const handleKeyUp = (e: KeyboardEvent) => {
-      pressedKeysRef.current.delete(e.code);
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
-
-    return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
-    };
-  }, []);
-
-  const getRequiredPointsCount = (type: string) => {
-    switch (type) {
-      case "circle":
-        return 1;
-      case "line":
-        return 2;
-      case "curve":
-        return 3;
-      default:
-        return 1;
-    }
-  };
-
-  const requiredCount = getRequiredPointsCount(spawnConfig.type);
+  const { handleWheel } = useViewportControl(engine);
+  const { handleSpawnClick } = useSpawnInteraction(engine, spawnConfig);
 
   const { handlers } = useCanvasInteraction({
     canvasRef,
-    onDown: (point, e) => {
-      if(engine){
-        const nextPoints = [...clickedPoints, engine.toWorldPosition(Vector.from(point))];
-
-        if (nextPoints.length >= requiredCount) {
-          if (spawnConfig.type === "circle") {
-            engine.spawn({
-              type: "circle",
-              id: `ball_${Date.now()}`,
-              position: { x: nextPoints[0].x, y: nextPoints[0].y },
-              velocity: { x: spawnConfig.velocityX, y: spawnConfig.velocityY },
-              diameter: spawnConfig.diameter,
-              mass: spawnConfig.mass,
-              stiffness: spawnConfig.stiffness
-            } as CircleCreateOption);
-          }else if(spawnConfig.type === "line"){
-            engine.spawn({
-              type: "line",
-              id: `line_${Date.now()}`,
-              start: { x: nextPoints[0].x, y: nextPoints[0].y },
-              end: { x: nextPoints[1].x, y: nextPoints[1].y },
-              width: spawnConfig.width
-            } as LineCreateOption);
-          }else if(spawnConfig.type === "curve"){
-            engine.spawn({
-              type: "curve",
-              id: `curve_${Date.now()}`,
-              start: { x: nextPoints[0].x, y: nextPoints[0].y },
-              middle: { x: nextPoints[1].x, y: nextPoints[1].y },
-              end: { x: nextPoints[2].x, y: nextPoints[2].y },
-              width: spawnConfig.width
-            } as CurveCreateOption);
-          }
-
-          setClickedPoints([]);
-        }else{
-          setClickedPoints(nextPoints);
-        }
-      }
-    },
+    onDown: (point) => handleSpawnClick(point),
     onMove: (point, isDragging, e) => {
       if (isDragging) {
 
@@ -132,15 +27,7 @@ export default function PhysicsCanvas() {
     onUp: (point, e) => {
 
     },
-    onWheel: (e) => {
-      if(engine){
-        if(e.deltaY < 0){
-          engine.viewport.zoomRatio = Math.min(engine.viewport.zoomRatio + 0.1, 5);
-        }else{
-          engine.viewport.zoomRatio = Math.max(engine.viewport.zoomRatio - 0.1, 0.3);
-        }
-      }
-    }
+    onWheel: (e) => handleWheel(e),
   });
 
   useEffect(() => {
