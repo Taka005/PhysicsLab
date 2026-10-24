@@ -1,9 +1,18 @@
+import { BaseGround } from "./objects/BaseGround";
+
 export type VectorData = {
   x: number;
   y: number;
 }
 
 export type ObjectType = "circle" | "line" | "curve";
+
+export type EdgeType = "start" | "end" | "middle";
+
+export type EdgeData = {
+  type: EdgeType;
+  ground: BaseGround;
+}
 
 export type EntityOption = {
   id: string;

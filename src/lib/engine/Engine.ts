@@ -1,11 +1,13 @@
 import { EngineBase } from "./EngineBase";
 import { BaseBody } from "./objects/BaseBody";
+import { BaseGround } from "./objects/BaseGround";
 import { BaseObject } from "./objects/BaseObject";
 import { Circle } from "./objects/Circle";
 import { Curve } from "./objects/Curve";
+import { Entity } from "./objects/Entity";
 import { Line } from "./objects/Line";
 import { saveDataSchema } from "./typeSchema";
-import { BaseCreateOption, DEFAULT_ENGINE_VALUE, DEFAULT_VIEWPORT_VALUE, EngineOption, EngineSnapShot, SaveData, ViewportOption } from "./types";
+import { BaseCreateOption, DEFAULT_ENGINE_VALUE, DEFAULT_VIEWPORT_VALUE, EdgeData, EngineOption, EngineSnapShot, SaveData, ViewportOption } from "./types";
 import { ContentManager } from "./utils/ContentManager";
 import { Vector } from "./utils/Vector";
 import { Viewport } from "./utils/Viewport";
@@ -331,6 +333,121 @@ export class Engine extends EngineBase {
   public deSpawn(id: string): void {
     this.content.removeBody(id);
     this.content.removeGround(id);
+  }
+
+  public getBodiesAt(target: Vector): BaseBody[]{
+    const bodies: BaseBody[] = [];
+
+    for (let i = 0; i < this.content.bodies.length; i++) {
+      const body = this.content.bodies[i];
+
+      const entities = body.entities.filter(entity=>{
+        const diff = Vector.subtract(entity.position,target);
+
+        const distance = diff.distance();
+
+        return distance <= entity.radius;
+      });
+
+      if(entities.length == 0) continue;
+
+      bodies.push(body);
+    }
+
+    return bodies;
+  }
+
+  public getGroundsAt(target: Vector): BaseGround[]{
+    const bodies: BaseGround[] = [];
+
+    for (let i = 0; i < this.content.grounds.length; i++) {
+      const ground = this.content.grounds[i];
+
+      const cross = ground.solvePosition(target);
+
+      const diff = Vector.subtract(cross,target);
+
+      const distance = diff.distance();
+
+      if(distance > ground.width / 2) continue;
+
+      bodies.push(ground);
+    }
+
+    return bodies;
+  }
+
+  public getEntitiesAt(target: Vector): Entity[]{
+    const entities: Entity[] = [];
+
+    for (let i = 0; i < this.content.entities.length; i++) {
+      const entity = this.content.entities[i];
+
+      const diff = Vector.subtract(entity.position,target);
+
+      const distance = diff.distance();
+
+      if(distance > entity.radius) continue;
+
+      entities.push(entity);
+    }
+
+    return entities;
+  }
+
+  public getGroundsEdgeAt(target: Vector): EdgeData[]{
+    const edges: EdgeData[] = [];
+
+    for (let i = 0; i < this.content.grounds.length; i++) {
+      const ground = this.content.grounds[i];
+
+      if(ground instanceof Line){
+        const diffStart = Vector.subtract(ground.start,target);
+        const diffEnd = Vector.subtract(ground.end,target);
+
+        const distanceStart = diffStart.distance();
+        const distanceEnd = diffEnd.distance();
+
+        if(distanceStart <= ground.width / 2){
+          edges.push({
+            type: "start",
+            ground: ground
+          });
+        }else if(distanceEnd <= ground.width / 2){
+          edges.push({
+            type: "end",
+            ground: ground
+          });
+        }
+      }else if(ground instanceof Curve){
+        const diffStart = Vector.subtract(ground.start,target);
+        const diffMiddle = Vector.subtract(ground.middle,target);
+        const diffEnd = Vector.subtract(ground.end,target);
+
+        const distanceStart = diffStart.distance();
+        const distanceMiddle = diffMiddle.distance();
+        const distanceEnd = diffEnd.distance();
+
+        if(distanceStart <= ground.width / 2){
+          edges.push({
+            type: "start",
+            ground: ground
+          });
+        }else if(distanceMiddle <= ground.width / 2){
+          edges.push({
+            type: "middle",
+            ground: ground
+          });
+        }else if(distanceEnd <= ground.width / 2){
+          edges.push({
+            type: "end",
+            ground: ground
+          });
+        }
+      }
+    }
+
+    return edges;
   }
 
   public import(saveData: string): void {

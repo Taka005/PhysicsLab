@@ -8,6 +8,18 @@ export function useViewportControl(engine: Engine | null) {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement).tagName)) return;
       pressedKeysRef.current.add(e.code);
+
+      if (engine) {
+        if (pressedKeysRef.current.has("Space")){
+          engine.isStarted ? engine.stop() : engine.start();
+        }
+
+        if (pressedKeysRef.current.has("KeyF")){
+          if(!engine.isStarted){
+            engine.step();
+          }
+        }
+      }
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
@@ -25,6 +37,7 @@ export function useViewportControl(engine: Engine | null) {
         if (pressedKeysRef.current.has("KeyS")) engine.viewport.offset.y -= speed;
         if (pressedKeysRef.current.has("KeyA")) engine.viewport.offset.x += speed;
         if (pressedKeysRef.current.has("KeyD")) engine.viewport.offset.x -= speed;
+
       }
       animationId = requestAnimationFrame(loop);
     };

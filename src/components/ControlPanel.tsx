@@ -20,7 +20,8 @@ export default function ControlPanel() {
   if (!engine||!state) return null;
 
   const modeOptions = [
-    { label: "生成", value: "spawn" }
+    { label: "生成", value: "spawn" },
+    { label: "移動", value: "move" }
   ];
 
   return (

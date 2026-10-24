@@ -63,15 +63,11 @@ export function useSpawnMode(engine: Engine | null, spawnConfig: SpawnConfig) {
     }
   }, [engine, clickedPoints, requiredCount, spawnConfig]);
 
-  const onMove = useCallback((point: Point, isDragging: boolean) => {
-  }, []);
-
-  const onUp = useCallback(() => {
-  }, []);
-
   return {
     onDown,
-    onMove,
-    onUp,
+    onMove: (point: Point, isDragging: boolean) => {
+      if (!isDragging || !engine) return;
+    },
+    onUp: () => {},
   };
 }

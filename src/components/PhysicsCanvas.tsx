@@ -8,6 +8,7 @@ import { useSpawnState } from "@/context/SpawnContext";
 import { useViewportControl } from "@/hooks/useViewportControl";
 import { useToolMode } from "@/context/ToolModeContext";
 import { useSpawnMode } from "@/hooks/modes/useSpawnMode";
+import { useMoveMode } from "@/hooks/modes/useMoveMode";
 
 export default function PhysicsCanvas() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -16,11 +17,13 @@ export default function PhysicsCanvas() {
   const { spawnConfig } = useSpawnState();
   const { handleWheel } = useViewportControl(engine);
   const spawnMode = useSpawnMode(engine, spawnConfig);
+  const moveMode = useMoveMode(engine);
   const { mode } = useToolMode();
 
   const activeMode = (() => {
     switch (mode) {
       case "spawn": return spawnMode;
+      case "move": return moveMode;
       default: return spawnMode;
     }
   })();
