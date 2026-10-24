@@ -6,7 +6,8 @@ import { useEngine } from "@/context/EngineContext";
 import { useCanvasInteraction } from "@/hooks/useCanvasInteraction";
 import { useSpawnState } from "@/context/SpawnContext";
 import { useViewportControl } from "@/hooks/useViewportControl";
-import { useSpawnInteraction } from "@/hooks/useSpawnInteraction";
+import { useToolMode } from "@/context/ToolModeContext";
+import { useSpawnMode } from "@/hooks/modes/useSpawnMode";
 
 export default function PhysicsCanvas() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -14,19 +15,21 @@ export default function PhysicsCanvas() {
   const engine = useEngine();
   const { spawnConfig } = useSpawnState();
   const { handleWheel } = useViewportControl(engine);
-  const { handleSpawnClick } = useSpawnInteraction(engine, spawnConfig);
+  const spawnMode = useSpawnMode(engine, spawnConfig);
+  const { mode } = useToolMode();
+
+  const activeMode = (() => {
+    switch (mode) {
+      case "spawn": return spawnMode;
+      default: return spawnMode;
+    }
+  })();
 
   const { handlers } = useCanvasInteraction({
     canvasRef,
-    onDown: (point) => handleSpawnClick(point),
-    onMove: (point, isDragging, e) => {
-      if (isDragging) {
-
-      }
-    },
-    onUp: (point, e) => {
-
-    },
+    onDown: (point) => activeMode.onDown(point),
+    onMove: (point, isDragging) => activeMode.onMove(point, isDragging),
+    onUp: (point) => activeMode.onUp(),
     onWheel: (e) => handleWheel(e),
   });
 

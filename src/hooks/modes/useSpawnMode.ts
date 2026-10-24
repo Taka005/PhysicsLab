@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback } from "react";
 import { Engine, Vector } from "@/lib/engine";
 import { CircleCreateOption, CurveCreateOption, LineCreateOption } from "@/lib/engine/types";
 import { SpawnConfig } from "@/context/SpawnContext";
-import { Point } from "./useCanvasInteraction";
+import { Point } from "../useCanvasInteraction";
 
-export function useSpawnInteraction(engine: Engine | null, spawnConfig: SpawnConfig) {
+export function useSpawnMode(engine: Engine | null, spawnConfig: SpawnConfig) {
   const [clickedPoints, setClickedPoints] = useState<Point[]>([]);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export function useSpawnInteraction(engine: Engine | null, spawnConfig: SpawnCon
 
   const requiredCount = getRequiredPointsCount(spawnConfig.type);
 
-  const handleSpawnClick = useCallback((point: Point) => {
+  const onDown = useCallback((point: Point) => {
     if (!engine) return;
 
     const nextPoints = [...clickedPoints, engine.toWorldPosition(Vector.from(point))];
@@ -63,8 +63,15 @@ export function useSpawnInteraction(engine: Engine | null, spawnConfig: SpawnCon
     }
   }, [engine, clickedPoints, requiredCount, spawnConfig]);
 
+  const onMove = useCallback((point: Point, isDragging: boolean) => {
+  }, []);
+
+  const onUp = useCallback(() => {
+  }, []);
+
   return {
-    clickedPoints,
-    handleSpawnClick,
+    onDown,
+    onMove,
+    onUp,
   };
 }

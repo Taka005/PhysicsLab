@@ -21,7 +21,7 @@ export default function SpawnSettings() {
     <>
       <SelectField
         label="生成タイプ"
-        value={spawnConfig.type ?? "circle"}
+        value={spawnConfig.type}
         options={shapeOptions}
         onChange={(e) => {
           updateSpawnConfig({ type: e.target.value });

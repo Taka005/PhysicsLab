@@ -7,14 +7,21 @@ import Draggable from "react-draggable";
 import EnvSettings from "./ui/EnvSettings";
 import SpawnSettings from "./ui/SpawnSettings";
 import SettingPanel from "./ui/SettingPanel";
+import SelectField from "./ui/SelectField";
+import { useToolMode } from "@/context/ToolModeContext";
 
 export default function ControlPanel() {
   const engine = useEngine();
   const state = useEngineState();
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const nodeRef = useRef<HTMLDivElement>(null);
+  const { mode, setMode } = useToolMode();
 
   if (!engine||!state) return null;
+
+  const modeOptions = [
+    { label: "生成", value: "spawn" }
+  ];
 
   return (
     <>
@@ -60,26 +67,35 @@ export default function ControlPanel() {
           </div>
         </div>
         <hr className="my-1 border-t border-gray-400" />
+        <SelectField
+          label="モード"
+          value={mode}
+          options={modeOptions}
+          onChange={(e) => {
+            setMode(e.target.value);
+          }}
+        />
+        <hr className="my-1 border-t border-gray-400" />
         <EnvSettings/>
         <hr className="my-1 border-t border-gray-400" />
         <SpawnSettings/>
       </div>
-          {isSettingOpen && (
-          <Draggable handle=".drag-handle" nodeRef={nodeRef} bounds="body">
-            <div ref={nodeRef} className="absolute top-10 right-100 w-72 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50">
-              <div className="drag-handle bg-gray-500 text-white px-4 py-2 flex justify-between items-center cursor-move text-sm font-semibold">
-                <span>設定</span>
-                <button
-                  onClick={() => setIsSettingOpen(false)}
-                  className="text-gray-400 hover:text-white"
-                >
-                  ✕
-                </button>
-              </div>
-              <SettingPanel/>
+        {isSettingOpen && (
+        <Draggable handle=".drag-handle" nodeRef={nodeRef} bounds="body">
+          <div ref={nodeRef} className="absolute top-10 right-100 w-72 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50">
+            <div className="drag-handle bg-gray-500 text-white px-4 py-2 flex justify-between items-center cursor-move text-sm font-semibold">
+              <span>設定</span>
+              <button
+                onClick={() => setIsSettingOpen(false)}
+                className="text-gray-400 hover:text-white"
+              >
+                ✕
+              </button>
             </div>
-          </Draggable>
-        )}
+            <SettingPanel/>
+          </div>
+        </Draggable>
+      )}
     </>
   )
 }
