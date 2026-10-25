@@ -3,6 +3,7 @@ import { useEngineState } from "@/hooks/useEngineState";
 import SliderField from "./SliderField";
 import { useSpawnState } from "@/context/SpawnContext";
 import SelectField from "./SelectField";
+import ColorPicker from "./ColorPicker";
 
 export default function SpawnSettings() {
   const engine = useEngine();
@@ -95,6 +96,13 @@ export default function SpawnSettings() {
           />
         </>
       )}
+      <ColorPicker
+        label="カラー"
+        value="#ff0000"
+        onChange={(e) => {
+
+        }}
+      />
     </>
   );
 }

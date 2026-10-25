@@ -76,13 +76,13 @@ export default function SettingPanel() {
         <div className="flex gap-2">
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex-1 px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-600 transition"
+            className="flex-1 px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-600 transition focus:outline-none"
           >
             インポート
           </button>
           <button
             onClick={handleDownload}
-            className="flex-1 px-4 py-2 bg-lime-500 text-white rounded hover:bg-lime-600 transition"
+            className="flex-1 px-4 py-2 bg-lime-500 text-white rounded hover:bg-lime-600 transition focus:outline-none"
           >
             エクスポート
           </button>
@@ -93,7 +93,7 @@ export default function SettingPanel() {
               localStorage.setItem("worldData", engine.export());
               toast.success("保存しました");
             }}
-            className="flex-1 px-4 py-2 bg-amber-500 text-white rounded hover:bg-amber-600 transition"
+            className="flex-1 px-4 py-2 bg-amber-500 text-white rounded hover:bg-amber-600 transition focus:outline-none"
           >
             保存
           </button>
@@ -114,7 +114,7 @@ export default function SettingPanel() {
                 toast.error("保存されたデータが存在しません");
               }
             }}
-            className="flex-1 px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition"
+            className="flex-1 px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition focus:outline-none"
           >
             ロード
           </button>
@@ -235,7 +235,7 @@ export default function SettingPanel() {
         <div className="flex gap-2">
           <button
             onClick={()=>engine.clearTrack()}
-            className="flex-1 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
+            className="flex-1 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition focus:outline-none"
           >
             トラッキングを削除
           </button>
@@ -260,7 +260,7 @@ export default function SettingPanel() {
 
               engine.reset();
             }}
-            className="flex-1 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
+            className="flex-1 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition focus:outline-none"
           >
             デフォルト設定に戻す
           </button>
@@ -272,7 +272,7 @@ export default function SettingPanel() {
 
               toast.success("リセットしました");
             }}
-            className="flex-1 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+            className="flex-1 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition focus:outline-none"
           >
             すべてリセット
           </button>

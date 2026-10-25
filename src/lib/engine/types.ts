@@ -133,6 +133,8 @@ export type EngineSnapShot = {
   isDisplayGrid: boolean;
   isDisplayVector: boolean;
   isDisplayEdge: boolean;
+  isHiddenBody: boolean;
+  isHiddenGround: boolean;
   playBackSpeed: number;
   worldSize: number;
   trackingInterval: number;

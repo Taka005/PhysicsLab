@@ -32,7 +32,7 @@ export default function SliderField({
         step={step}
         value={value}
         onChange={onChange}
-        className="w-full accent-blue-600 cursor-pointer"
+        className="w-full accent-blue-600 focus:outline-none"
       />
     </div>
   );

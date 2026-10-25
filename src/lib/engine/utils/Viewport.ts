@@ -8,6 +8,8 @@ export class Viewport{
   private _isDisplayVector: boolean = false;
   private _isDisplayGrid: boolean = false;
   private _isDisplayEdge: boolean = false;
+  private _isHiddenBody: boolean = false;
+  private _isHiddenGround: boolean = false;
   private onChanged: () => void;
 
   constructor(option: ViewportOption,onChanged: () => void){
@@ -50,6 +52,24 @@ export class Viewport{
 
   public set isDisplayEdge(value: boolean) {
     this._isDisplayEdge = value;
+    this.onChanged();
+  }
+
+  public get isHiddenBody(): boolean{
+    return this._isHiddenBody;
+  }
+
+  public set isHiddenBody(value: boolean) {
+    this._isHiddenBody = value;
+    this.onChanged();
+  }
+
+  public get isHiddenGround(): boolean{
+    return this._isHiddenGround;
+  }
+
+  public set isHiddenGround(value: boolean) {
+    this._isHiddenGround = value;
     this.onChanged();
   }
 

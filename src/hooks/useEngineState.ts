@@ -15,6 +15,8 @@ export function useEngineState() {
     isDisplayGrid: false,
     isDisplayVector: false,
     isDisplayEdge: false,
+    isHiddenBody: false,
+    isHiddenGround: false,
     trackingInterval: DEFAULT_ENGINE_VALUE.trackingInterval,
     trackingLimit: DEFAULT_ENGINE_VALUE.trackingLimit,
     playBackSpeed: DEFAULT_ENGINE_VALUE.playBackSpeed,

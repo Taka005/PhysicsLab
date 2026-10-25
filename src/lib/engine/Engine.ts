@@ -144,6 +144,8 @@ export class Engine extends EngineBase {
       isDisplayGrid: this.viewport.isDisplayGrid,
       isDisplayVector: this.viewport.isDisplayVector,
       isDisplayEdge: this.viewport.isDisplayEdge,
+      isHiddenBody: this.viewport.isHiddenBody,
+      isHiddenGround: this.viewport.isHiddenGround,
       playBackSpeed: this.playBackSpeed,
       worldSize: this.worldSize,
       trackingInterval: this.trackingInterval,
