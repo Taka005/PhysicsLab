@@ -6,10 +6,14 @@ import { ChangeEvent, useRef } from "react";
 import { toast } from "sonner";
 import ToggleSwitch from "./ToggleSwitch";
 import SliderField from "./SliderField";
+import { useSpawnState } from "@/context/SpawnContext";
+import { useConnectionState } from "@/context/ConnectionContext";
 
 export default function SettingPanel() {
   const engine = useEngine();
   const state = useEngineState();
+  const { updateSpawnConfig } = useSpawnState();
+  const { updateConnectionConfig } = useConnectionState();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!engine||!state) return null;
@@ -238,7 +242,24 @@ export default function SettingPanel() {
         </div>
         <div className="flex gap-2">
           <button
-            onClick={()=>engine.reset()}
+            onClick={()=>{
+              updateSpawnConfig({
+                type: "circle",
+                diameter: 15,
+                mass: 10,
+                stiffness: 0.8,
+                width: 10,
+                velocityX: 0,
+                velocityY: 0
+              });
+
+              updateConnectionConfig({
+                type: "dynamic",
+                stiffness: 0.8
+              });
+
+              engine.reset();
+            }}
             className="flex-1 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
           >
             デフォルト設定に戻す

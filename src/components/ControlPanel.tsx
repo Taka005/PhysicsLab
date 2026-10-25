@@ -72,6 +72,8 @@ export default function ControlPanel() {
           </div>
         </div>
         <hr className="my-1 border-t border-gray-400" />
+        <EnvSettings/>
+        <hr className="my-1 border-t border-gray-400" />
         <SelectField
           label="モード"
           value={mode}
@@ -80,8 +82,6 @@ export default function ControlPanel() {
             setMode(e.target.value);
           }}
         />
-        <hr className="my-1 border-t border-gray-400" />
-        <EnvSettings/>
         <hr className="my-1 border-t border-gray-400" />
         {mode == "spawn" && (
         <SpawnSettings/>
