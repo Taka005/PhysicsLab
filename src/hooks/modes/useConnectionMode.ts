@@ -1,49 +1,51 @@
 import { Engine, Entity, Vector } from "@/lib/engine";
 import { Point } from "../useCanvasInteraction";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { ConnectionConfig } from "@/context/ConnectionContext";
 import { toast } from "sonner";
 
 export function useConnectionMode(engine: Engine | null,connectionConfig: ConnectionConfig) {
- const [selectedEntity, setSelectedEntity] = useState<Entity | null>();
+  const [selectedEntity, setSelectedEntity] = useState<Entity | null>();
+
+  const onDown = useCallback((point: Point) => {
+    if (!engine) return;
+
+    const target = engine.toWorldPosition(Vector.from(point),true);
+
+    const entities = engine.getEntitiesAt(target);
+
+    if(entities.length > 0){
+      const entity = entities[0];
+
+      if(selectedEntity == null){
+        setSelectedEntity(entity);
+      }else{
+        if(entity.connection.get(selectedEntity.id)){
+          setSelectedEntity(null);
+          toast.error("既に接続が存在します");
+
+          return;
+        }
+
+        if(connectionConfig.type == "dynamic"){
+          const distance = Vector.distance(selectedEntity.position,entity.position);
+
+          selectedEntity.connection.add(entity.id,distance,connectionConfig.stiffness);
+          entity.connection.add(selectedEntity.id,distance,connectionConfig.stiffness);
+        }else if(connectionConfig.type == "minimum"){
+          const distance = entity.radius + selectedEntity.radius;
+
+          selectedEntity.connection.add(entity.id,distance,connectionConfig.stiffness);
+          entity.connection.add(selectedEntity.id,distance,connectionConfig.stiffness);
+        }
+
+        setSelectedEntity(null);
+      }
+    }
+  },[engine]);
 
   return {
-    onDown: (point: Point) => {
-      if (!engine) return;
-
-      const target = engine.toWorldPosition(Vector.from(point),true);
-
-      const entities = engine.getEntitiesAt(target);
-
-      if(entities.length > 0){
-        const entity = entities[0];
-
-        if(selectedEntity == null){
-          setSelectedEntity(entity);
-        }else{
-          if(entity.connection.get(selectedEntity.id)){
-            setSelectedEntity(null);
-            toast.error("既に接続が存在します");
-
-            return;
-          }
-
-          if(connectionConfig.type == "dynamic"){
-            const distance = Vector.distance(selectedEntity.position,entity.position);
-
-            selectedEntity.connection.add(entity.id,distance,connectionConfig.stiffness);
-            entity.connection.add(selectedEntity.id,distance,connectionConfig.stiffness);
-          }else if(connectionConfig.type == "minimum"){
-            const distance = entity.radius + selectedEntity.radius;
-
-            selectedEntity.connection.add(entity.id,distance,connectionConfig.stiffness);
-            entity.connection.add(selectedEntity.id,distance,connectionConfig.stiffness);
-          }
-
-          setSelectedEntity(null);
-        }
-      }
-    },
+    onDown,
     onMove: () => {},
     onUp: () => {}
   };
