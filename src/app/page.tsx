@@ -3,6 +3,7 @@ import PhysicsCanvas from "@/components/PhysicsCanvas";
 import { EngineProvider } from "@/context/EngineContext";
 import { SpawnProvider } from "@/context/SpawnContext";
 import { ToolModeProvider } from "@/context/ToolModeContext";
+import { ConnectionProvider } from "@/context/ConnectionContext";
 
 export default function Home() {
   return (
@@ -10,8 +11,10 @@ export default function Home() {
       <EngineProvider>
         <ToolModeProvider>
           <SpawnProvider>
-            <PhysicsCanvas/>
-            <ControlPanel/>
+            <ConnectionProvider>
+              <PhysicsCanvas/>
+              <ControlPanel/>
+            </ConnectionProvider>
           </SpawnProvider>
         </ToolModeProvider>
       </EngineProvider>

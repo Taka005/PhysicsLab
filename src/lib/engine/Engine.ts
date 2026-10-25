@@ -275,7 +275,7 @@ export class Engine extends EngineBase {
         this.solvePosition(source,target);
       }
 
-      for(let j = i + 1;j < source.connection.targets.length;j++){
+      for(let j = 0;j < source.connection.targets.length;j++){
         const targetData = source.connection.targets[j];
         const target = this.content.getEntity(targetData.entityId);
 

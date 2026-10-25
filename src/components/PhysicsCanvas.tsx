@@ -9,21 +9,29 @@ import { useViewportControl } from "@/hooks/useViewportControl";
 import { useToolMode } from "@/context/ToolModeContext";
 import { useSpawnMode } from "@/hooks/modes/useSpawnMode";
 import { useMoveMode } from "@/hooks/modes/useMoveMode";
+import { useDeleteMode } from "@/hooks/modes/useDeleteMode";
+import { useConnectionMode } from "@/hooks/modes/useConnectionMode";
+import { useConnectionState } from "@/context/ConnectionContext";
 
 export default function PhysicsCanvas() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const engine = useEngine();
   const { spawnConfig } = useSpawnState();
+  const { connectionConfig } = useConnectionState();
   const { handleWheel } = useViewportControl(engine);
   const spawnMode = useSpawnMode(engine, spawnConfig);
   const moveMode = useMoveMode(engine);
+  const deleteMode = useDeleteMode(engine);
+  const connectionMode = useConnectionMode(engine,connectionConfig);
   const { mode } = useToolMode();
 
   const activeMode = (() => {
     switch (mode) {
       case "spawn": return spawnMode;
       case "move": return moveMode;
+      case "delete": return deleteMode;
+      case "connection": return connectionMode;
       default: return spawnMode;
     }
   })();

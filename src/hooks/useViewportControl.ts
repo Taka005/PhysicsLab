@@ -1,7 +1,9 @@
 import { useEffect, useRef } from "react";
 import { Engine } from "@/lib/engine";
+import { useToolMode } from "@/context/ToolModeContext";
 
 export function useViewportControl(engine: Engine | null) {
+  const { mode, setMode } = useToolMode();
   const pressedKeysRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
@@ -18,6 +20,18 @@ export function useViewportControl(engine: Engine | null) {
           if(!engine.isStarted){
             engine.step();
           }
+        }
+
+        if (pressedKeysRef.current.has("Digit1")){
+          setMode("spawn");
+        }
+
+        if (pressedKeysRef.current.has("Digit2")){
+          setMode("move");
+        }
+
+        if (pressedKeysRef.current.has("Digit3")){
+          setMode("delete");
         }
       }
     };

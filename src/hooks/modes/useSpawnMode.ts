@@ -65,9 +65,7 @@ export function useSpawnMode(engine: Engine | null, spawnConfig: SpawnConfig) {
 
   return {
     onDown,
-    onMove: (point: Point, isDragging: boolean) => {
-      if (!isDragging || !engine) return;
-    },
+    onMove: () => {},
     onUp: () => {},
   };
 }

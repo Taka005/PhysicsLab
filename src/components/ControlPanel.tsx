@@ -9,6 +9,7 @@ import SpawnSettings from "./ui/SpawnSettings";
 import SettingPanel from "./ui/SettingPanel";
 import SelectField from "./ui/SelectField";
 import { useToolMode } from "@/context/ToolModeContext";
+import ConnectionSettings from "./ui/ConnectionSettings";
 
 export default function ControlPanel() {
   const engine = useEngine();
@@ -21,7 +22,9 @@ export default function ControlPanel() {
 
   const modeOptions = [
     { label: "生成", value: "spawn" },
-    { label: "移動", value: "move" }
+    { label: "移動", value: "move" },
+    { label: "削除", value: "delete" },
+    { label: "接続", value: "connection" }
   ];
 
   return (
@@ -79,7 +82,12 @@ export default function ControlPanel() {
         <hr className="my-1 border-t border-gray-400" />
         <EnvSettings/>
         <hr className="my-1 border-t border-gray-400" />
+        {mode == "spawn" && (
         <SpawnSettings/>
+        )}
+        {mode == "connection" && (
+        <ConnectionSettings/>
+        )}
       </div>
         {isSettingOpen && (
         <Draggable handle=".drag-handle" nodeRef={nodeRef} bounds="body">

@@ -4,23 +4,56 @@ import { Vector } from "../utils/Vector";
 import { normalizeAngle } from "../utils/normalizeAngle";
 
 export class Curve extends BaseGround {
-  public start: Vector;
-  public middle: Vector;
+  private _start: Vector;
+  private _middle: Vector;
+  private _end: Vector;
   public center: Vector;
   public radius: number;
-  public end: Vector;
 
   constructor(option: CurveOption) {
     super(option);
 
-    this.start = Vector.from(option.start);
-    this.middle = Vector.from(option.middle);
-    this.end = Vector.from(option.end);
+    this._start = Vector.from(option.start);
+    this._middle = Vector.from(option.middle);
+    this._end = Vector.from(option.end);
     this.center = this.calcCenter();
     this.radius = Vector.distance(this.start,this.center);
   }
 
-  public calcCenter(): Vector{
+  public get start(): Vector{
+    return this._start;
+  }
+
+  public set start(value: Vector){
+    this._start = value;
+
+    this.center = this.calcCenter();
+    this.radius = Vector.distance(this.start,this.center);
+  }
+
+  public get middle(): Vector{
+    return this._middle;
+  }
+
+  public set middle(value: Vector){
+    this._middle = value;
+
+    this.center = this.calcCenter();
+    this.radius = Vector.distance(this.start,this.center);
+  }
+
+  public get end(): Vector{
+    return this._end;
+  }
+
+  public set end(value: Vector){
+    this._end = value;
+
+    this.center = this.calcCenter();
+    this.radius = Vector.distance(this.start,this.center);
+  }
+
+  private calcCenter(): Vector{
     const slope1 = (this.middle.x - this.start.x) / (this.start.y - this.middle.y);
     const slope2 = (this.end.x - this.middle.x) / (this.middle.y - this.end.y);
     const equat1 = (this.start.y + this.middle.y) / 2 - slope1 * ((this.start.x + this.middle.x) / 2);
