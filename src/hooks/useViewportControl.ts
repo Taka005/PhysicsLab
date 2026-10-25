@@ -33,6 +33,10 @@ export function useViewportControl(engine: Engine | null) {
         if (pressedKeysRef.current.has("Digit3")){
           setMode("delete");
         }
+
+        if (pressedKeysRef.current.has("Digit4")){
+          setMode("connection");
+        }
       }
     };
 

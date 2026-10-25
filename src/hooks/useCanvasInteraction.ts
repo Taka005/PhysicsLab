@@ -1,4 +1,5 @@
-import { useRef, useState, useCallback, RefObject, PointerEvent, WheelEvent } from "react";
+import { useRef, useState, useCallback, RefObject, PointerEvent, WheelEvent, useEffect } from "react";
+import { toast } from "sonner";
 
 export interface Point {
   x: number;
@@ -22,6 +23,7 @@ export function useCanvasInteraction({
 }: CanvasInteractionOptions) {
   const [currentPoint, setCurrentPoint] = useState<Point | null>(null);
   const isDraggingRef = useRef(false);
+  const eventRef = useRef<PointerEvent | null>(null);
 
   const getCanvasPoint = useCallback((e: PointerEvent): Point | null => {
     const canvas = canvasRef.current;
@@ -35,7 +37,35 @@ export function useCanvasInteraction({
     };
   }, [canvasRef]);
 
+  useEffect(() => {
+    let animationFrameId: number;
+
+    const updateLoop = () => {
+      if (isDraggingRef.current && eventRef.current) {
+        const point = getCanvasPoint(eventRef.current);
+
+        if (point) {
+          setCurrentPoint(point);
+          onMove?.(point, true, eventRef.current);
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(updateLoop);
+    };
+
+    animationFrameId = requestAnimationFrame(updateLoop);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [getCanvasPoint, onMove]);
+
   const handlePointerDown = useCallback((e: PointerEvent) => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      canvas.setPointerCapture(e.pointerId);
+    }
+
     const point = getCanvasPoint(e);
     if (!point) return;
 
@@ -46,17 +76,30 @@ export function useCanvasInteraction({
   }, [getCanvasPoint, onDown]);
 
   const handlePointerMove = useCallback((e: PointerEvent) => {
+    eventRef.current = e;
     const point = getCanvasPoint(e);
     if (!point) return;
 
     setCurrentPoint(point);
 
-    onMove?.(point, isDraggingRef.current, e);
+    if (!isDraggingRef.current) {
+      onMove?.(point, false, e);
+    }
   }, [getCanvasPoint, onMove]);
 
   const handlePointerUp = useCallback((e: PointerEvent) => {
+    const canvas = canvasRef.current;
+    if (canvas && e.pointerId != null) {
+      try {
+        canvas.releasePointerCapture(e.pointerId);
+      }catch{
+        toast.error("ポインタキャプチャーの開放に失敗しました");
+      }
+    }
+
     const point = getCanvasPoint(e) || currentPoint;
 
+    eventRef.current = null;
     isDraggingRef.current = false;
 
     if (point) {
@@ -77,6 +120,6 @@ export function useCanvasInteraction({
       onPointerUp: handlePointerUp,
       onPointerLeave: handlePointerUp,
       onWheel: handleWheel
-    },
+    }
   };
 }

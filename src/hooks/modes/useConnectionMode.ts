@@ -20,6 +20,8 @@ export function useConnectionMode(engine: Engine | null,connectionConfig: Connec
       if(selectedEntity == null){
         setSelectedEntity(entity);
       }else{
+        if (selectedEntity.id === entity.id) return;
+
         if(entity.connection.get(selectedEntity.id)){
           setSelectedEntity(null);
           toast.error("既に接続が存在します");
@@ -42,7 +44,7 @@ export function useConnectionMode(engine: Engine | null,connectionConfig: Connec
         setSelectedEntity(null);
       }
     }
-  },[engine]);
+  },[engine, selectedEntity, connectionConfig]);
 
   return {
     onDown,

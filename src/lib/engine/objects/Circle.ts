@@ -1,4 +1,5 @@
 import { CircleOption, CircleCreateOption, EntityOption, BaseCreateOption, BaseBodyOption } from "../types";
+import { createId } from "../utils/createId";
 import { BaseBody } from "./BaseBody";
 
 export class Circle extends BaseBody{
@@ -43,7 +44,7 @@ export class Circle extends BaseBody{
 
   public static create(option: CircleCreateOption): Circle {
     const entityOption: EntityOption = {
-      id: option.id,
+      id: createId(12),
       position: option.position,
       velocity: option.velocity,
       diameter: option.diameter,
