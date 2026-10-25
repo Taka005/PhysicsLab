@@ -10,8 +10,9 @@ import { useToolMode } from "@/context/ToolModeContext";
 import { useSpawnMode } from "@/hooks/modes/useSpawnMode";
 import { useMoveMode } from "@/hooks/modes/useMoveMode";
 import { useDeleteMode } from "@/hooks/modes/useDeleteMode";
-import { useConnectionMode } from "@/hooks/modes/useConnectionMode";
+import { useConnectMode } from "@/hooks/modes/useConnectMode";
 import { useConnectionState } from "@/context/ConnectionContext";
+import { useDisconnectMode } from "@/hooks/modes/useDisconnect";
 
 export default function PhysicsCanvas() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -23,7 +24,8 @@ export default function PhysicsCanvas() {
   const spawnMode = useSpawnMode(engine, spawnConfig);
   const moveMode = useMoveMode(engine);
   const deleteMode = useDeleteMode(engine);
-  const connectionMode = useConnectionMode(engine,connectionConfig);
+  const connectMode = useConnectMode(engine,connectionConfig);
+  const disconnectMode = useDisconnectMode(engine);
   const { mode } = useToolMode();
 
   const activeMode = (() => {
@@ -31,7 +33,8 @@ export default function PhysicsCanvas() {
       case "spawn": return spawnMode;
       case "move": return moveMode;
       case "delete": return deleteMode;
-      case "connection": return connectionMode;
+      case "connect": return connectMode;
+      case "disconnect": return disconnectMode;
       default: return spawnMode;
     }
   })();
@@ -60,7 +63,7 @@ export default function PhysicsCanvas() {
         clientHeight
       );
 
-      engine.import(`{"engine":{"playBackSpeed":1,"trackingInterval":300,"trackingLimit":100,"worldSize":5000,"pps":120,"gravity":200,"friction":0.001},"viewport":{"offset":{"x":0,"y":0},"zoomRatio":1, "gridWidth":50},"objects":{"bodies":[{"type":"circle","id":"ball1","trackingId":"cNYbhzO2hV","diameter":10,"entities":[{"id":"ball1","position":{"x":50,"y":50},"velocity":{"x":50,"y":50},"diameter":10,"mass":10,"stiffness":0.8,"connections":[]}]},{"type":"circle","id":"ball2","trackingId":"FqEhU4FmN5","diameter":20,"entities":[{"id":"ball2","position":{"x":60,"y":30},"velocity":{"x":50,"y":50},"diameter":20,"mass":10,"stiffness":0.8,"connections":[]}]}],"grounds":[{"type":"line","id":"line1","width":10,"start":{"x":0,"y":100},"end":{"x":200,"y":200}},{"type":"line","id":"line2","width":10,"start":{"x":200,"y":200},"end":{"x":500,"y":200}}]}}`)
+      engine.import(`{"engine":{"playBackSpeed":1,"trackingInterval":100,"trackingLimit":100,"worldSize":5000,"pps":120,"gravity":200,"friction":0.001},"viewport":{"offset":{"x":0,"y":0},"zoomRatio":1, "gridWidth":50},"objects":{"bodies":[{"type":"circle","id":"ball1","trackingId":"cNYbhzO2hV","diameter":10,"entities":[{"id":"ball1","position":{"x":50,"y":50},"velocity":{"x":50,"y":50},"diameter":10,"mass":10,"stiffness":0.8,"connections":[]}]},{"type":"circle","id":"ball2","trackingId":"FqEhU4FmN5","diameter":20,"entities":[{"id":"ball2","position":{"x":60,"y":30},"velocity":{"x":50,"y":50},"diameter":20,"mass":10,"stiffness":0.8,"connections":[]}]}],"grounds":[{"type":"line","id":"line1","width":10,"start":{"x":0,"y":100},"end":{"x":200,"y":200}},{"type":"line","id":"line2","width":10,"start":{"x":200,"y":200},"end":{"x":500,"y":200}}]}}`)
 
       const loop = () => {
         renderer.render();

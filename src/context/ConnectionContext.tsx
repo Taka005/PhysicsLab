@@ -16,7 +16,7 @@ const ConnectionContext = createContext<ConnectionContextType | undefined>(undef
 
 export function ConnectionProvider({ children }: { children: ReactNode }) {
   const [connectionConfig, setConnectionConfig] = useState<ConnectionConfig>({
-    type: "minimum",
+    type: "dynamic",
     stiffness: 0.8
   });
 

@@ -35,7 +35,11 @@ export function useViewportControl(engine: Engine | null) {
         }
 
         if (pressedKeysRef.current.has("Digit4")){
-          setMode("connection");
+          setMode("connect");
+        }
+
+        if (pressedKeysRef.current.has("Digit5")){
+          setMode("disconnect");
         }
       }
     };

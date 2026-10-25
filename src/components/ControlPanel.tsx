@@ -24,7 +24,8 @@ export default function ControlPanel() {
     { label: "生成", value: "spawn" },
     { label: "移動", value: "move" },
     { label: "削除", value: "delete" },
-    { label: "接続", value: "connection" }
+    { label: "接続", value: "connect" },
+    { label: "切断", value: "disconnect" }
   ];
 
   return (
@@ -85,7 +86,7 @@ export default function ControlPanel() {
         {mode == "spawn" && (
         <SpawnSettings/>
         )}
-        {mode == "connection" && (
+        {mode == "connect" && (
         <ConnectionSettings/>
         )}
       </div>

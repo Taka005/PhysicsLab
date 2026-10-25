@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { ConnectionConfig } from "@/context/ConnectionContext";
 import { toast } from "sonner";
 
-export function useConnectionMode(engine: Engine | null,connectionConfig: ConnectionConfig) {
+export function useConnectMode(engine: Engine | null,connectionConfig: ConnectionConfig) {
   const [selectedEntity, setSelectedEntity] = useState<Entity | null>();
 
   const onDown = useCallback((point: Point) => {
@@ -29,17 +29,19 @@ export function useConnectionMode(engine: Engine | null,connectionConfig: Connec
           return;
         }
 
-        if(connectionConfig.type == "dynamic"){
+        if(connectionConfig.type == "static"){
           const distance = Vector.distance(selectedEntity.position,entity.position);
 
           selectedEntity.connection.add(entity.id,distance,connectionConfig.stiffness);
           entity.connection.add(selectedEntity.id,distance,connectionConfig.stiffness);
-        }else if(connectionConfig.type == "minimum"){
+        }else if(connectionConfig.type == "dynamic"){
           const distance = entity.radius + selectedEntity.radius;
 
           selectedEntity.connection.add(entity.id,distance,connectionConfig.stiffness);
           entity.connection.add(selectedEntity.id,distance,connectionConfig.stiffness);
         }
+
+        toast.success("接続しました");
 
         setSelectedEntity(null);
       }

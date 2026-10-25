@@ -58,8 +58,6 @@ export class ContentManager {
   }
 
   public getBody(id: string): BaseBody | undefined {
-    this.cacheEntities = null;
-
     return this.bodies.find(body => body.id === id);
   }
 
@@ -71,6 +69,8 @@ export class ContentManager {
     if (this.isExistedId(body.id)) throw new Error("既に存在するIDが指定されています");
 
     this.bodies.push(body);
+
+    this.cacheEntities = null;
   }
 
   public addGround(ground: BaseGround): void {
@@ -85,6 +85,8 @@ export class ContentManager {
 
   public removeBody(id: string): void {
     this.bodies = this.bodies.filter(body => body.id !== id);
+
+    this.cacheEntities = null;
   }
 
   public removeGround(id: string): void {

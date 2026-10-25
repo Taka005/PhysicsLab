@@ -10,8 +10,8 @@ export default function ConnectionSettings() {
   const { connectionConfig, updateConnectionConfig } = useConnectionState();
 
   const shapeOptions = [
-    { label: "最小接続", value: "minimum" },
     { label: "動的接続", value: "dynamic" },
+    { label: "固定接続", value: "static" },
   ];
 
   if (!engine||!state) return null;
