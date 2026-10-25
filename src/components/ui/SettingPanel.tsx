@@ -176,6 +176,24 @@ export default function SettingPanel() {
         </div>
         <div className="flex-1 gap-2">
           <ToggleSwitch
+            label="物体を非表示"
+            checked={state.isHiddenBody}
+            onChange={(checked) =>{
+              engine.viewport.isHiddenBody = checked;
+            }}
+          />
+        </div>
+        <div className="flex-1 gap-2">
+          <ToggleSwitch
+            label="地面を非表示"
+            checked={state.isHiddenGround}
+            onChange={(checked) =>{
+              engine.viewport.isHiddenGround = checked;
+            }}
+          />
+        </div>
+        <div className="flex-1 gap-2">
+          <ToggleSwitch
             label="デバッグモード"
             checked={state.isDebugMode}
             onChange={(checked) =>{

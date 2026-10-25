@@ -118,6 +118,8 @@ export class Viewport{
     this.isDisplayGrid= false;
     this.isDisplayVector = false;
     this.isDisplayEdge = false;
+    this.isHiddenBody = false;
+    this.isHiddenGround = false;
 
     this.onChanged();
   }

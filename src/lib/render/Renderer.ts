@@ -13,7 +13,7 @@ export class Renderer{
   private mainContainer: Container = new Container();
   private trackingContainer: Container = new Container();
   private groundContainer: Container = new Container();
-  private objectContainer: Container = new Container();
+  private bodyContainer: Container = new Container();
   private viewMap: Map<string,Graphics> = new Map();
   private trackingViews: Graphics[] = [];
   private isInitialized = false;
@@ -46,7 +46,7 @@ export class Renderer{
     this.mainContainer.addChild(this.gridGraphics);
     this.mainContainer.addChild(this.groundContainer);
     this.mainContainer.addChild(this.trackingContainer);
-    this.mainContainer.addChild(this.objectContainer);
+    this.mainContainer.addChild(this.bodyContainer);
 
     this.trackingContainer.alpha = 0.3;
 
@@ -64,6 +64,9 @@ export class Renderer{
       this.gridGraphics.clear();
     }
 
+    this.bodyContainer.visible = !this.engine.viewport.isHiddenBody;
+    this.groundContainer.visible = !this.engine.viewport.isHiddenGround;
+
     const activeIds = new Set<string>();
 
     const objects = this.engine.getObjects();
@@ -80,7 +83,7 @@ export class Renderer{
         if(object instanceof BaseGround){
           this.groundContainer.addChild(graphics);
         }else if(object instanceof BaseBody){
-          this.objectContainer.addChild(graphics);
+          this.bodyContainer.addChild(graphics);
         }
 
         this.viewMap.set(object.id, graphics);
