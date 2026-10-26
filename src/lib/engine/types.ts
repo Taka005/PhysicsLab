@@ -31,7 +31,6 @@ export interface BaseObjectOption{
 }
 
 export interface BaseBodyOption extends BaseObjectOption {
-  trackingId?: string;
   entities: EntityOption[];
 }
 
@@ -156,7 +155,7 @@ export const DEFAULT_ENGINE_VALUE: EngineOption = {
   trackingLimit: 100,
   playBackSpeed: 1,
   worldSize: 5000,
-  gravity: 200,
+  gravity: 250,
   pps: 120,
   friction: 0.001
 };

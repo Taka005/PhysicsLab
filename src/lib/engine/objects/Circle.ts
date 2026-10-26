@@ -20,7 +20,6 @@ export class Circle extends BaseBody{
       type: "circle",
       id: this.id,
       resource: this.resource.toJSON(),
-      trackingId: this.trackingId,
       diameter: this.diameter,
       entities: this.entities.map(entity=>entity.toJSON())
     }

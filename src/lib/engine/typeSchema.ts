@@ -43,7 +43,6 @@ const circleOptionSchema = z.object({
   type: z.literal("circle"),
   id: z.string(),
   resource: resourceOption,
-  trackingId: z.string().optional(),
   entities: z.array(entityOptionSchema),
   diameter: z.number().gt(0)
 });
