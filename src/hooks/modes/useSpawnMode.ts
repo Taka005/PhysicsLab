@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Engine, Vector } from "@/lib/engine";
 import { CircleCreateOption, CurveCreateOption, LineCreateOption } from "@/lib/engine/types";
-import { SpawnConfig, useSpawnState } from "@/context/SpawnContext";
+import { useSpawnState } from "@/context/SpawnContext";
 import { Point } from "../useCanvasInteraction";
 
 export function useSpawnMode(engine: Engine | null) {
