@@ -1,10 +1,11 @@
 import { Engine, Entity, Vector } from "@/lib/engine";
 import { Point } from "../useCanvasInteraction";
 import { useCallback, useState } from "react";
-import { ConnectionConfig } from "@/context/ConnectionContext";
+import { useConnectionState } from "@/context/ConnectionContext";
 import { toast } from "sonner";
 
-export function useConnectMode(engine: Engine | null,connectionConfig: ConnectionConfig) {
+export function useConnectMode(engine: Engine | null) {
+  const { connectionConfig } = useConnectionState();
   const [selectedEntity, setSelectedEntity] = useState<Entity | null>();
 
   const onDown = useCallback((point: Point) => {

@@ -10,10 +10,13 @@ import SettingPanel from "./ui/SettingPanel";
 import SelectField from "./ui/SelectField";
 import { useToolMode } from "@/context/ToolModeContext";
 import ConnectionSettings from "./ui/ConnectionSettings";
+import EditSettings from "./ui/EditSettings";
+import { useEditState } from "@/context/EditContext";
 
 export default function ControlPanel() {
   const engine = useEngine();
   const state = useEngineState();
+  const { setSelectedObject, updateEditConfig } = useEditState();
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const nodeRef = useRef<HTMLDivElement>(null);
   const { mode, setMode } = useToolMode();
@@ -81,6 +84,11 @@ export default function ControlPanel() {
           options={modeOptions}
           onChange={(e) => {
             setMode(e.target.value);
+
+            setSelectedObject(null);
+            updateEditConfig({
+              stiffness: 0.8
+            });
           }}
         />
         <hr className="my-1 border-t border-gray-400" />
@@ -89,6 +97,9 @@ export default function ControlPanel() {
         )}
         {mode == "connect" && (
         <ConnectionSettings/>
+        )}
+        {mode == "edit" && (
+        <EditSettings/>
         )}
       </div>
         {isSettingOpen && (

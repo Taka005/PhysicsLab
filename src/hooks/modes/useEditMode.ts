@@ -1,10 +1,18 @@
-import { BaseObject, Engine, Vector } from "@/lib/engine";
+import { BaseBody, Engine, Vector } from "@/lib/engine";
 import { Point } from "../useCanvasInteraction";
-import { useCallback, useState } from "react";
-import { EditConfig } from "@/context/EditContext";
+import { useCallback, useEffect } from "react";
+import { useEditState } from "@/context/EditContext";
 
-export function useEditMode(engine: Engine | null,editConfig: EditConfig) {
-  const [selectedObject, setSelectedObject] = useState<BaseObject | null>();
+export function useEditMode(engine: Engine | null) {
+  const { editConfig, selectedObject, setSelectedObject, updateEditConfig } = useEditState();
+
+  useEffect(() => {
+    if (!selectedObject) return;
+
+    if(selectedObject instanceof BaseBody){
+      selectedObject.stiffness = editConfig.stiffness ?? 0;
+    }
+  }, [editConfig, selectedObject]);
 
   const onDown = useCallback((point: Point) => {
     if (!engine) return;
@@ -17,6 +25,14 @@ export function useEditMode(engine: Engine | null,editConfig: EditConfig) {
       const object = objects[0];
 
       setSelectedObject(object);
+
+      if(object instanceof BaseBody){
+        updateEditConfig({
+          stiffness: object.stiffness
+        });
+      }
+    }else{
+      setSelectedObject(null);
     }
   },[engine, selectedObject, editConfig]);
 

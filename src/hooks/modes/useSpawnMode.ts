@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { Engine, Vector } from "@/lib/engine";
 import { CircleCreateOption, CurveCreateOption, LineCreateOption } from "@/lib/engine/types";
-import { SpawnConfig } from "@/context/SpawnContext";
+import { SpawnConfig, useSpawnState } from "@/context/SpawnContext";
 import { Point } from "../useCanvasInteraction";
 
-export function useSpawnMode(engine: Engine | null, spawnConfig: SpawnConfig) {
+export function useSpawnMode(engine: Engine | null) {
+  const { spawnConfig } = useSpawnState();
   const [clickedPoints, setClickedPoints] = useState<Point[]>([]);
 
   useEffect(() => {

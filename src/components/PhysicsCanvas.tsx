@@ -4,31 +4,25 @@ import { useEffect, useRef } from "react";
 import { Renderer } from "@/lib/render";
 import { useEngine } from "@/context/EngineContext";
 import { useCanvasInteraction } from "@/hooks/useCanvasInteraction";
-import { useSpawnState } from "@/context/SpawnContext";
 import { useViewportControl } from "@/hooks/useViewportControl";
 import { useToolMode } from "@/context/ToolModeContext";
 import { useSpawnMode } from "@/hooks/modes/useSpawnMode";
 import { useMoveMode } from "@/hooks/modes/useMoveMode";
 import { useDeleteMode } from "@/hooks/modes/useDeleteMode";
 import { useConnectMode } from "@/hooks/modes/useConnectMode";
-import { useConnectionState } from "@/context/ConnectionContext";
 import { useDisconnectMode } from "@/hooks/modes/useDisconnect";
 import { useEditMode } from "@/hooks/modes/useEditMode";
-import { useEditState } from "@/context/EditContext";
 
 export default function PhysicsCanvas() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const engine = useEngine();
-  const { spawnConfig } = useSpawnState();
-  const { connectionConfig } = useConnectionState();
-  const { editConfig } = useEditState();
   const { handleWheel } = useViewportControl(engine);
-  const spawnMode = useSpawnMode(engine, spawnConfig);
+  const spawnMode = useSpawnMode(engine);
   const moveMode = useMoveMode(engine);
   const deleteMode = useDeleteMode(engine);
-  const editMode = useEditMode(engine,editConfig);
-  const connectMode = useConnectMode(engine,connectionConfig);
+  const editMode = useEditMode(engine);
+  const connectMode = useConnectMode(engine);
   const disconnectMode = useDisconnectMode(engine);
   const { mode } = useToolMode();
 
