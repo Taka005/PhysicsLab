@@ -22,12 +22,12 @@ export class CurveView {
       !clockwise
     );
     
-    graphics.stroke({ width: curve.width, color: "red" });
+    graphics.stroke({ width: curve.width, color: curve.resource.color });
 
     graphics.circle(curve.start.x, curve.start.y, curve.width / 2);
-    graphics.fill({ color: "red" });
+    graphics.fill({ color: curve.resource.color });
 
     graphics.circle(curve.end.x, curve.end.y, curve.width / 2);
-    graphics.fill({ color: "red" });
+    graphics.fill({ color: curve.resource.color });
   }
 }

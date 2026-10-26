@@ -478,16 +478,16 @@ export class Engine extends EngineBase {
 
     this.content.setGrounds(
       validData.objects.grounds
-      .map(ground=>{
-        if(Line.isLineOption(ground)){
-          return Line.from(ground);
-        }else if(Curve.isCurveOption(ground)){
-          return Curve.from(ground);
-        }
+        .map(ground=>{
+          if(Line.isLineOption(ground)){
+            return Line.from(ground);
+          }else if(Curve.isCurveOption(ground)){
+            return Curve.from(ground);
+          }
 
-        return null;
-      })
-      .filter(ground=>ground != null)
+          return null;
+        })
+        .filter(ground=>ground != null)
     );
   }
 

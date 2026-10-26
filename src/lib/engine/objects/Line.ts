@@ -47,6 +47,7 @@ export class Line extends BaseGround {
     return {
       type: "line",
       id: this.id,
+      resource: this.resource.toJSON(),
       width: this.width,
       start: this.start,
       end: this.end
@@ -57,6 +58,7 @@ export class Line extends BaseGround {
     return new Line({
       type: option.type,
       id: option.id,
+      resource: option.resource,
       width: option.width,
       start: option.start,
       end: option.end

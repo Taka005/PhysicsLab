@@ -115,6 +115,7 @@ export class Curve extends BaseGround {
     return {
       type: "curve",
       id: this.id,
+      resource: this.resource.toJSON(),
       width: this.width,
       start: this.start,
       middle: this.middle,
@@ -134,6 +135,7 @@ export class Curve extends BaseGround {
     return new Curve({
       type: option.type,
       id: option.id,
+      resource: option.resource,
       width: option.width,
       start: option.start,
       middle: option.middle,

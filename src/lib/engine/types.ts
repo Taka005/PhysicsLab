@@ -27,6 +27,7 @@ export type EntityOption = {
 export interface BaseObjectOption{
   type: ObjectType;
   id: string;
+  resource: ResourceOption
 }
 
 export interface BaseBodyOption extends BaseObjectOption {
@@ -59,6 +60,7 @@ export interface CurveOption extends BaseGroundOption {
 export interface BaseCreateOption {
   type: ObjectType;
   id: string;
+  resource: ResourceOption;
 }
 
 export interface BaseCreateBodyOption extends BaseCreateOption {
@@ -113,6 +115,10 @@ export type ViewportOption = {
   offset: VectorData;
   zoomRatio: number;
   gridWidth: number;
+}
+
+export type ResourceOption = {
+  color: string;
 }
 
 export type SaveData = {

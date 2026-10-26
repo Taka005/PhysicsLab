@@ -6,6 +6,6 @@ export class CircleView{
     graphics.clear();
 
     graphics.circle(circle.position.x,circle.position.y,circle.radius);
-    graphics.fill({ color: "red"});
+    graphics.fill({ color: circle.resource.color });
   }
 }

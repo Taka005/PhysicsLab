@@ -35,9 +35,14 @@ const entityOptionSchema = z.object({
   }))
 });
 
+const resourceOption = z.object({
+  color: z.string()
+});
+
 const circleOptionSchema = z.object({
   type: z.literal("circle"),
   id: z.string(),
+  resource: resourceOption,
   trackingId: z.string().optional(),
   entities: z.array(entityOptionSchema),
   diameter: z.number().gt(0)
@@ -46,6 +51,7 @@ const circleOptionSchema = z.object({
 const lineOptionSchema = z.object({
   type: z.literal("line"),
   id: z.string(),
+  resource: resourceOption,
   width: z.number().gt(0),
   start: vectorDataSchema,
   end: vectorDataSchema
@@ -54,6 +60,7 @@ const lineOptionSchema = z.object({
 const CurveOptionSchema = z.object({
   type: z.literal("curve"),
   id: z.string(),
+  resource: resourceOption,
   width: z.number().gt(0),
   start: vectorDataSchema,
   middle: vectorDataSchema,

@@ -98,9 +98,9 @@ export default function SpawnSettings() {
       )}
       <ColorPicker
         label="カラー"
-        value="#ff0000"
-        onChange={(e) => {
-
+        value={spawnConfig.color}
+        onChange={(value) => {
+          updateSpawnConfig({ color: value });
         }}
       />
     </>

@@ -1,8 +1,10 @@
-export class Resource{
-  private _color: string;
+import { ResourceOption } from "../types";
 
-  constructor(color: string){
-    this._color = color;
+export class Resource{
+  private _color: string = "#ff0000";
+
+  constructor(option: ResourceOption){
+    this.color = option.color;
   }
 
   public get color(): string{
@@ -13,8 +15,16 @@ export class Resource{
     const isValidColor = /^#([0-9A-F]{3}){1,2}$/i.test(value);
     if(isValidColor){
       this._color = value;
-    }else{
-      this._color = "#000000";
     }
+  }
+
+  public toJSON(): ResourceOption {
+    return {
+      color: this.color
+    }
+  }
+
+  public static from(option: ResourceOption): Resource{
+    return new Resource(option);
   }
 }

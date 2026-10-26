@@ -4,6 +4,7 @@ import { createContext, useContext, useState, ReactNode } from "react";
 
 export type SpawnConfig = {
   type: string;
+  color: string;
   diameter?: number;
   mass?: number;
   stiffness?: number;
@@ -22,6 +23,7 @@ const SpawnContext = createContext<SpawnContextType | undefined>(undefined);
 export function SpawnProvider({ children }: { children: ReactNode }) {
   const [spawnConfig, setSpawnConfig] = useState<SpawnConfig>({
     type: "circle",
+    color: "#ff0000",
     diameter: 15,
     mass: 10,
     stiffness: 0.8,
