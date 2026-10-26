@@ -3,7 +3,6 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 
 export type EditConfig = {
-  type: string;
   diameter?: number;
   mass?: number;
   stiffness?: number;
@@ -21,7 +20,6 @@ const EditContext = createContext<EditContextType | undefined>(undefined);
 
 export function EditProvider({ children }: { children: ReactNode }) {
   const [editConfig, setEditConfig] = useState<EditConfig>({
-    type: "circle",
     diameter: 15,
     mass: 10,
     stiffness: 0.8,

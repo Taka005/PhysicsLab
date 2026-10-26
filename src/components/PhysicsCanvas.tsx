@@ -13,6 +13,8 @@ import { useDeleteMode } from "@/hooks/modes/useDeleteMode";
 import { useConnectMode } from "@/hooks/modes/useConnectMode";
 import { useConnectionState } from "@/context/ConnectionContext";
 import { useDisconnectMode } from "@/hooks/modes/useDisconnect";
+import { useEditMode } from "@/hooks/modes/useEditMode";
+import { useEditState } from "@/context/EditContext";
 
 export default function PhysicsCanvas() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -20,10 +22,12 @@ export default function PhysicsCanvas() {
   const engine = useEngine();
   const { spawnConfig } = useSpawnState();
   const { connectionConfig } = useConnectionState();
+  const { editConfig } = useEditState();
   const { handleWheel } = useViewportControl(engine);
   const spawnMode = useSpawnMode(engine, spawnConfig);
   const moveMode = useMoveMode(engine);
   const deleteMode = useDeleteMode(engine);
+  const editMode = useEditMode(engine,editConfig);
   const connectMode = useConnectMode(engine,connectionConfig);
   const disconnectMode = useDisconnectMode(engine);
   const { mode } = useToolMode();
@@ -33,6 +37,7 @@ export default function PhysicsCanvas() {
       case "spawn": return spawnMode;
       case "move": return moveMode;
       case "delete": return deleteMode;
+      case "edit": return editMode;
       case "connect": return connectMode;
       case "disconnect": return disconnectMode;
       default: return spawnMode;
@@ -43,7 +48,7 @@ export default function PhysicsCanvas() {
     canvasRef,
     onDown: (point) => activeMode.onDown(point),
     onMove: (point, isDragging) => activeMode.onMove(point, isDragging),
-    onUp: (point) => activeMode.onUp(),
+    onUp: () => activeMode.onUp(),
     onWheel: (e) => handleWheel(e),
   });
 

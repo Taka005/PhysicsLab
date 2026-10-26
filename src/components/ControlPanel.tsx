@@ -24,6 +24,7 @@ export default function ControlPanel() {
     { label: "生成", value: "spawn" },
     { label: "移動", value: "move" },
     { label: "削除", value: "delete" },
+    { label: "編集", value: "edit" },
     { label: "接続", value: "connect" },
     { label: "切断", value: "disconnect" }
   ];
