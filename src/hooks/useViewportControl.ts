@@ -3,7 +3,7 @@ import { Engine } from "@/lib/engine";
 import { useToolMode } from "@/context/ToolModeContext";
 
 export function useViewportControl(engine: Engine | null) {
-  const { mode, setMode } = useToolMode();
+  const { setMode } = useToolMode();
   const pressedKeysRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
@@ -59,11 +59,11 @@ export function useViewportControl(engine: Engine | null) {
     const loop = () => {
       if (engine) {
         const speed = 3;
+        
         if (pressedKeysRef.current.has("KeyW")) engine.viewport.offset.y += speed;
         if (pressedKeysRef.current.has("KeyS")) engine.viewport.offset.y -= speed;
         if (pressedKeysRef.current.has("KeyA")) engine.viewport.offset.x += speed;
         if (pressedKeysRef.current.has("KeyD")) engine.viewport.offset.x -= speed;
-
       }
       animationId = requestAnimationFrame(loop);
     };
