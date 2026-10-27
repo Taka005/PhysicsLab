@@ -1,4 +1,5 @@
 import { BaseGround } from "./objects/BaseGround";
+import { BaseObject } from "./objects/BaseObject";
 
 export type VectorData = {
   x: number;
@@ -118,6 +119,16 @@ export type ViewportOption = {
 
 export type ResourceOption = {
   color: string;
+}
+
+export type ScriptOption = {
+  target: BaseObject;
+  code: string;
+}
+
+export type TranspiledScript = {
+  init: (obj: BaseObject, global: { [key: string]: any }) => void;
+  update: (obj: BaseObject, global: { [key: string]: any }) => void;
 }
 
 export type SaveData = {
