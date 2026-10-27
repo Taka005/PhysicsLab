@@ -8,7 +8,7 @@ import {
 } from "./parser/types";
 
 export class Transpiler {
-  private envVariables = new Set<string>();
+  private globalVariables = new Set<string>();
 
   private localVariables = new Set<string>();
 
@@ -26,10 +26,10 @@ export class Transpiler {
   };
 
   public transpile(program: ProgramNode): string {
-    this.envVariables.clear();
+    this.globalVariables.clear();
     this.localVariables.clear();
 
-    this.collectEnvVariables(program.init);
+    this.collectGlobalVariables(program.init);
 
     this.collectLocalVariables(program.update);
 
@@ -53,30 +53,30 @@ export class Transpiler {
     .join("\n");
 
     return `return {
-      init: function(obj, env) {
+      init: function(obj, global) {
       ${this.indent(initCode, 4)}
       },
-      update: function(obj, env) {
+      update: function(obj, global) {
       ${this.indent(updateCode, 4)}
       }
       };`;
   }
 
-  private collectEnvVariables(statements: StatementNode[]): void {
+  private collectGlobalVariables(statements: StatementNode[]): void {
     for (const statement of statements) {
       switch (statement.type) {
         case "Assignment": {
           const name = statement.left.name;
 
           if (!this.isObjectVariable(name)) {
-            this.envVariables.add(name);
+            this.globalVariables.add(name);
           }
 
           break;
         }
 
         case "IfStatement":
-          this.collectEnvVariables(statement.body);
+          this.collectGlobalVariables(statement.body);
           break;
       }
     }
@@ -90,7 +90,7 @@ export class Transpiler {
 
           if (
             !this.isObjectVariable(name) &&
-            !this.envVariables.has(name)
+            !this.globalVariables.has(name)
           ) {
             this.localVariables.add(name);
           }
@@ -132,7 +132,7 @@ export class Transpiler {
     const right = this.transpileExpression(node.right, scope);
 
     if (scope === "init" && !this.isObjectVariable(name)) {
-      return `env.${name} = ${right};`;
+      return `global.${name} = ${right};`;
     }
 
     return `${left} = ${right};`;
@@ -202,8 +202,8 @@ export class Transpiler {
       return name;
     }
 
-    if (this.envVariables.has(name)) {
-      return `env.${name}`;
+    if (this.globalVariables.has(name)) {
+      return `global.${name}`;
     }
 
     if (scope === "update" && this.localVariables.has(name)) {
