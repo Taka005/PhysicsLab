@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "build:parser": "peggy --plugin ts-pegjs -o ./src/lib/script/parser.ts ./src/lib/script/parser.peggy"
   },
   "dependencies": {
     "next": "^16.4.2",
@@ -23,7 +24,9 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "peggy": "^5.1.1",
     "tailwindcss": "^4",
+    "ts-pegjs": "^4.2.2",
     "typescript": "^5"
   }
 }
