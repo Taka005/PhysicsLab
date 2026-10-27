@@ -1,4 +1,4 @@
-import { transpileToJavaScript } from "./Compiler";
+import { transpiler } from "./Transpiler";
 import { generateAst } from "./parser/ast";
 import { ScriptSyntaxError } from "./parser/ScriptSyntaxError";
 
@@ -11,28 +11,21 @@ const code = `
   update {
     if (t > 5) {
       t += 1;
+      a = 1
     }
 
-    t = sin(startY * 0.05) * PI;
+    t = sin(max(startY,startX) * 0.05) * PI;
 
     obj.start.Y += t;
     endY += t;
+    obj = 1;
   }
 `;
 
 try {
   const ast = generateAst(code);
 
-  const javascript = transpileToJavaScript(ast, {
-    selfProperties: [
-      "startY",
-      "endY",
-    ],
-    envProperties: [
-      "t",
-    ],
-  });
-
+  const javascript = transpiler.transpile(ast);
   console.log(javascript);
 } catch (error) {
   if (error instanceof ScriptSyntaxError) {
