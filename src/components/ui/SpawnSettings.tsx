@@ -4,6 +4,7 @@ import SliderField from "./SliderField";
 import { useSpawnState } from "@/context/SpawnContext";
 import SelectField from "./SelectField";
 import ColorPicker from "./ColorPicker";
+import InputField from "./InputField";
 
 export default function SpawnSettings() {
   const engine = useEngine();
@@ -27,6 +28,15 @@ export default function SpawnSettings() {
         onChange={(e) => {
           updateSpawnConfig({ type: e.target.value });
         }}
+      />
+      <InputField
+        label="ID"
+        value={spawnConfig.id ?? ""}
+        onChange={(e) => {
+          updateSpawnConfig({ id: e.target.value });
+        }}
+        placeholder="(任意)"
+        required={false} 
       />
       {spawnConfig.type === "circle" && (
         <>

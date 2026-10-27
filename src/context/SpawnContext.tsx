@@ -5,6 +5,7 @@ import { createContext, useContext, useState, ReactNode } from "react";
 export type SpawnConfig = {
   type: string;
   color: string;
+  id?: string;
   diameter?: number;
   mass?: number;
   stiffness?: number;

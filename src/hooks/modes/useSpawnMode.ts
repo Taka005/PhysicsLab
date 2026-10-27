@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Engine, Vector } from "@/lib/engine";
+import { createId, Engine, Vector } from "@/lib/engine";
 import { CircleCreateOption, CurveCreateOption, LineCreateOption } from "@/lib/engine/types";
 import { useSpawnState } from "@/context/SpawnContext";
 import { Point } from "../useCanvasInteraction";
@@ -32,7 +32,7 @@ export function useSpawnMode(engine: Engine | null) {
       if (spawnConfig.type === "circle") {
         engine.spawn({
           type: "circle",
-          id: `ball_${Date.now()}`,
+          id: spawnConfig.id ?? createId(10),
           resource:{
             color: spawnConfig.color
           },
@@ -45,7 +45,7 @@ export function useSpawnMode(engine: Engine | null) {
       } else if (spawnConfig.type === "line") {
         engine.spawn({
           type: "line",
-          id: `line_${Date.now()}`,
+          id: spawnConfig.id ?? createId(10),
           resource:{
             color: spawnConfig.color
           },
@@ -56,7 +56,7 @@ export function useSpawnMode(engine: Engine | null) {
       } else if (spawnConfig.type === "curve") {
         engine.spawn({
           type: "curve",
-          id: `curve_${Date.now()}`,
+          id: spawnConfig.id ?? createId(10),
           resource:{
             color: spawnConfig.color
           },
@@ -68,7 +68,7 @@ export function useSpawnMode(engine: Engine | null) {
       }
 
       setClickedPoints([]);
-    } else {
+    }else{
       setClickedPoints(nextPoints);
     }
   }, [engine, clickedPoints, requiredCount, spawnConfig]);
