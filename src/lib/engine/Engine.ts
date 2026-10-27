@@ -192,14 +192,6 @@ export class Engine extends EngineBase {
     this.notify();
   }
 
-  public getObjects(): BaseObject[]{
-    return this.content.objects;
-  }
-
-  public getTrackBodies(): BaseBody[]{
-    return this.content.trackBodies;
-  }
-
   public start(): void {
     if(this.isStarted) return;
 
@@ -335,6 +327,18 @@ export class Engine extends EngineBase {
   public deSpawn(id: string): void {
     this.content.removeBody(id);
     this.content.removeGround(id);
+  }
+
+  public getObjects(): BaseObject[]{
+    return this.content.objects;
+  }
+
+  public getTrackBodies(): BaseBody[]{
+    return this.content.trackBodies;
+  }
+
+  public getObject(id: string): BaseObject | undefined{
+    return this.getObjects().find(obj=>obj.id == id);
   }
 
   public getBodiesAt(target: Vector): BaseBody[]{

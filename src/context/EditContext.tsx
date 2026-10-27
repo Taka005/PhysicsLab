@@ -1,6 +1,5 @@
 "use client";
 
-import { BaseObject } from "@/lib/engine";
 import { createContext, useContext, useState, ReactNode } from "react";
 
 export type EditConfig = {
@@ -15,14 +14,14 @@ export type EditConfig = {
 type EditContextType = {
   editConfig: EditConfig;
   updateEditConfig: (newConfig: Partial<EditConfig>) => void;
-  selectedObject: BaseObject | null;
-  setSelectedObject: (obj: BaseObject | null) => void;
+  selectedObjectId: string | null;
+  setSelectedObjectId: (obj: string | null) => void;
 };
 
 const EditContext = createContext<EditContextType | undefined>(undefined);
 
 export function EditProvider({ children }: { children: ReactNode }) {
-  const [selectedObject, setSelectedObject] = useState<BaseObject | null>(null);
+  const [selectedObjectId, setSelectedObjectId] = useState<string | null>(null);
   const [editConfig, setEditConfig] = useState<EditConfig>({
     diameter: 15,
     mass: 10,
@@ -37,7 +36,7 @@ export function EditProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <EditContext.Provider value={{ editConfig, updateEditConfig, selectedObject, setSelectedObject }}>
+    <EditContext.Provider value={{ editConfig, updateEditConfig, selectedObjectId, setSelectedObjectId }}>
       {children}
     </EditContext.Provider>
   );

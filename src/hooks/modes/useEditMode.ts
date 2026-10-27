@@ -4,15 +4,20 @@ import { useCallback, useEffect } from "react";
 import { useEditState } from "@/context/EditContext";
 
 export function useEditMode(engine: Engine | null) {
-  const { editConfig, selectedObject, setSelectedObject, updateEditConfig } = useEditState();
+  const { editConfig, selectedObjectId, setSelectedObjectId, updateEditConfig } = useEditState();
 
   useEffect(() => {
-    if (!selectedObject) return;
+    if (!selectedObjectId||!engine) return;
 
-    if(selectedObject instanceof BaseBody){
-      selectedObject.stiffness = editConfig.stiffness ?? 0;
+    const object = engine.getObject(selectedObjectId);
+    if(!object){
+      setSelectedObjectId(null);
+    }else{
+      if(object instanceof BaseBody){
+        object.stiffness = editConfig.stiffness ?? 0;
+      }
     }
-  }, [editConfig, selectedObject]);
+  }, [engine,editConfig, selectedObjectId]);
 
   const onDown = useCallback((point: Point) => {
     if (!engine) return;
@@ -24,7 +29,7 @@ export function useEditMode(engine: Engine | null) {
     if(objects.length > 0){
       const object = objects[0];
 
-      setSelectedObject(object);
+      setSelectedObjectId(object.id);
 
       if(object instanceof BaseBody){
         updateEditConfig({
@@ -32,9 +37,9 @@ export function useEditMode(engine: Engine | null) {
         });
       }
     }else{
-      setSelectedObject(null);
+      setSelectedObjectId(null);
     }
-  },[engine, selectedObject, editConfig]);
+  },[engine, selectedObjectId, editConfig]);
 
   return {
     onDown,

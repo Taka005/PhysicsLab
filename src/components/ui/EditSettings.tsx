@@ -6,9 +6,9 @@ import { useEditState } from "@/context/EditContext";
 export default function EditSettings() {
   const engine = useEngine();
   const state = useEngineState();
-  const { selectedObject, editConfig, updateEditConfig } = useEditState();
+  const { selectedObjectId, editConfig, updateEditConfig } = useEditState();
 
-  if (!engine||!state||!selectedObject) return null;
+  if (!engine||!state||!selectedObjectId) return null;
 
   return (
     <>
