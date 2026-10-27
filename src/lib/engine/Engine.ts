@@ -461,6 +461,14 @@ export class Engine extends EngineBase {
 
     const validData = saveDataSchema.parse(rawData);
 
+    const allIds = [
+      ...validData.objects.bodies.map((body) => body.id),
+      ...validData.objects.grounds.map((ground) => ground.id),
+    ];
+
+    const uniqueIds = new Set(allIds);
+    if (uniqueIds.size !== allIds.length) throw new Error("セーブデータ内に重複している物体IDが存在します");
+
     this.stop();
 
     this.clear(true);

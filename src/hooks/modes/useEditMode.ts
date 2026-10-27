@@ -1,10 +1,10 @@
-import { BaseBody, Engine, Vector } from "@/lib/engine";
+import { BaseBody, BaseGround, createId, Engine, Vector } from "@/lib/engine";
 import { Point } from "../useCanvasInteraction";
 import { useCallback, useEffect } from "react";
 import { useEditState } from "@/context/EditContext";
 
 export function useEditMode(engine: Engine | null) {
-  const { editConfig, selectedObjectId, setSelectedObjectId, updateEditConfig, selectedObjectType, setSelectedObjectType } = useEditState();
+  const { editConfig, selectedObjectId, setSelectedObjectId, updateEditConfig, setSelectedObjectType } = useEditState();
 
   useEffect(() => {
     if (!selectedObjectId||!engine) return;
@@ -14,6 +14,8 @@ export function useEditMode(engine: Engine | null) {
       setSelectedObjectId(null);
       setSelectedObjectType(null);
     }else{
+      object.resource.color = editConfig.color ?? "#ff0000";
+
       if(object instanceof BaseBody){
         object.stiffness = editConfig.stiffness ?? 0;
       }
@@ -35,7 +37,12 @@ export function useEditMode(engine: Engine | null) {
 
       if(object instanceof BaseBody){
         updateEditConfig({
+          color: object.resource.color,
           stiffness: object.stiffness
+        });
+      }else if(object instanceof BaseGround){
+          updateEditConfig({
+          color: object.resource.color
         });
       }
     }else{

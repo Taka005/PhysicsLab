@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 
 export type EditConfig = {
+  color?: string;
   diameter?: number;
   mass?: number;
   stiffness?: number;
@@ -25,14 +26,7 @@ const EditContext = createContext<EditContextType | undefined>(undefined);
 export function EditProvider({ children }: { children: ReactNode }) {
   const [selectedObjectId, setSelectedObjectId] = useState<string | null>(null);
   const [selectedObjectType, setSelectedObjectType] = useState<string | null>(null);
-  const [editConfig, setEditConfig] = useState<EditConfig>({
-    diameter: 15,
-    mass: 10,
-    stiffness: 0.8,
-    width: 10,
-    velocityX: 0,
-    velocityY: 0
-  });
+  const [editConfig, setEditConfig] = useState<EditConfig>({});
 
   const updateEditConfig = (newConfig: Partial<EditConfig>) => {
     setEditConfig((prev) => ({ ...prev, ...newConfig }));
