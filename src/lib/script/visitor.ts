@@ -1,5 +1,5 @@
-import { IToken } from "chevrotain";
-import { AssignmentNode, ExpressionNode, FunctionCallNode, IdentifierNode, IfStatementNode, ProgramNode, StatementNode } from "./types";
+import { CstNode, IToken } from "chevrotain";
+import { AssignmentNode, ExpressionNode, FunctionCallNode, IdentifierNode, IfStatementNode, ProgramNode, StatementNode, CstContext } from "./types";
 import { parser } from "./parser";
 
 const BaseCstVisitor = parser.getBaseCstVisitorConstructorWithDefaults();
@@ -10,59 +10,112 @@ class AstVisitor extends BaseCstVisitor {
     this.validateVisitor();
   }
 
-  program(ctx: any): ProgramNode {
+  private getNodes(
+    ctx: CstContext,
+    key: string,
+  ): CstNode[] {
+    return (ctx[key] ?? []).filter(
+      (child): child is CstNode => "children" in child,
+    );
+  }
+
+  private getTokens(
+    ctx: CstContext,
+    key: string,
+  ): IToken[] {
+    return (ctx[key] ?? []).filter(
+      (child): child is IToken => "image" in child,
+    );
+  }
+
+  private visitNode<T>(node: CstNode): T {
+    return this.visit(node) as T;
+  }
+
+  public program(ctx: CstContext): ProgramNode {
+    const initBlock = this.getNodes(ctx, "initBlock");
+    const updateBlock = this.getNodes(ctx, "updateBlock");
+
     return {
       type: "Program",
-      init: ctx.initBlock
-        ? this.visit(ctx.initBlock[0])
+      init: initBlock.length > 0
+        ? this.visitNode<StatementNode[]>(initBlock[0])
         : [],
-      update: ctx.updateBlock
-        ? this.visit(ctx.updateBlock[0])
+      update: updateBlock.length > 0
+        ? this.visitNode<StatementNode[]>(updateBlock[0])
         : [],
     };
   }
 
-  initBlock(ctx: any): StatementNode[] {
-    return (ctx.statement ?? []).map(
-      (statement: any) => this.visit(statement),
+  public initBlock(ctx: CstContext): StatementNode[] {
+    return this.getNodes(ctx, "statement").map(
+      (node) => this.visitNode<StatementNode>(node),
     );
   }
 
-  updateBlock(ctx: any): StatementNode[] {
-    return (ctx.statement ?? []).map(
-      (statement: any) => this.visit(statement),
+  public updateBlock(ctx: CstContext): StatementNode[] {
+    return this.getNodes(ctx, "statement").map(
+      (node) => this.visitNode<StatementNode>(node),
     );
   }
 
-  statement(ctx: any): StatementNode {
-    if (ctx.ifStatement) {
-      return this.visit(ctx.ifStatement[0]);
+  public statement(ctx: CstContext): StatementNode {
+    const ifStatement = this.getNodes(ctx, "ifStatement");
+
+    if (ifStatement.length > 0) {
+      return this.visitNode<IfStatementNode>(ifStatement[0]);
     }
 
-    return this.visit(ctx.assignmentStatement[0]);
+    const assignmentStatement = this.getNodes(
+      ctx,
+      "assignmentStatement",
+    );
+
+    if (assignmentStatement.length === 0) {
+      throw new Error("statementに対応するノードがありません");
+    }
+
+    return this.visitNode<AssignmentNode>(assignmentStatement[0]);
   }
 
-  ifStatement(ctx: any): IfStatementNode {
+  public ifStatement(ctx: CstContext): IfStatementNode {
+    const expressions = this.getNodes(ctx, "expression");
+    const conditionNode = expressions[0];
+
+    if (!conditionNode) {
+      throw new Error("ifStatementにconditionがありません");
+    }
+
     return {
       type: "IfStatement",
-      condition: this.visit(ctx.expression[0]),
-      body: (ctx.statement ?? []).map(
-        (statement: any) => this.visit(statement),
+      condition: this.visitNode<ExpressionNode>(conditionNode),
+      body: this.getNodes(ctx, "statement").map(
+        (node) => this.visitNode<StatementNode>(node),
       ),
     };
   }
 
-  assignmentStatement(ctx: any): AssignmentNode {
-    const name = ctx.name[0].image;
+  public assignmentStatement(ctx: CstContext): AssignmentNode {
+    const nameToken = this.getTokens(ctx, "name")[0];
+
+    if (!nameToken) {
+      throw new Error("assignmentStatementにnameがありません");
+    }
+
+    const expressionNode = this.getNodes(ctx, "expression")[0];
+
+    if (!expressionNode) {
+      throw new Error("assignmentStatementにexpressionがありません");
+    }
 
     const left: IdentifierNode = {
       type: "Identifier",
-      name,
+      name: nameToken.image,
     };
 
-    const expr = this.visit(ctx.expression[0]);
+    const right = this.visitNode<ExpressionNode>(expressionNode);
 
-    if (ctx.PlusAssign) {
+    if (this.getTokens(ctx, "PlusAssign").length > 0) {
       return {
         type: "Assignment",
         left,
@@ -70,7 +123,7 @@ class AstVisitor extends BaseCstVisitor {
           type: "BinaryExpression",
           operator: "+",
           left,
-          right: expr,
+          right,
         },
       };
     }
@@ -78,102 +131,151 @@ class AstVisitor extends BaseCstVisitor {
     return {
       type: "Assignment",
       left,
-      right: expr,
+      right,
     };
   }
 
-  expression(ctx: any): ExpressionNode {
-    return this.visit(ctx.comparison[0]);
+  public expression(ctx: CstContext): ExpressionNode {
+    const comparison = this.getNodes(ctx, "comparison")[0];
+
+    if (!comparison) {
+      throw new Error("expressionにcomparisonがありません");
+    }
+
+    return this.visitNode<ExpressionNode>(comparison);
   }
 
-  comparison(ctx: any): ExpressionNode {
-    const left = this.visit(ctx.left[0]);
+  public comparison(ctx: CstContext): ExpressionNode {
+    const leftNode = this.getNodes(ctx, "left")[0];
 
-    if (!ctx.operator) {
+    if (!leftNode) {
+      throw new Error("comparisonにleftがありません");
+    }
+
+    const left = this.visitNode<ExpressionNode>(leftNode);
+    const operator = this.getTokens(ctx, "operator")[0];
+
+    if (!operator) {
       return left;
+    }
+
+    const rightNode = this.getNodes(ctx, "right")[0];
+
+    if (!rightNode) {
+      throw new Error("comparisonにrightがありません");
     }
 
     return {
       type: "BinaryExpression",
-      operator: ctx.operator[0].image,
+      operator: operator.image,
       left,
-      right: this.visit(ctx.right[0]),
+      right: this.visitNode<ExpressionNode>(rightNode),
     };
   }
 
-  additive(ctx: any): ExpressionNode {
-    const operands = (ctx.operands ?? []) as any[];
-    const operators = (ctx.operators ?? []) as IToken[];
+  public additive(ctx: CstContext): ExpressionNode {
+    return this.visitBinaryExpression(ctx);
+  }
 
-    let result = this.visit(operands[0]) as ExpressionNode;
+  public multiplicative(ctx: CstContext): ExpressionNode {
+    return this.visitBinaryExpression(ctx);
+  }
+
+  private visitBinaryExpression(
+    ctx: CstContext,
+  ): ExpressionNode {
+    const operands = this.getNodes(ctx, "operands");
+    const operators = this.getTokens(ctx, "operators");
+
+    const firstOperand = operands[0];
+
+    if (!firstOperand) {
+      throw new Error("演算式にoperandがありません");
+    }
+
+    let result = this.visitNode<ExpressionNode>(firstOperand);
 
     for (let i = 0; i < operators.length; i++) {
+      const nextOperand = operands[i + 1];
+
+      if (!nextOperand) {
+        throw new Error("演算子に対応するoperandがありません");
+      }
+
       result = {
         type: "BinaryExpression",
         operator: operators[i].image,
         left: result,
-        right: this.visit(operands[i + 1]),
+        right: this.visitNode<ExpressionNode>(nextOperand),
       };
     }
 
     return result;
   }
 
-  multiplicative(ctx: any): ExpressionNode {
-    const operands = (ctx.operands ?? []) as any[];
-    const operators = (ctx.operators ?? []) as IToken[];
+  public primary(ctx: CstContext): ExpressionNode {
+    const functionCall = this.getNodes(ctx, "functionCall")[0];
 
-    let result = this.visit(operands[0]) as ExpressionNode;
-
-    for (let i = 0; i < operators.length; i++) {
-      result = {
-        type: "BinaryExpression",
-        operator: operators[i].image,
-        left: result,
-        right: this.visit(operands[i + 1]),
-      };
+    if (functionCall) {
+      return this.visitNode<FunctionCallNode>(functionCall);
     }
 
-    return result;
-  }
+    const numberLiteral = this.getTokens(ctx, "NumberLiteral")[0];
 
-  primary(ctx: any): ExpressionNode {
-    if (ctx.functionCall) {
-      return this.visit(ctx.functionCall[0]);
-    }
-
-    if (ctx.NumberLiteral) {
+    if (numberLiteral) {
       return {
         type: "Literal",
-        value: parseFloat(ctx.NumberLiteral[0].image),
+        value: Number.parseFloat(numberLiteral.image),
       };
     }
 
-    if (ctx.Identifier) {
+    const identifier = this.getTokens(ctx, "Identifier")[0];
+
+    if (identifier) {
       return {
         type: "Identifier",
-        name: ctx.Identifier[0].image,
+        name: identifier.image,
       };
     }
 
-    return this.visit(ctx.expression[0]);
+    const expression = this.getNodes(ctx, "expression")[0];
+
+    if (expression) {
+      return this.visitNode<ExpressionNode>(expression);
+    }
+
+    throw new Error("primaryに対応するノードがありません");
   }
 
-  functionCall(ctx: any): FunctionCallNode {
+  public functionCall(ctx: CstContext): FunctionCallNode {
+    const name = this.getTokens(ctx, "name")[0];
+
+    if (!name) {
+      throw new Error("functionCallにnameがありません");
+    }
+
+    const expressionList = this.getNodes(ctx, "expressionList")[0];
+
     return {
       type: "FunctionCall",
-      name: ctx.name[0].image,
-      arguments: ctx.expressionList
-        ? this.visit(ctx.expressionList[0])
+      name: name.image,
+      arguments: expressionList
+        ? this.visitNode<ExpressionNode[]>(expressionList)
         : [],
     };
   }
 
-  expressionList(ctx: any): ExpressionNode[] {
+  public expressionList(ctx: CstContext): ExpressionNode[] {
+    const head = this.getNodes(ctx, "head")[0];
+
+    if (!head) {
+      throw new Error("expressionListにheadがありません");
+    }
+
     return [
-      this.visit(ctx.head[0]),
-      ...(ctx.tail ?? []).map(
-        (expression: any) => this.visit(expression),
+      this.visitNode<ExpressionNode>(head),
+      ...this.getNodes(ctx, "tail").map(
+        (node) => this.visitNode<ExpressionNode>(node),
       ),
     ];
   }

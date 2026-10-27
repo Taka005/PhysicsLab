@@ -1,3 +1,5 @@
+import { CstChildrenDictionary, CstNode, IToken } from "chevrotain";
+
 export interface ProgramNode {
   type: "Program";
   init: StatementNode[];
@@ -48,3 +50,9 @@ export interface FunctionCallNode {
   name: string;
   arguments: ExpressionNode[];
 }
+
+export type CstChild = CstNode | IToken;
+
+export type CstContext = CstChildrenDictionary & {
+  [key: string]: CstChild[] | undefined;
+};

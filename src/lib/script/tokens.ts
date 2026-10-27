@@ -160,4 +160,4 @@ export const allTokens = [
   Semicolon,
 ];
 
-export const ScriptLexer = new Lexer(allTokens);
+export const scriptLexer = new Lexer(allTokens);
