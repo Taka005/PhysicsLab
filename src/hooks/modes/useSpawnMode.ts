@@ -3,9 +3,10 @@ import { createId, Engine, Vector } from "@/lib/engine";
 import { CircleCreateOption, CurveCreateOption, LineCreateOption } from "@/lib/engine/types";
 import { useSpawnState } from "@/context/SpawnContext";
 import { Point } from "../useCanvasInteraction";
+import { toast } from "sonner";
 
 export function useSpawnMode(engine: Engine | null) {
-  const { spawnConfig } = useSpawnState();
+  const { spawnConfig, updateSpawnConfig } = useSpawnState();
   const [clickedPoints, setClickedPoints] = useState<Point[]>([]);
 
   useEffect(() => {
@@ -29,44 +30,50 @@ export function useSpawnMode(engine: Engine | null) {
     const nextPoints = [...clickedPoints, engine.toWorldPosition(Vector.from(point))];
 
     if (nextPoints.length >= requiredCount) {
-      if (spawnConfig.type === "circle") {
-        engine.spawn({
-          type: "circle",
-          id: spawnConfig.id ?? createId(10),
-          resource:{
-            color: spawnConfig.color
-          },
-          position: { x: nextPoints[0].x, y: nextPoints[0].y },
-          velocity: { x: spawnConfig.velocityX, y: spawnConfig.velocityY },
-          diameter: spawnConfig.diameter,
-          mass: spawnConfig.mass,
-          stiffness: spawnConfig.stiffness
-        } as CircleCreateOption);
-      } else if (spawnConfig.type === "line") {
-        engine.spawn({
-          type: "line",
-          id: spawnConfig.id ?? createId(10),
-          resource:{
-            color: spawnConfig.color
-          },
-          start: { x: nextPoints[0].x, y: nextPoints[0].y },
-          end: { x: nextPoints[1].x, y: nextPoints[1].y },
-          width: spawnConfig.width
-        } as LineCreateOption);
-      } else if (spawnConfig.type === "curve") {
-        engine.spawn({
-          type: "curve",
-          id: spawnConfig.id ?? createId(10),
-          resource:{
-            color: spawnConfig.color
-          },
-          start: { x: nextPoints[0].x, y: nextPoints[0].y },
-          middle: { x: nextPoints[1].x, y: nextPoints[1].y },
-          end: { x: nextPoints[2].x, y: nextPoints[2].y },
-          width: spawnConfig.width
-        } as CurveCreateOption);
+      try{
+        if (spawnConfig.type === "circle") {
+          engine.spawn({
+            type: "circle",
+            id: spawnConfig.id == "" ? createId(10) : spawnConfig.id,
+            resource:{
+              color: spawnConfig.color
+            },
+            position: { x: nextPoints[0].x, y: nextPoints[0].y },
+            velocity: { x: spawnConfig.velocityX, y: spawnConfig.velocityY },
+            diameter: spawnConfig.diameter,
+            mass: spawnConfig.mass,
+            stiffness: spawnConfig.stiffness
+          } as CircleCreateOption);
+        } else if (spawnConfig.type === "line") {
+          engine.spawn({
+            type: "line",
+            id: spawnConfig.id == "" ? createId(10) : spawnConfig.id,
+            resource:{
+              color: spawnConfig.color
+            },
+            start: { x: nextPoints[0].x, y: nextPoints[0].y },
+            end: { x: nextPoints[1].x, y: nextPoints[1].y },
+            width: spawnConfig.width
+          } as LineCreateOption);
+        } else if (spawnConfig.type === "curve") {
+          engine.spawn({
+            type: "curve",
+            id: spawnConfig.id == "" ? createId(10) : spawnConfig.id,
+            resource:{
+              color: spawnConfig.color
+            },
+            start: { x: nextPoints[0].x, y: nextPoints[0].y },
+            middle: { x: nextPoints[1].x, y: nextPoints[1].y },
+            end: { x: nextPoints[2].x, y: nextPoints[2].y },
+            width: spawnConfig.width
+          } as CurveCreateOption);
+        }
+      }catch{
+        toast.error("既に同じIDが設定されています");
       }
 
+      updateSpawnConfig({ id: "" });
+      
       setClickedPoints([]);
     }else{
       setClickedPoints(nextPoints);

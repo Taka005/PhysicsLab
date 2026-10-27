@@ -36,7 +36,7 @@ export default function SpawnSettings() {
           updateSpawnConfig({ id: e.target.value });
         }}
         placeholder="(任意)"
-        required={false} 
+        required={false}
       />
       {spawnConfig.type === "circle" && (
         <>
