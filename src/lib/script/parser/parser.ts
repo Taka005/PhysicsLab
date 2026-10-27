@@ -2,7 +2,7 @@ import {
   CstParser,
   EOF
 } from "chevrotain";
-import { allTokens, Assign, Comma, Divide, DivideAssign, EqualEqual, Greater, GreaterEqual, Identifier, If, Init, LBrace, Less, LessEqual, LParen, Minus, MinusAssign, Multiply, MultiplyAssign, NotEqual, NumberLiteral, Plus, PlusAssign, RBrace, RParen, Semicolon, Update } from "./tokens";
+import { allTokens, Assign, Comma, Divide, DivideAssign, Dot, EqualEqual, Greater, GreaterEqual, Identifier, If, Init, LBrace, Less, LessEqual, LParen, Minus, MinusAssign, Multiply, MultiplyAssign, NotEqual, NumberLiteral, Plus, PlusAssign, RBrace, RParen, Semicolon, Update } from "./tokens";
 
 class ScriptParser extends CstParser {
   public program = this.RULE("program", () => {
@@ -61,24 +61,14 @@ class ScriptParser extends CstParser {
   });
 
   public assignmentStatement = this.RULE("assignmentStatement",() => {
-    this.CONSUME(Identifier, { LABEL: "name" });
+     this.SUBRULE(this.variableName, { LABEL: "name" });
 
     this.OR([
-      {
-        ALT: () => this.CONSUME(PlusAssign),
-      },
-      {
-        ALT: () => this.CONSUME(MinusAssign),
-      },
-      {
-        ALT: () => this.CONSUME(MultiplyAssign),
-      },
-      {
-        ALT: () => this.CONSUME(DivideAssign),
-      },
-      {
-        ALT: () => this.CONSUME(Assign),
-      },
+      { ALT: () => this.CONSUME(PlusAssign) },
+      { ALT: () => this.CONSUME(MinusAssign) },
+      { ALT: () => this.CONSUME(MultiplyAssign) },
+      { ALT: () => this.CONSUME(DivideAssign) },
+      { ALT: () => this.CONSUME(Assign) },
     ]);
 
     this.SUBRULE(this.expression);
@@ -165,7 +155,7 @@ class ScriptParser extends CstParser {
         ALT: () => this.CONSUME(NumberLiteral),
       },
       {
-        ALT: () => this.CONSUME(Identifier),
+        ALT: () => this.SUBRULE(this.variableName),
       },
       {
         ALT: () => {
@@ -194,6 +184,15 @@ class ScriptParser extends CstParser {
     this.MANY(() => {
       this.CONSUME(Comma);
       this.SUBRULE2(this.expression, { LABEL: "tail" });
+    });
+  });
+
+  public variableName = this.RULE("variableName", () => {
+    this.CONSUME(Identifier, { LABEL: "parts" });
+
+    this.MANY(() => {
+      this.CONSUME(Dot);
+      this.CONSUME2(Identifier, { LABEL: "parts" });
     });
   });
 

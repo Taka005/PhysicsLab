@@ -96,9 +96,9 @@ class AstVisitor extends BaseCstVisitor {
   }
 
   public assignmentStatement(ctx: CstContext): AssignmentNode {
-    const nameToken = this.getTokens(ctx, "name")[0];
+    const nameNode = this.getNodes(ctx, "name")[0];
 
-    if (!nameToken) {
+    if (!nameNode) {
       throw new Error("assignmentStatementにnameがありません");
     }
 
@@ -108,9 +108,11 @@ class AstVisitor extends BaseCstVisitor {
       throw new Error("assignmentStatementにexpressionがありません");
     }
 
+    const name = this.visitNode<string>(nameNode);
+
     const left: IdentifierNode = {
       type: "Identifier",
-      name: nameToken.image,
+      name,
     };
 
     const right = this.visitNode<ExpressionNode>(expressionNode);
@@ -240,12 +242,12 @@ class AstVisitor extends BaseCstVisitor {
       };
     }
 
-    const identifier = this.getTokens(ctx, "Identifier")[0];
+    const variableName = this.getNodes(ctx, "variableName")[0];
 
-    if (identifier) {
+    if (variableName) {
       return {
         type: "Identifier",
-        name: identifier.image,
+        name: this.visitNode<string>(variableName),
       };
     }
 
@@ -289,6 +291,12 @@ class AstVisitor extends BaseCstVisitor {
         (node) => this.visitNode<ExpressionNode>(node),
       ),
     ];
+  }
+
+  public variableName(ctx: CstContext): string {
+    return this.getTokens(ctx, "parts")
+      .map((token) => token.image)
+      .join(".");
   }
 }
 

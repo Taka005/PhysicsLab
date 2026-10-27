@@ -57,6 +57,11 @@ export const DivideAssign = createToken({
   pattern: /\/=/,
 });
 
+export const Dot = createToken({
+  name: "Dot",
+  pattern: /\./,
+});
+
 export const GreaterEqual = createToken({
   name: "GreaterEqual",
   pattern: />=/,
@@ -145,14 +150,11 @@ export const Semicolon = createToken({
 export const allTokens = [
   WhiteSpace,
   Comment,
-
   Init,
   Update,
   If,
-
   NumberLiteral,
   Identifier,
-
   PlusAssign,
   MinusAssign,
   MultiplyAssign,
@@ -161,7 +163,6 @@ export const allTokens = [
   LessEqual,
   EqualEqual,
   NotEqual,
-
   Greater,
   Less,
   Assign,
@@ -169,7 +170,7 @@ export const allTokens = [
   Minus,
   Multiply,
   Divide,
-
+  Dot,
   LParen,
   RParen,
   LBrace,

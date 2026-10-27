@@ -1,3 +1,4 @@
+import { transpileToJavaScript } from "./Compiler";
 import { generateAst } from "./parser/ast";
 import { ScriptSyntaxError } from "./parser/ScriptSyntaxError";
 
@@ -14,7 +15,7 @@ const code = `
 
     t = sin(startY * 0.05) * PI;
 
-    startY += t;
+    obj.start.Y += t;
     endY += t;
   }
 `;
@@ -22,10 +23,17 @@ const code = `
 try {
   const ast = generateAst(code);
 
-  console.log(
-    "パース成功:",
-    JSON.stringify(ast, null, 2),
-  );
+  const javascript = transpileToJavaScript(ast, {
+    selfProperties: [
+      "startY",
+      "endY",
+    ],
+    envProperties: [
+      "t",
+    ],
+  });
+
+  console.log(javascript);
 } catch (error) {
   if (error instanceof ScriptSyntaxError) {
     console.error(
