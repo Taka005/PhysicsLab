@@ -16,7 +16,7 @@ import { useEditState } from "@/context/EditContext";
 export default function ControlPanel() {
   const engine = useEngine();
   const state = useEngineState();
-  const { setSelectedObjectId, updateEditConfig } = useEditState();
+  const { setSelectedObjectId, setSelectedObjectType } = useEditState();
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const nodeRef = useRef<HTMLDivElement>(null);
   const { mode, setMode } = useToolMode();
@@ -86,6 +86,7 @@ export default function ControlPanel() {
             setMode(e.target.value);
 
             setSelectedObjectId(null);
+            setSelectedObjectType(null);
           }}
         />
         <hr className="my-1 border-t border-gray-400" />

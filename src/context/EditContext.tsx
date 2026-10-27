@@ -15,13 +15,16 @@ type EditContextType = {
   editConfig: EditConfig;
   updateEditConfig: (newConfig: Partial<EditConfig>) => void;
   selectedObjectId: string | null;
-  setSelectedObjectId: (obj: string | null) => void;
+  setSelectedObjectId: (id: string | null) => void;
+  selectedObjectType: string | null;
+  setSelectedObjectType: (type: string | null) => void;
 };
 
 const EditContext = createContext<EditContextType | undefined>(undefined);
 
 export function EditProvider({ children }: { children: ReactNode }) {
   const [selectedObjectId, setSelectedObjectId] = useState<string | null>(null);
+  const [selectedObjectType, setSelectedObjectType] = useState<string | null>(null);
   const [editConfig, setEditConfig] = useState<EditConfig>({
     diameter: 15,
     mass: 10,
@@ -36,7 +39,7 @@ export function EditProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <EditContext.Provider value={{ editConfig, updateEditConfig, selectedObjectId, setSelectedObjectId }}>
+    <EditContext.Provider value={{ editConfig, updateEditConfig, selectedObjectId, setSelectedObjectId, selectedObjectType, setSelectedObjectType }}>
       {children}
     </EditContext.Provider>
   );
