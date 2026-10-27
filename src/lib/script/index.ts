@@ -1,5 +1,5 @@
-import { parse } from "./ast";
-import { ScriptSyntaxError } from "./ScriptSyntaxError";
+import { generateAst } from "./parser/ast";
+import { ScriptSyntaxError } from "./parser/ScriptSyntaxError";
 
 const code = `
   init {
@@ -20,7 +20,7 @@ const code = `
 `;
 
 try {
-  const ast = parse(code);
+  const ast = generateAst(code);
 
   console.log(
     "パース成功:",

@@ -115,13 +115,24 @@ class AstVisitor extends BaseCstVisitor {
 
     const right = this.visitNode<ExpressionNode>(expressionNode);
 
-    if (this.getTokens(ctx, "PlusAssign").length > 0) {
+    const compoundOperators: Readonly<Record<string, string>> = {
+      PlusAssign: "+",
+      MinusAssign: "-",
+      MultiplyAssign: "*",
+      DivideAssign: "/",
+    };
+
+    const compoundOperator = Object.entries(compoundOperators).find(
+      ([tokenName]) => this.getTokens(ctx, tokenName).length > 0,
+    )?.[1];
+
+    if (compoundOperator) {
       return {
         type: "Assignment",
         left,
         right: {
           type: "BinaryExpression",
-          operator: "+",
+          operator: compoundOperator,
           left,
           right,
         },
@@ -281,4 +292,4 @@ class AstVisitor extends BaseCstVisitor {
   }
 }
 
-export const astVisitor = new AstVisitor();
+export const visitor = new AstVisitor();

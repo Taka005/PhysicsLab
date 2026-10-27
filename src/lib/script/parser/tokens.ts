@@ -42,6 +42,21 @@ export const PlusAssign = createToken({
   pattern: /\+=/,
 });
 
+export const MinusAssign = createToken({
+  name: "MinusAssign",
+  pattern: /\-=/,
+});
+
+export const MultiplyAssign = createToken({
+  name: "MultiplyAssign",
+  pattern: /\*=/,
+});
+
+export const DivideAssign = createToken({
+  name: "DivideAssign",
+  pattern: /\/=/,
+});
+
 export const GreaterEqual = createToken({
   name: "GreaterEqual",
   pattern: />=/,
@@ -139,6 +154,9 @@ export const allTokens = [
   Identifier,
 
   PlusAssign,
+  MinusAssign,
+  MultiplyAssign,
+  DivideAssign,
   GreaterEqual,
   LessEqual,
   EqualEqual,

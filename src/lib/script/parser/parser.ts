@@ -2,7 +2,7 @@ import {
   CstParser,
   EOF
 } from "chevrotain";
-import { allTokens, Assign, Comma, Divide, EqualEqual, Greater, GreaterEqual, Identifier, If, Init, LBrace, Less, LessEqual, LParen, Minus, Multiply, NotEqual, NumberLiteral, Plus, PlusAssign, RBrace, RParen, Semicolon, Update } from "./tokens";
+import { allTokens, Assign, Comma, Divide, DivideAssign, EqualEqual, Greater, GreaterEqual, Identifier, If, Init, LBrace, Less, LessEqual, LParen, Minus, MinusAssign, Multiply, MultiplyAssign, NotEqual, NumberLiteral, Plus, PlusAssign, RBrace, RParen, Semicolon, Update } from "./tokens";
 
 class ScriptParser extends CstParser {
   public program = this.RULE("program", () => {
@@ -65,20 +65,24 @@ class ScriptParser extends CstParser {
 
     this.OR([
       {
-        ALT: () => {
-          this.CONSUME(PlusAssign);
-          this.SUBRULE(this.expression);
-          this.CONSUME(Semicolon);
-        },
+        ALT: () => this.CONSUME(PlusAssign),
       },
       {
-        ALT: () => {
-          this.CONSUME(Assign);
-          this.SUBRULE2(this.expression);
-          this.CONSUME2(Semicolon);
-        },
+        ALT: () => this.CONSUME(MinusAssign),
+      },
+      {
+        ALT: () => this.CONSUME(MultiplyAssign),
+      },
+      {
+        ALT: () => this.CONSUME(DivideAssign),
+      },
+      {
+        ALT: () => this.CONSUME(Assign),
       },
     ]);
+
+    this.SUBRULE(this.expression);
+    this.OPTION(() => this.CONSUME(Semicolon));
   });
 
   public expression = this.RULE("expression", () => {

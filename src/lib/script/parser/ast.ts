@@ -2,9 +2,9 @@ import { parser } from "./parser";
 import { ScriptSyntaxError } from "./ScriptSyntaxError";
 import { scriptLexer } from "./tokens";
 import { ProgramNode } from "./types";
-import { astVisitor } from "./visitor";
+import { visitor } from "./visitor";
 
-export function parse(source: string): ProgramNode {
+export function generateAst(source: string): ProgramNode {
   const lexResult = scriptLexer.tokenize(source);
 
   if (lexResult.errors.length > 0) {
@@ -32,5 +32,5 @@ export function parse(source: string): ProgramNode {
     );
   }
 
-  return astVisitor.visit(cst) as ProgramNode;
+  return visitor.visit(cst) as ProgramNode;
 }
