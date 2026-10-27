@@ -17,7 +17,9 @@ export function useEditMode(engine: Engine | null) {
       object.resource.color = editConfig.color ?? "#ff0000";
 
       if(object instanceof BaseBody){
-        object.stiffness = editConfig.stiffness ?? 0;
+        object.stiffness = editConfig.stiffness ?? 0.8;
+      }else if(object instanceof BaseGround){
+        object.width = editConfig.width ?? 10;
       }
     }
   }, [engine,editConfig, selectedObjectId]);
@@ -41,8 +43,9 @@ export function useEditMode(engine: Engine | null) {
           stiffness: object.stiffness
         });
       }else if(object instanceof BaseGround){
-          updateEditConfig({
-          color: object.resource.color
+        updateEditConfig({
+          color: object.resource.color,
+          width: object.width
         });
       }
     }else{

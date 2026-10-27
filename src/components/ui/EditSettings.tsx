@@ -25,6 +25,18 @@ export default function EditSettings() {
           }}
         />
       )}
+      {(selectedObjectType === "line" || selectedObjectType === "curve") && (
+        <SliderField
+          label="幅"
+          value={editConfig.width ?? 10}
+          min="1"
+          max="50"
+          step="1"
+          onChange={(e) => {
+            updateEditConfig({ width: parseFloat(e.target.value) });
+          }}
+        />
+      )}
       <ColorPicker
         label="カラー"
         value={editConfig.color}
