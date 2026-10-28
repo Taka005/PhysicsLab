@@ -122,7 +122,8 @@ export type ResourceOption = {
 }
 
 export type ScriptOption = {
-  target: BaseObject;
+  id: string;
+  name: string;
   code: string;
 }
 

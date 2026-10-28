@@ -1,5 +1,5 @@
 import { CstNode, IToken } from "chevrotain";
-import { AssignmentNode, ExpressionNode, FunctionCallNode, IdentifierNode, IfStatementNode, ProgramNode, StatementNode, CstContext } from "./types";
+import { AssignmentNode, ExpressionNode, FunctionCallNode, IdentifierNode, IfStatementNode, ProgramNode, StatementNode, CstContext } from "../types";
 import { parser } from "./parser";
 
 const BaseCstVisitor = parser.getBaseCstVisitorConstructorWithDefaults();

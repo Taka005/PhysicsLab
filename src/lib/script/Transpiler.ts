@@ -5,7 +5,7 @@ import {
   IfStatementNode,
   ExpressionNode,
   FunctionCallNode,
-} from "./parser/types";
+} from "./types";
 
 export class Transpiler {
   private globalVariables = new Set<string>();

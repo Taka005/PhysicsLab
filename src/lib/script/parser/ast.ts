@@ -1,7 +1,7 @@
 import { parser } from "./parser";
 import { ScriptSyntaxError } from "./ScriptSyntaxError";
 import { scriptLexer } from "./tokens";
-import { ProgramNode } from "./types";
+import { ProgramNode } from "../types";
 import { visitor } from "./visitor";
 
 export function generateAst(source: string): ProgramNode {
