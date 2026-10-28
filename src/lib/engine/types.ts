@@ -28,7 +28,8 @@ export type EntityOption = {
 export interface BaseObjectOption{
   type: ObjectType;
   id: string;
-  resource: ResourceOption
+  resource: ResourceOption;
+  scriptId: string | null;
 }
 
 export interface BaseBodyOption extends BaseObjectOption {
@@ -61,6 +62,7 @@ export interface BaseCreateOption {
   type: ObjectType;
   id: string;
   resource: ResourceOption;
+  scriptId: string | null;
 }
 
 export interface BaseCreateBodyOption extends BaseCreateOption {
@@ -135,6 +137,7 @@ export type TranspiledScript = {
 export type SaveData = {
   engine: EngineOption;
   viewport: ViewportOption;
+  scripts: ScriptOption[];
   objects: {
     bodies: BaseBodyOption[];
     grounds: BaseGroundOption[];

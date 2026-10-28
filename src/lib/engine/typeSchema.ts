@@ -21,6 +21,12 @@ const viewportOptionSchema = z.object({
   gridWidth: z.number().gt(0)
 });
 
+const ScriptOptionSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  code: z.string()
+});
+
 const entityOptionSchema = z.object({
   id: z.string(),
   position: vectorDataSchema,
@@ -44,7 +50,8 @@ const circleOptionSchema = z.object({
   id: z.string(),
   resource: resourceOption,
   entities: z.array(entityOptionSchema),
-  diameter: z.number().gt(0)
+  diameter: z.number().gt(0),
+  scriptId: z.string().nullable()
 });
 
 const lineOptionSchema = z.object({
@@ -53,7 +60,8 @@ const lineOptionSchema = z.object({
   resource: resourceOption,
   width: z.number().gt(0),
   start: vectorDataSchema,
-  end: vectorDataSchema
+  end: vectorDataSchema,
+  scriptId: z.string().nullable()
 });
 
 const CurveOptionSchema = z.object({
@@ -63,7 +71,8 @@ const CurveOptionSchema = z.object({
   width: z.number().gt(0),
   start: vectorDataSchema,
   middle: vectorDataSchema,
-  end: vectorDataSchema
+  end: vectorDataSchema,
+  scriptId: z.string().nullable()
 });
 
 const bodyOptionSchema = z.discriminatedUnion("type",[
@@ -78,6 +87,7 @@ const groundOptionSchema = z.discriminatedUnion("type",[
 export const saveDataSchema = z.object({
   engine: engineOptionSchema,
   viewport: viewportOptionSchema,
+  scripts: z.array(ScriptOptionSchema),
   objects: z.object({
     bodies: z.array(bodyOptionSchema),
     grounds: z.array(groundOptionSchema)

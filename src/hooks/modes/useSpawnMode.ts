@@ -42,7 +42,8 @@ export function useSpawnMode(engine: Engine | null) {
             velocity: { x: spawnConfig.velocityX, y: spawnConfig.velocityY },
             diameter: spawnConfig.diameter,
             mass: spawnConfig.mass,
-            stiffness: spawnConfig.stiffness
+            stiffness: spawnConfig.stiffness,
+            scriptId: null
           } as CircleCreateOption);
         } else if (spawnConfig.type === "line") {
           engine.spawn({
@@ -53,7 +54,8 @@ export function useSpawnMode(engine: Engine | null) {
             },
             start: { x: nextPoints[0].x, y: nextPoints[0].y },
             end: { x: nextPoints[1].x, y: nextPoints[1].y },
-            width: spawnConfig.width
+            width: spawnConfig.width,
+            scriptId: null
           } as LineCreateOption);
         } else if (spawnConfig.type === "curve") {
           engine.spawn({
@@ -65,7 +67,8 @@ export function useSpawnMode(engine: Engine | null) {
             start: { x: nextPoints[0].x, y: nextPoints[0].y },
             middle: { x: nextPoints[1].x, y: nextPoints[1].y },
             end: { x: nextPoints[2].x, y: nextPoints[2].y },
-            width: spawnConfig.width
+            width: spawnConfig.width,
+            scriptId: null
           } as CurveCreateOption);
         }
       }catch{
@@ -73,7 +76,7 @@ export function useSpawnMode(engine: Engine | null) {
       }
 
       updateSpawnConfig({ id: "" });
-      
+
       setClickedPoints([]);
     }else{
       setClickedPoints(nextPoints);

@@ -304,6 +304,11 @@ export class Engine extends EngineBase {
   }
 
   public spawn(option: BaseCreateOption): BaseObject {
+    if(
+      option.scriptId !== null&&
+      !this.scriptManager.get(option.scriptId)
+    ) throw new Error("存在しないスクリプトを設定しています");
+
     if(Circle.isCircleCreateOption(option)){
       const circle = Circle.create(option);
 
@@ -330,6 +335,7 @@ export class Engine extends EngineBase {
   public deSpawn(id: string): void {
     this.content.removeBody(id);
     this.content.removeGround(id);
+    this.scriptManager.removeObject(id);
   }
 
   public getObjects(): BaseObject[]{
@@ -479,6 +485,8 @@ export class Engine extends EngineBase {
     this.setOption(validData.engine);
     this.viewport.setOption(validData.viewport);
 
+    this.scriptManager.setScripts(validData.scripts);
+
     this.content.setBodies(validData.objects.bodies);
 
     this.content.setGrounds(validData.objects.grounds);
@@ -500,6 +508,7 @@ export class Engine extends EngineBase {
         zoomRatio: this.viewport.zoomRatio,
         gridWidth: this.viewport.gridWidth
       },
+      scripts: this.scriptManager.scripts.map(script=>script.toJSON()),
       objects:{
         bodies: this.content.bodies.map(body=>body.toJSON()),
         grounds: this.content.grounds.map(ground=>ground.toJSON())

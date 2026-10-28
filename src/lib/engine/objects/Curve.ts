@@ -119,7 +119,8 @@ export class Curve extends BaseGround {
       width: this.width,
       start: this.start,
       middle: this.middle,
-      end: this.end
+      end: this.end,
+      scriptId: this.scriptId
     }
   }
 
@@ -139,7 +140,8 @@ export class Curve extends BaseGround {
       width: option.width,
       start: option.start,
       middle: option.middle,
-      end: option.end
+      end: option.end,
+      scriptId: option.scriptId
     });
   }
 

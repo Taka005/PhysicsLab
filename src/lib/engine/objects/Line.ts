@@ -50,7 +50,8 @@ export class Line extends BaseGround {
       resource: this.resource.toJSON(),
       width: this.width,
       start: this.start,
-      end: this.end
+      end: this.end,
+      scriptId: this.scriptId
     }
   }
 
@@ -61,7 +62,8 @@ export class Line extends BaseGround {
       resource: option.resource,
       width: option.width,
       start: option.start,
-      end: option.end
+      end: option.end,
+      scriptId: option.scriptId
     });
   }
 

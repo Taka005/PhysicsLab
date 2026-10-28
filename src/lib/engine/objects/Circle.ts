@@ -21,6 +21,7 @@ export class Circle extends BaseBody{
       id: this.id,
       resource: this.resource.toJSON(),
       diameter: this.diameter,
+      scriptId: this.scriptId,
       entities: this.entities.map(entity=>entity.toJSON())
     }
   }
@@ -58,6 +59,7 @@ export class Circle extends BaseBody{
       id: option.id,
       resource: option.resource,
       diameter: option.diameter,
+      scriptId: option.scriptId,
       entities: [entityOption]
     });
   }
