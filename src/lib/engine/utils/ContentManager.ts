@@ -1,7 +1,11 @@
 import { BaseBody } from "../objects/BaseBody";
 import { BaseGround } from "../objects/BaseGround";
 import { BaseObject } from "../objects/BaseObject";
+import { Circle } from "../objects/Circle";
+import { Curve } from "../objects/Curve";
 import { Entity } from "../objects/Entity";
+import { Line } from "../objects/Line";
+import { BaseBodyOption, BaseGroundOption } from "../types";
 
 export class ContentManager {
   public bodies: BaseBody[] = [];
@@ -37,13 +41,32 @@ export class ContentManager {
     return this.cacheEntities;
   }
 
-  public setBodies(value: BaseBody[]) {
-    this.bodies = value;
+  public setBodies(bodies: BaseBodyOption[]) {
+    this.bodies = bodies
+      .map(body=>{
+        if(Circle.isCircleOption(body)){
+          return Circle.from(body);
+        }
+
+        return null;
+      })
+      .filter(body=>body != null)
+
     this.cacheEntities = null;
   }
 
-  public setGrounds(value: BaseGround[]) {
-    this.grounds = value;
+  public setGrounds(grounds: BaseGroundOption[]) {
+    this.grounds = grounds
+      .map(ground=>{
+        if(Line.isLineOption(ground)){
+          return Line.from(ground);
+        }else if(Curve.isCurveOption(ground)){
+          return Curve.from(ground);
+        }
+
+        return null;
+      })
+      .filter(ground=>ground != null)
   }
 
   public getEntity(id: string): Entity | undefined{

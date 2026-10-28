@@ -9,6 +9,7 @@ import { Line } from "./objects/Line";
 import { saveDataSchema } from "./typeSchema";
 import { BaseCreateOption, DEFAULT_ENGINE_VALUE, DEFAULT_VIEWPORT_VALUE, EdgeData, EngineOption, EngineSnapShot, SaveData, ViewportOption } from "./types";
 import { ContentManager } from "./utils/ContentManager";
+import { ScriptManager } from "./utils/ScriptManager";
 import { Vector } from "./utils/Vector";
 import { Viewport } from "./utils/Viewport";
 
@@ -36,6 +37,8 @@ export class Engine extends EngineBase {
   private trackingCount: number = 0;
 
   private readonly content: ContentManager = new ContentManager();
+
+  private readonly scriptManager: ScriptManager = new ScriptManager();
 
   private listeners = new Set<() => void>();
 
@@ -476,31 +479,9 @@ export class Engine extends EngineBase {
     this.setOption(validData.engine);
     this.viewport.setOption(validData.viewport);
 
-    this.content.setBodies(
-      validData.objects.bodies
-        .map(body=>{
-          if(Circle.isCircleOption(body)){
-            return Circle.from(body);
-          }
+    this.content.setBodies(validData.objects.bodies);
 
-          return null;
-        })
-        .filter(body=>body != null)
-    );
-
-    this.content.setGrounds(
-      validData.objects.grounds
-        .map(ground=>{
-          if(Line.isLineOption(ground)){
-            return Line.from(ground);
-          }else if(Curve.isCurveOption(ground)){
-            return Curve.from(ground);
-          }
-
-          return null;
-        })
-        .filter(ground=>ground != null)
-    );
+    this.content.setGrounds(validData.objects.grounds);
   }
 
   public export(): string {

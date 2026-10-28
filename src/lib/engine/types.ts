@@ -128,8 +128,8 @@ export type ScriptOption = {
 }
 
 export type TranspiledScript = {
-  init: (obj: BaseObject, global: { [key: string]: any }) => void;
-  update: (obj: BaseObject, global: { [key: string]: any }) => void;
+  init: (obj: BaseObject, globalVar: { [key: string]: any }) => void;
+  update: (obj: BaseObject, globalVar: { [key: string]: any }) => void;
 }
 
 export type SaveData = {

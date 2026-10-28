@@ -7,7 +7,6 @@ export class Script{
   public name: string;
   private _code: string;
   private build: TranspiledScript;
-  private globalVariables: { [key: string]: any } = {};
 
   constructor(option: ScriptOption){
     this.id = option.id;
@@ -25,12 +24,12 @@ export class Script{
     this.build = this.transpileScript(this.code);
   }
 
-  public init(target: BaseObject): void{
-    this.build.init(target,this.globalVariables);
+  public init(target: BaseObject,globalVar: { [key: string]: any }): void{
+    this.build.init(target,globalVar);
   }
 
-  public update(target: BaseObject): void{
-    this.build.update(target,this.globalVariables);
+  public update(target: BaseObject, globalVar: { [key: string]: any }): void{
+    this.build.update(target,globalVar);
   }
 
   private transpileScript(code: string): TranspiledScript {
@@ -43,5 +42,17 @@ export class Script{
     }catch(error){
       throw error;
     }
+  }
+
+  public toJSON(): ScriptOption{
+    return {
+      id: this.id,
+      name: this.name,
+      code: this.code
+    }
+  }
+
+  public static from(option: ScriptOption): Script{
+    return new Script(option);
   }
 }
