@@ -2,7 +2,7 @@ import {
   CstParser,
   EOF
 } from "chevrotain";
-import { allTokens, Assign, Comma, Divide, DivideAssign, Dot, EqualEqual, Greater, GreaterEqual, Identifier, If, Init, LBrace, Less, LessEqual, LParen, Minus, MinusAssign, Multiply, MultiplyAssign, NotEqual, NumberLiteral, Plus, PlusAssign, RBrace, RParen, Semicolon, Update } from "./tokens";
+import { allTokens, Assign, Comma, Divide, DivideAssign, Dot, EqualEqual, Greater, GreaterEqual, Identifier, If, Init, LBrace, Less, LessEqual, LParen, Minus, MinusAssign, Multiply, MultiplyAssign, Not, NotEqual, NumberLiteral, Plus, PlusAssign, RBrace, RParen, Semicolon, StringLiteral, Update } from "./tokens";
 
 class ScriptParser extends CstParser {
   public program = this.RULE("program", () => {
@@ -123,7 +123,7 @@ class ScriptParser extends CstParser {
   });
 
   public multiplicative = this.RULE("multiplicative", () => {
-    this.SUBRULE(this.primary, {
+    this.SUBRULE(this.unaryExpression, {
       LABEL: "operands",
     });
 
@@ -141,7 +141,7 @@ class ScriptParser extends CstParser {
         },
       ]);
 
-      this.SUBRULE2(this.primary, {
+      this.SUBRULE2(this.unaryExpression, {
         LABEL: "operands",
       });
     });
@@ -151,6 +151,9 @@ class ScriptParser extends CstParser {
     this.OR([
       {
         ALT: () => this.SUBRULE(this.functionCall),
+      },
+      {
+        ALT: () => this.CONSUME(StringLiteral),
       },
       {
         ALT: () => this.CONSUME(NumberLiteral),
@@ -164,6 +167,22 @@ class ScriptParser extends CstParser {
           this.SUBRULE(this.expression);
           this.CONSUME(RParen);
         },
+      },
+    ]);
+  });
+
+  public unaryExpression = this.RULE("unaryExpression", () => {
+    this.OR([
+      {
+        ALT: () => {
+          this.CONSUME(Not);
+          this.SUBRULE(this.unaryExpression, {
+            LABEL: "argument",
+          });
+        },
+      },
+      {
+        ALT: () => this.SUBRULE(this.primary),
       },
     ]);
   });

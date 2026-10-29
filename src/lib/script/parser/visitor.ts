@@ -244,6 +244,15 @@ class AstVisitor extends BaseCstVisitor {
       return this.visitNode<FunctionCallNode>(functionCall);
     }
 
+    const stringLiteral = this.getTokens(ctx, "StringLiteral")[0];
+
+    if (stringLiteral) {
+      return {
+        type: "Literal",
+        value: JSON.parse(stringLiteral.image) as string,
+      };
+    }
+
     const numberLiteral = this.getTokens(ctx, "NumberLiteral")[0];
 
     if (numberLiteral) {
@@ -289,20 +298,40 @@ class AstVisitor extends BaseCstVisitor {
     };
   }
 
-public functionCallStatement(
-  ctx: CstContext,
-): FunctionCallStatementNode {
-  const functionCallNode = this.getNodes(ctx, "functionCall")[0];
+  public functionCallStatement(
+    ctx: CstContext,
+  ): FunctionCallStatementNode {
+    const functionCallNode = this.getNodes(ctx, "functionCall")[0];
 
-  if (!functionCallNode) {
-    throw new Error("functionCallStatementにfunctionCallがありません");
+    if (!functionCallNode) {
+      throw new Error("functionCallStatementにfunctionCallがありません");
+    }
+
+    return {
+      type: "FunctionCallStatement",
+      expression: this.visitNode<FunctionCallNode>(functionCallNode),
+    };
   }
 
-  return {
-    type: "FunctionCallStatement",
-    expression: this.visitNode<FunctionCallNode>(functionCallNode),
-  };
-}
+  public unaryExpression(ctx: CstContext): ExpressionNode {
+    const argumentNode = this.getNodes(ctx, "argument")[0];
+
+    if (argumentNode) {
+      return {
+        type: "UnaryExpression",
+        operator: "!",
+        argument: this.visitNode<ExpressionNode>(argumentNode),
+      };
+    }
+
+    const primaryNode = this.getNodes(ctx, "primary")[0];
+
+    if (primaryNode) {
+      return this.visitNode<ExpressionNode>(primaryNode);
+    }
+
+    throw new Error("unaryExpressionに対応するノードがありません");
+  }
 
   public expressionList(ctx: CstContext): ExpressionNode[] {
     const head = this.getNodes(ctx, "head")[0];

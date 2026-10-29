@@ -167,10 +167,15 @@ export class Transpiler {
         return this.resolveIdentifier(node.name, scope);
 
       case "Literal":
-        return String(node.value);
+        return typeof node.value === "string"
+          ? JSON.stringify(node.value)
+          : String(node.value);
 
       case "BinaryExpression":
         return `(${this.transpileExpression(node.left, scope)} ${node.operator} ${this.transpileExpression(node.right, scope)})`;
+
+      case "UnaryExpression":
+        return `(!${this.transpileExpression(node.argument, scope)})`;
 
       case "FunctionCall":
         return this.transpileFunctionCall(node, scope);

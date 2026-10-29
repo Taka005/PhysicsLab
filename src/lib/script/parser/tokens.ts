@@ -62,6 +62,16 @@ export const Dot = createToken({
   pattern: /\./,
 });
 
+export const StringLiteral = createToken({
+  name: "StringLiteral",
+  pattern: /"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/,
+});
+
+export const Not = createToken({
+  name: "Not",
+  pattern: /!/,
+});
+
 export const GreaterEqual = createToken({
   name: "GreaterEqual",
   pattern: />=/,
@@ -153,6 +163,7 @@ export const allTokens = [
   Init,
   Update,
   If,
+  StringLiteral,
   NumberLiteral,
   Identifier,
   PlusAssign,
@@ -163,6 +174,7 @@ export const allTokens = [
   LessEqual,
   EqualEqual,
   NotEqual,
+  Not,
   Greater,
   Less,
   Assign,

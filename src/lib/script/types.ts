@@ -27,7 +27,8 @@ export type ExpressionNode =
   | IdentifierNode
   | LiteralNode
   | BinaryExpressionNode
-  | FunctionCallNode;
+  | FunctionCallNode
+  | UnaryExpressionNode;
 
 export interface IdentifierNode {
   type: "Identifier";
@@ -36,7 +37,13 @@ export interface IdentifierNode {
 
 export interface LiteralNode {
   type: "Literal";
-  value: number;
+  value: number | string;
+}
+
+export interface UnaryExpressionNode {
+  type: "UnaryExpression";
+  operator: "!";
+  argument: ExpressionNode;
 }
 
 export interface BinaryExpressionNode {
