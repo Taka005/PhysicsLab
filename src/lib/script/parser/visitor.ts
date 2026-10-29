@@ -1,5 +1,5 @@
 import { CstNode, IToken } from "chevrotain";
-import { AssignmentNode, ExpressionNode, FunctionCallNode, IdentifierNode, IfStatementNode, ProgramNode, StatementNode, CstContext } from "../types";
+import { AssignmentNode, ExpressionNode, FunctionCallNode, IdentifierNode, IfStatementNode, ProgramNode, StatementNode, CstContext, FunctionCallStatementNode } from "../types";
 import { parser } from "./parser";
 
 const BaseCstVisitor = parser.getBaseCstVisitorConstructorWithDefaults();
@@ -65,6 +65,17 @@ class AstVisitor extends BaseCstVisitor {
     if (ifStatement.length > 0) {
       return this.visitNode<IfStatementNode>(ifStatement[0]);
     }
+
+  const functionCallStatement = this.getNodes(
+    ctx,
+    "functionCallStatement",
+  )[0];
+
+  if (functionCallStatement) {
+    return this.visitNode<FunctionCallStatementNode>(
+      functionCallStatement,
+    );
+  }
 
     const assignmentStatement = this.getNodes(
       ctx,
@@ -277,6 +288,21 @@ class AstVisitor extends BaseCstVisitor {
         : [],
     };
   }
+
+public functionCallStatement(
+  ctx: CstContext,
+): FunctionCallStatementNode {
+  const functionCallNode = this.getNodes(ctx, "functionCall")[0];
+
+  if (!functionCallNode) {
+    throw new Error("functionCallStatementにfunctionCallがありません");
+  }
+
+  return {
+    type: "FunctionCallStatement",
+    expression: this.visitNode<FunctionCallNode>(functionCallNode),
+  };
+}
 
   public expressionList(ctx: CstContext): ExpressionNode[] {
     const head = this.getNodes(ctx, "head")[0];

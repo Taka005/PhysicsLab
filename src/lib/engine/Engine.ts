@@ -42,7 +42,7 @@ export class Engine extends EngineBase {
 
   private readonly content: ContentManager = new ContentManager();
 
-  private readonly scriptManager: ScriptManager = new ScriptManager();
+  public readonly scriptManager: ScriptManager = new ScriptManager();
 
   private listeners = new Set<() => void>();
 

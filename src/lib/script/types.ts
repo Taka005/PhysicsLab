@@ -8,7 +8,8 @@ export interface ProgramNode {
 
 export type StatementNode =
   | IfStatementNode
-  | AssignmentNode;
+  | AssignmentNode
+  | FunctionCallStatementNode;
 
 export interface IfStatementNode {
   type: "IfStatement";
@@ -43,6 +44,11 @@ export interface BinaryExpressionNode {
   operator: string;
   left: ExpressionNode;
   right: ExpressionNode;
+}
+
+export interface FunctionCallStatementNode {
+  type: "FunctionCallStatement";
+  expression: FunctionCallNode;
 }
 
 export interface FunctionCallNode {

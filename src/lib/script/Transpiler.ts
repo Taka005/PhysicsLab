@@ -23,6 +23,7 @@ export class Transpiler {
     "abs": "Math.abs",
     "max": "Math.max",
     "min": "Math.min",
+    "console": "console.log"
   };
 
   public transpile(program: ProgramNode): string {
@@ -115,6 +116,12 @@ export class Transpiler {
 
       case "IfStatement":
         return this.transpileIfStatement(statement, scope);
+
+      case "FunctionCallStatement":
+        return `${this.transpileExpression(
+          statement.expression,
+          scope,
+        )};`;
 
       default:
         throw new Error(

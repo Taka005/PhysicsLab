@@ -42,6 +42,7 @@ class ScriptParser extends CstParser {
   public statement = this.RULE("statement", () => {
     this.OR([
       { ALT: () => this.SUBRULE(this.ifStatement) },
+      { ALT: () => this.SUBRULE(this.functionCallStatement) },
       { ALT: () => this.SUBRULE(this.assignmentStatement) },
     ]);
   });
@@ -176,6 +177,13 @@ class ScriptParser extends CstParser {
     });
 
     this.CONSUME(RParen);
+  });
+
+  public functionCallStatement = this.RULE("functionCallStatement",() => {
+    this.SUBRULE(this.functionCall);
+    this.OPTION(() => {
+      this.CONSUME(Semicolon);
+    });
   });
 
   public expressionList = this.RULE("expressionList", () => {
