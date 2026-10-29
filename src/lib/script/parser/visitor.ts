@@ -97,12 +97,19 @@ class AstVisitor extends BaseCstVisitor {
       throw new Error("ifStatementにconditionがありません");
     }
 
+    const body = this.getNodes(ctx, "body").map((node) =>
+      this.visitNode<StatementNode>(node)
+    );
+
+    const elseBody = this.getNodes(ctx, "elseBody").map((node) =>
+      this.visitNode<StatementNode>(node)
+    );
+
     return {
       type: "IfStatement",
       condition: this.visitNode<ExpressionNode>(conditionNode),
-      body: this.getNodes(ctx, "statement").map(
-        (node) => this.visitNode<StatementNode>(node),
-      ),
+      body,
+      ...(ctx.Else ? { elseBody } : {}),
     };
   }
 

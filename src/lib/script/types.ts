@@ -15,6 +15,7 @@ export interface IfStatementNode {
   type: "IfStatement";
   condition: ExpressionNode;
   body: StatementNode[];
+  elseBody?: StatementNode[];
 }
 
 export interface AssignmentNode {

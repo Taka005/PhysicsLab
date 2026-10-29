@@ -15,6 +15,11 @@ export const If = createToken({
   pattern: /if\b/,
 });
 
+export const Else = createToken({
+  name: "Else",
+  pattern: /else/,
+});
+
 export const NumberLiteral = createToken({
   name: "NumberLiteral",
   pattern: /[0-9]+(?:\.[0-9]+)?/,
@@ -163,6 +168,7 @@ export const allTokens = [
   Init,
   Update,
   If,
+  Else,
   StringLiteral,
   NumberLiteral,
   Identifier,

@@ -2,7 +2,7 @@ import {
   CstParser,
   EOF
 } from "chevrotain";
-import { allTokens, Assign, Comma, Divide, DivideAssign, Dot, EqualEqual, Greater, GreaterEqual, Identifier, If, Init, LBrace, Less, LessEqual, LParen, Minus, MinusAssign, Multiply, MultiplyAssign, Not, NotEqual, NumberLiteral, Plus, PlusAssign, RBrace, RParen, Semicolon, StringLiteral, Update } from "./tokens";
+import { allTokens, Assign, Comma, Divide, DivideAssign, Dot, Else, EqualEqual, Greater, GreaterEqual, Identifier, If, Init, LBrace, Less, LessEqual, LParen, Minus, MinusAssign, Multiply, MultiplyAssign, Not, NotEqual, NumberLiteral, Plus, PlusAssign, RBrace, RParen, Semicolon, StringLiteral, Update } from "./tokens";
 
 class ScriptParser extends CstParser {
   public program = this.RULE("program", () => {
@@ -52,13 +52,23 @@ class ScriptParser extends CstParser {
     this.CONSUME(LParen);
     this.SUBRULE(this.expression);
     this.CONSUME(RParen);
+
     this.CONSUME(LBrace);
-
     this.MANY(() => {
-      this.SUBRULE(this.statement);
+      this.SUBRULE(this.statement, { LABEL: "body" });
     });
-
     this.CONSUME(RBrace);
+
+    this.OPTION(() => {
+      this.CONSUME(Else);
+      this.CONSUME2(LBrace);
+
+      this.MANY2(() => {
+        this.SUBRULE2(this.statement, { LABEL: "elseBody" });
+      });
+
+      this.CONSUME2(RBrace);
+    });
   });
 
   public assignmentStatement = this.RULE("assignmentStatement",() => {

@@ -155,7 +155,17 @@ export class Transpiler {
       .map((statement) => this.transpileStatement(statement, scope))
       .join("\n");
 
-    return `if (${condition}) {\n${this.indent(body, 2)}\n}`;
+    let code = `if (${condition}) {\n${this.indent(body, 2)}\n}`;
+
+    if (node.elseBody !== undefined) {
+      const elseBody = node.elseBody
+        .map((s) => this.transpileStatement(s, scope))
+        .join("\n");
+
+      code += ` else {\n${this.indent(elseBody, 2)}\n}`;
+    }
+
+    return code;
   }
 
   private transpileExpression(
