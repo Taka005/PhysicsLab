@@ -194,6 +194,15 @@ export default function SettingPanel() {
         </div>
         <div className="flex-1 gap-2">
           <ToggleSwitch
+            label="スクリプトの実行を許可"
+            checked={state.isExecuteScript}
+            onChange={(checked) =>{
+              engine.isExecuteScript = checked
+            }}
+          />
+        </div>
+        <div className="flex-1 gap-2">
+          <ToggleSwitch
             label="デバッグモード"
             checked={state.isDebugMode}
             onChange={(checked) =>{

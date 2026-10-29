@@ -12,6 +12,7 @@ export function useEngineState() {
     isDynamicTrackingMode: false,
     isDebugMode: false,
     isSetGridCrossMode: false,
+    isExecuteScript: true,
     isDisplayGrid: false,
     isDisplayVector: false,
     isDisplayEdge: false,

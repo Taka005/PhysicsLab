@@ -22,6 +22,8 @@ export class Engine extends EngineBase {
 
   private _isSetGridCrossMode: boolean = false;
 
+  private _isExecuteScript: boolean = true;
+
   private _isDebugMode: boolean = false;
 
   private _playBackSpeed: number;
@@ -86,6 +88,15 @@ export class Engine extends EngineBase {
 
   public set isSetGridCrossMode(value: boolean) {
     this._isSetGridCrossMode = value;
+    this.notify();
+  }
+
+  public get isExecuteScript(): boolean{
+    return this._isExecuteScript;
+  }
+
+  public set isExecuteScript(value: boolean) {
+    this._isExecuteScript = value;
     this.notify();
   }
 
@@ -160,6 +171,7 @@ export class Engine extends EngineBase {
       isDynamicTrackingMode: this.isDynamicTrackingMode,
       isDebugMode: this.isDebugMode,
       isSetGridCrossMode: this.isSetGridCrossMode,
+      isExecuteScript: this.isExecuteScript,
       isDisplayGrid: this.viewport.isDisplayGrid,
       isDisplayVector: this.viewport.isDisplayVector,
       isDisplayEdge: this.viewport.isDisplayEdge,
@@ -201,6 +213,7 @@ export class Engine extends EngineBase {
     this.isDynamicTrackingMode = false;
     this.isDebugMode = false;
     this.isSetGridCrossMode = false;
+    this.isExecuteScript = true;
     this.trackingInterval = DEFAULT_ENGINE_VALUE.trackingInterval;
     this.trackingLimit = DEFAULT_ENGINE_VALUE.trackingLimit;
     this.scriptExecuteInterval = DEFAULT_ENGINE_VALUE.scriptExecuteInterval;
@@ -269,16 +282,18 @@ export class Engine extends EngineBase {
       this.trackingCount %= this.trackingInterval;
     }
 
-    this.scriptExecuteCount += 1000/this.pps;
+    if(this.isExecuteScript){
+      this.scriptExecuteCount += 1000/this.pps;
 
-    if(this.scriptExecuteCount >= this.scriptExecuteInterval){
-      try{
-        this.scriptManager.updateAll(this.content.objects);
-      }catch(e){
-        console.log(e);
+      if(this.scriptExecuteCount >= this.scriptExecuteInterval){
+        try{
+          this.scriptManager.updateAll(this.content.objects);
+        }catch(e){
+          console.log(e);
+        }
+
+        this.scriptExecuteCount %= this.scriptExecuteInterval;
       }
-
-      this.scriptExecuteCount %= this.scriptExecuteInterval;
     }
 
     for(let i = 0;i < this.content.entitiesCount;i++){

@@ -150,6 +150,7 @@ export type EngineSnapShot = {
   isTrackingMode: boolean;
   isDynamicTrackingMode: boolean;
   isSetGridCrossMode: boolean;
+  isExecuteScript: boolean;
   isDebugMode: boolean;
   isDisplayGrid: boolean;
   isDisplayVector: boolean;
