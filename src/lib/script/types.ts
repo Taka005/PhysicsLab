@@ -43,7 +43,7 @@ export interface LiteralNode {
 
 export interface UnaryExpressionNode {
   type: "UnaryExpression";
-  operator: "!";
+  operator: "!" | "-";
   argument: ExpressionNode;
 }
 

@@ -184,8 +184,21 @@ export class Transpiler {
       case "BinaryExpression":
         return `(${this.transpileExpression(node.left, scope)} ${node.operator} ${this.transpileExpression(node.right, scope)})`;
 
-      case "UnaryExpression":
-        return `(!${this.transpileExpression(node.argument, scope)})`;
+      case "UnaryExpression": {
+        const argument = this.transpileExpression(node.argument, scope);
+
+        if (node.operator === "!") {
+          return `(!${argument})`;
+        }
+
+        if (node.operator === "-") {
+          return `(-${argument})`;
+        }
+
+        throw new Error(
+          `未対応の単項演算子です: ${node.operator}`
+        );
+      }
 
       case "FunctionCall":
         return this.transpileFunctionCall(node, scope);

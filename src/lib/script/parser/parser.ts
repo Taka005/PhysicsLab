@@ -192,6 +192,14 @@ class ScriptParser extends CstParser {
         },
       },
       {
+        ALT: () => {
+          this.CONSUME(Minus);
+          this.SUBRULE2(this.unaryExpression, {
+            LABEL: "argument",
+          });
+        },
+      },
+      {
         ALT: () => this.SUBRULE(this.primary),
       },
     ]);

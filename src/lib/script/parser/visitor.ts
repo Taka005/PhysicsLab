@@ -324,9 +324,22 @@ class AstVisitor extends BaseCstVisitor {
     const argumentNode = this.getNodes(ctx, "argument")[0];
 
     if (argumentNode) {
+      const notToken = this.getTokens(ctx, "Not")[0];
+      const minusToken = this.getTokens(ctx, "Minus")[0];
+
+      const operator = notToken
+        ? "!"
+        : minusToken
+          ? "-"
+          : undefined;
+
+      if(!operator){
+        throw new Error("単項演算子を特定できません");
+      }
+
       return {
         type: "UnaryExpression",
-        operator: "!",
+        operator,
         argument: this.visitNode<ExpressionNode>(argumentNode),
       };
     }

@@ -17,7 +17,7 @@ const code = `
 
     t = sin(max(startY,startX) * 0.05) * PI;
 
-    obj.start.Y += t;
+    obj.start.Y += -1;
     endY += t;
     obj = 1;
     console("obj.start.Y");
