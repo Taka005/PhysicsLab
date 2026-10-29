@@ -239,6 +239,18 @@ export default function SettingPanel() {
         </div>
         <div className="flex-1 gap-2">
           <SliderField
+            label="スクリプト実行間隔"
+            value={state.scriptExecuteInterval}
+            min="10"
+            max="1000"
+            step="10"
+            onChange={(e) => {
+              engine.scriptExecuteInterval = parseFloat(e.target.value);
+            }}
+          />
+        </div>
+        <div className="flex-1 gap-2">
+          <SliderField
             label="ワールドサイズ"
             value={state.worldSize}
             min="1000"

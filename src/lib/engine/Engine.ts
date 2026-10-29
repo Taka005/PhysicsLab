@@ -32,9 +32,13 @@ export class Engine extends EngineBase {
 
   private _worldSize: number;
 
+  private _scriptExecuteInterval: number;
+
   public readonly viewport: Viewport;
 
   private trackingCount: number = 0;
+
+  private scriptExecuteCount: number = 0;
 
   private readonly content: ContentManager = new ContentManager();
 
@@ -53,6 +57,7 @@ export class Engine extends EngineBase {
     this._trackingInterval = engineOption.trackingInterval;
     this._trackingLimit = engineOption.trackingLimit;
     this._worldSize = engineOption.worldSize;
+    this._scriptExecuteInterval = engineOption.scriptExecuteInterval;
 
     this.snapshot = this.createSnapshot();
   }
@@ -126,6 +131,17 @@ export class Engine extends EngineBase {
     this.notify();
   }
 
+  public get scriptExecuteInterval(): number{
+    return this._scriptExecuteInterval;
+  }
+
+  public set scriptExecuteInterval(value: number) {
+    if(value <= 0) throw new Error("スクリプト実行間隔は0を超える必要があります");
+
+    this._scriptExecuteInterval = value;
+    this.notify();
+  }
+
   public get worldSize(): number{
     return this._worldSize;
   }
@@ -153,6 +169,7 @@ export class Engine extends EngineBase {
       worldSize: this.worldSize,
       trackingInterval: this.trackingInterval,
       trackingLimit: this.trackingLimit,
+      scriptExecuteInterval: this.scriptExecuteInterval,
       gridWidth: this.viewport.gridWidth,
       gravity: this.gravity,
       pps: this.pps,
@@ -186,6 +203,7 @@ export class Engine extends EngineBase {
     this.isSetGridCrossMode = false;
     this.trackingInterval = DEFAULT_ENGINE_VALUE.trackingInterval;
     this.trackingLimit = DEFAULT_ENGINE_VALUE.trackingLimit;
+    this.scriptExecuteInterval = DEFAULT_ENGINE_VALUE.scriptExecuteInterval;
     this.playBackSpeed = DEFAULT_ENGINE_VALUE.playBackSpeed;
     this.worldSize = DEFAULT_ENGINE_VALUE.worldSize;
     this.gravity = DEFAULT_ENGINE_VALUE.gravity;
@@ -249,6 +267,18 @@ export class Engine extends EngineBase {
       }
 
       this.trackingCount %= this.trackingInterval;
+    }
+
+    this.scriptExecuteCount += 1000/this.pps;
+
+    if(this.scriptExecuteCount >= this.scriptExecuteInterval){
+      try{
+        this.scriptManager.updateAll(this.content.objects);
+      }catch(e){
+        console.log(e);
+      }
+
+      this.scriptExecuteCount %= this.scriptExecuteInterval;
     }
 
     for(let i = 0;i < this.content.entitiesCount;i++){
@@ -498,6 +528,7 @@ export class Engine extends EngineBase {
         playBackSpeed: this.playBackSpeed,
         trackingInterval: this.trackingInterval,
         trackingLimit: this.trackingLimit,
+        scriptExecuteInterval: this.scriptExecuteInterval,
         worldSize: this.worldSize,
         pps: this.pps,
         gravity: this.gravity,
@@ -522,6 +553,7 @@ export class Engine extends EngineBase {
     this.playBackSpeed = option.playBackSpeed;
     this.trackingInterval = option.trackingInterval;
     this.trackingLimit = option.trackingLimit;
+    this.scriptExecuteInterval = option.scriptExecuteInterval;
     this.worldSize = option.worldSize;
     this.pps = option.pps;
     this.gravity = option.gravity;

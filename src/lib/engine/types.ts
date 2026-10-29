@@ -104,6 +104,7 @@ export interface EngineOption extends EngineBaseOption {
   playBackSpeed: number;
   trackingInterval: number;
   trackingLimit: number;
+  scriptExecuteInterval: number;
   worldSize: number;
 }
 
@@ -159,6 +160,7 @@ export type EngineSnapShot = {
   worldSize: number;
   trackingInterval: number;
   trackingLimit: number;
+  scriptExecuteInterval: number;
   gridWidth: number;
   gravity: number;
   pps: number;
@@ -168,6 +170,7 @@ export type EngineSnapShot = {
 export const DEFAULT_ENGINE_VALUE: EngineOption = {
   trackingInterval: 100,
   trackingLimit: 100,
+  scriptExecuteInterval: 100,
   playBackSpeed: 1,
   worldSize: 5000,
   gravity: 250,

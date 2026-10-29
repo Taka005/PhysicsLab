@@ -12,6 +12,7 @@ const engineOptionSchema = z.object({
   playBackSpeed: z.number().gt(0),
   trackingInterval: z.number().int().min(1),
   trackingLimit: z.number().int().min(1),
+  scriptExecuteInterval: z.number().int().min(1),
   worldSize: z.number().int().min(1)
 });
 

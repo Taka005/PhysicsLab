@@ -19,6 +19,7 @@ export function useEngineState() {
     isHiddenGround: false,
     trackingInterval: DEFAULT_ENGINE_VALUE.trackingInterval,
     trackingLimit: DEFAULT_ENGINE_VALUE.trackingLimit,
+    scriptExecuteInterval: DEFAULT_ENGINE_VALUE.scriptExecuteInterval,
     playBackSpeed: DEFAULT_ENGINE_VALUE.playBackSpeed,
     worldSize: DEFAULT_ENGINE_VALUE.worldSize,
     gridWidth: DEFAULT_VIEWPORT_VALUE.gridWidth,
