@@ -80,7 +80,7 @@ export default function SelectField({
                   onClick={() => handleSelect(option)}
                   className={`w-full flex items-center justify-between px-3 py-2 text-sm text-left hover:bg-gray-100 focus:outline-none ${
                     isSelected
-                      ? "bg-gray-200 font-semibold text-gray-900"
+                      ? "bg-gray-200 text-gray-900"
                       : "text-gray-700"
                   }`}
                 >

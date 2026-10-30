@@ -22,8 +22,8 @@ export default function ConnectionSettings() {
         label="接続タイプ"
         value={connectionConfig.type}
         options={shapeOptions}
-        onChange={(e) => {
-          updateConnectionConfig({ type: e.target.value });
+        onChange={(value) => {
+          updateConnectionConfig({ type: value });
         }}
       />
       <SliderField
