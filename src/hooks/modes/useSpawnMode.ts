@@ -43,7 +43,7 @@ export function useSpawnMode(engine: Engine | null) {
             diameter: spawnConfig.diameter,
             mass: spawnConfig.mass,
             stiffness: spawnConfig.stiffness,
-            scriptId: null
+            scriptId: spawnConfig.scriptId
           } as CircleCreateOption);
         } else if (spawnConfig.type === "line") {
           engine.spawn({
@@ -55,7 +55,7 @@ export function useSpawnMode(engine: Engine | null) {
             start: { x: nextPoints[0].x, y: nextPoints[0].y },
             end: { x: nextPoints[1].x, y: nextPoints[1].y },
             width: spawnConfig.width,
-            scriptId: null
+            scriptId: spawnConfig.scriptId
           } as LineCreateOption);
         } else if (spawnConfig.type === "curve") {
           engine.spawn({
@@ -68,7 +68,7 @@ export function useSpawnMode(engine: Engine | null) {
             middle: { x: nextPoints[1].x, y: nextPoints[1].y },
             end: { x: nextPoints[2].x, y: nextPoints[2].y },
             width: spawnConfig.width,
-            scriptId: null
+            scriptId: spawnConfig.scriptId
           } as CurveCreateOption);
         }
       }catch{

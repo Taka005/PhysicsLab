@@ -5,13 +5,15 @@ import { useSpawnState } from "@/context/SpawnContext";
 import SelectField from "./SelectField";
 import ColorPicker from "./ColorPicker";
 import InputField from "./InputField";
+import { useScriptState } from "@/hooks/useScriptState";
 
 export default function SpawnSettings() {
   const engine = useEngine();
   const state = useEngineState();
+  const { scripts } = useScriptState();
   const { spawnConfig, updateSpawnConfig } = useSpawnState();
 
-  const shapeOptions = [
+  const ObjectOptions = [
     { label: "円", value: "circle" },
     { label: "直線", value: "line" },
     { label: "曲線", value: "curve" },
@@ -24,7 +26,7 @@ export default function SpawnSettings() {
       <SelectField
         label="生成タイプ"
         value={spawnConfig.type}
-        options={shapeOptions}
+        options={ObjectOptions}
         onChange={(e) => {
           updateSpawnConfig({ type: e.target.value });
         }}
@@ -111,6 +113,14 @@ export default function SpawnSettings() {
         value={spawnConfig.color}
         onChange={(value) => {
           updateSpawnConfig({ color: value });
+        }}
+      />
+      <SelectField
+        label="スクリプト"
+        value={spawnConfig.scriptId || ""}
+        options={[{ label: "なし", value: ""},...scripts.map(script=>({ label: `${script.name}(${script.id})`, value: script.id }))]}
+        onChange={(e) => {
+          updateSpawnConfig({ scriptId: e.target.value !== "" ? e.target.value : null});
         }}
       />
     </>

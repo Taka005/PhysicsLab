@@ -3,23 +3,18 @@
 import { useEngine } from "@/context/EngineContext";
 import { MouseEvent, useState } from "react";
 import { Script } from "@/lib/engine";
+import { useScriptState } from "@/hooks/useScriptState";
 
 export default function ScriptManagerPanel() {
   const engine = useEngine();
+  const { scripts } = useScriptState();
   const [selectedScriptId, setSelectedScriptId] = useState<string | null>(null);
-
   const [draftName, setDraftName] = useState("");
   const [draftCode, setDraftCode] = useState("");
   const [isCreatingNew, setIsCreatingNew] = useState(false);
-
-  const [, setRevision] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
 
   if (!engine) return null;
-
-  const refresh = () => {
-    setRevision((previous) => previous + 1);
-  };
 
   const handleSelectScript = (script: Script) => {
     setIsCreatingNew(false);
@@ -56,7 +51,6 @@ export default function ScriptManagerPanel() {
 
         if (!script) {
           setErrorMessage("対象のスクリプトが見つかりません");
-          refresh();
           return;
         }
 
@@ -65,7 +59,6 @@ export default function ScriptManagerPanel() {
       }
 
       setErrorMessage("");
-      refresh();
     }catch(error){
       setErrorMessage(
         error instanceof Error
@@ -73,7 +66,6 @@ export default function ScriptManagerPanel() {
           : "スクリプトの保存に失敗しました"
       );
 
-      refresh();
     }
   };
 
@@ -90,7 +82,6 @@ export default function ScriptManagerPanel() {
     }
 
     setErrorMessage("");
-    refresh();
   };
 
   return (
@@ -106,12 +97,12 @@ export default function ScriptManagerPanel() {
             </button>
           </div>
           <div className="flex-1 overflow-y-auto p-2 space-y-1">
-            {engine.scriptManager.scripts.length === 0 ? (
+            {scripts.length === 0 ? (
               <p className="text-center text-xs text-gray-400 mt-4">
                 保存されたスクリプトがありません
               </p>
             ) : (
-              engine.scriptManager.scripts.map((script) => {
+              scripts.map((script) => {
                 const isSelected = !isCreatingNew && selectedScriptId === script.id;
 
                 return (
