@@ -8,5 +8,6 @@ export { BaseBody } from "./objects/BaseBody";
 export { BaseGround } from "./objects/BaseGround";
 export { BaseObject } from "./objects/BaseObject";
 export { Viewport } from "./utils/Viewport";
+export { Script } from "./utils/Script";
 export { createId } from "./utils/createId";
 export { normalizeAngle } from "./utils/normalizeAngle";

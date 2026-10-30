@@ -1,75 +1,96 @@
 "use client";
 
+import { useEngine } from "@/context/EngineContext";
 import { MouseEvent, useState } from "react";
-
-type Script = {
-  id: string;
-  name: string;
-  code: string;
-};
+import { Script } from "@/lib/engine";
 
 export default function ScriptManagerPanel() {
-  const [scripts, setScripts] = useState<Script[]>([]);
-
+  const engine = useEngine();
   const [selectedScriptId, setSelectedScriptId] = useState<string | null>(null);
 
   const [draftName, setDraftName] = useState("");
   const [draftCode, setDraftCode] = useState("");
   const [isCreatingNew, setIsCreatingNew] = useState(false);
 
+  const [, setRevision] = useState(0);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  if (!engine) return null;
+
+  const refresh = () => {
+    setRevision((previous) => previous + 1);
+  };
+
   const handleSelectScript = (script: Script) => {
     setIsCreatingNew(false);
     setSelectedScriptId(script.id);
     setDraftName(script.name);
     setDraftCode(script.code);
+    setErrorMessage("");
   };
 
   const handleStartCreate = () => {
     setIsCreatingNew(true);
     setSelectedScriptId(null);
     setDraftName("");
-    setDraftCode("");
+    setDraftCode("init {\n\n}\n\nupdate {\n\n}");
+    setErrorMessage("");
   };
 
   const handleSave = () => {
-    if (!draftName.trim()) return;
+    if (!draftName.trim()) {
+      setErrorMessage("スクリプト名を入力してください");
+      return;
+    }
 
-    if (isCreatingNew) {
-      const newScript: Script = {
-        id: Date.now().toString(),
-        name: draftName.trim(),
-        code: draftCode,
-      };
+    try {
+      if(isCreatingNew){
+        const newScript = engine.scriptManager.register(draftName.trim(), draftCode);
 
-      const updatedScripts = [...scripts, newScript];
-      setScripts(updatedScripts);
-      
-      setIsCreatingNew(false);
-      setSelectedScriptId(newScript.id);
-    } else if (selectedScriptId) {
-      setScripts(
-        scripts.map((s) =>
-          s.id === selectedScriptId
-            ? { ...s, name: draftName.trim(), code: draftCode }
-            : s
-        )
+        setSelectedScriptId(newScript.id);
+        setIsCreatingNew(false);
+        setDraftName(newScript.name);
+        setDraftCode(newScript.code);
+      }else if(selectedScriptId){
+        const script = engine.scriptManager.get(selectedScriptId);
+
+        if (!script) {
+          setErrorMessage("対象のスクリプトが見つかりません");
+          refresh();
+          return;
+        }
+
+        script.name = draftName.trim();
+        script.code = draftCode;
+      }
+
+      setErrorMessage("");
+      refresh();
+    }catch(error){
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "スクリプトの保存に失敗しました"
       );
+
+      refresh();
     }
   };
 
   const handleDeleteScript = (id: string, e: MouseEvent) => {
     e.stopPropagation();
-    const updated = scripts.filter((s) => s.id !== id);
-    setScripts(updated);
+
+    if(!engine.scriptManager.remove(id)) return;
 
     if (selectedScriptId === id) {
-      if (updated.length > 0) {
-        handleSelectScript(updated[0]);
-      } else {
-        setSelectedScriptId(null);
-        setIsCreatingNew(false);
-      }
+      setSelectedScriptId(null);
+      setDraftName("");
+      setDraftCode("");
+      setIsCreatingNew(false);
     }
+
+    setErrorMessage("");
+    refresh();
   };
 
   return (
@@ -85,14 +106,14 @@ export default function ScriptManagerPanel() {
             </button>
           </div>
           <div className="flex-1 overflow-y-auto p-2 space-y-1">
-            {scripts.length === 0 ? (
+            {engine.scriptManager.scripts.length === 0 ? (
               <p className="text-center text-xs text-gray-400 mt-4">
                 保存されたスクリプトがありません
               </p>
             ) : (
-              scripts.map((script) => {
+              engine.scriptManager.scripts.map((script) => {
                 const isSelected = !isCreatingNew && selectedScriptId === script.id;
-                
+
                 return (
                   <div
                     key={script.id}
@@ -141,10 +162,15 @@ export default function ScriptManagerPanel() {
                 <textarea
                   value={draftCode}
                   onChange={(e) => setDraftCode(e.target.value)}
-                  placeholder="// ここにコードを記述..."
+                  placeholder="init {&#10;&#10;}&#10;&#10;update {&#10;&#10;}"
                   className="w-full flex-1 p-3 bg-gray-900 text-gray-100 font-mono text-xs rounded-lg shadow-inner border border-gray-700 resize-none focus:outline-none leading-relaxed"
                   spellCheck={false}
                 />
+                {errorMessage && (
+                  <p className="mt-2 text-xs text-red-600 whitespace-pre-wrap">
+                    {errorMessage}
+                  </p>
+                )}
               </div>
             </>
           ) : (

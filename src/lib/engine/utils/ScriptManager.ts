@@ -7,12 +7,16 @@ export class ScriptManager{
   public scripts: Script[] = [];
   private globalVarMap = new Map<string, { [key: string]: any }>();
 
-  public register(name: string, code: string) {
-    this.scripts.push(Script.from({
+  public register(name: string, code: string): Script{
+    const newScript = Script.from({
       id: createId(10),
       name: name,
       code: code
-    }));
+    });
+
+    this.scripts.push(newScript);
+
+    return newScript;
   }
 
   public get(id: string) {
@@ -48,7 +52,17 @@ export class ScriptManager{
     }
   }
 
-  public removeObject(id: string) {
+  public remove(id: string): boolean {
+    const index = this.scripts.findIndex(script => script.id === id);
+
+    if (index === -1) return false;
+
+    this.scripts.splice(index, 1);
+
+    return true;
+  }
+
+  public removeMap(id: string) {
     this.globalVarMap.delete(id);
   }
 }

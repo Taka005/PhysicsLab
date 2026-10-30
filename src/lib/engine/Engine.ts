@@ -380,7 +380,7 @@ export class Engine extends EngineBase {
   public deSpawn(id: string): void {
     this.content.removeBody(id);
     this.content.removeGround(id);
-    this.scriptManager.removeObject(id);
+    this.scriptManager.removeMap(id);
   }
 
   public getObjects(): BaseObject[]{
