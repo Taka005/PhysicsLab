@@ -31,7 +31,7 @@ export class ScriptManager{
       code: code
     });
 
-    this.scripts.push(newScript);
+    this._scripts = [...this._scripts, newScript];
 
     this.notify();
 
@@ -79,12 +79,27 @@ export class ScriptManager{
     }
   }
 
+  public update(id: string,name: string,code: string): boolean {
+    const script = this.get(id);
+
+    if (!script) return false;
+
+    script.code = code;
+    script.name = name;
+
+    this._scripts = [...this._scripts];
+
+    this.notify();
+
+    return true;
+  }
+
   public remove(id: string): boolean {
     const index = this.scripts.findIndex(script => script.id === id);
 
     if (index === -1) return false;
 
-    this.scripts.splice(index, 1);
+    this._scripts = this._scripts.filter((script) => script.id !== id);
 
     this.notify();
 

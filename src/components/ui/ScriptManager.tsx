@@ -47,15 +47,16 @@ export default function ScriptManagerPanel() {
         setDraftName(newScript.name);
         setDraftCode(newScript.code);
       }else if(selectedScriptId){
-        const script = engine.scriptManager.get(selectedScriptId);
+        const updated = engine.scriptManager.update(
+          selectedScriptId,
+          draftName.trim(),
+          draftCode
+        );
 
-        if (!script) {
+        if (!updated) {
           setErrorMessage("対象のスクリプトが見つかりません");
           return;
         }
-
-        script.name = draftName.trim();
-        script.code = draftCode;
       }
 
       setErrorMessage("");
