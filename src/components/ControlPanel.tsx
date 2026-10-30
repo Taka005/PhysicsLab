@@ -12,6 +12,7 @@ import { useToolMode } from "@/context/ToolModeContext";
 import ConnectionSettings from "./ui/ConnectionSettings";
 import EditSettings from "./ui/EditSettings";
 import { useEditState } from "@/context/EditContext";
+import ScriptManagerPanel from "./ui/ScriptManager";
 
 export default function ControlPanel() {
   const engine = useEngine();
@@ -128,7 +129,7 @@ export default function ControlPanel() {
       )}
       {isScriptManagerOpen && (
       <Draggable handle=".drag-handle" nodeRef={scriptManagerNodeRef} bounds="body">
-        <div ref={scriptManagerNodeRef} className="absolute top-10 right-100 w-72 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50">
+        <div ref={scriptManagerNodeRef} className="absolute top-10 right-100 w-72 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50 w-[750px] h-[500px] flex flex-col">
           <div className="drag-handle bg-gray-500 text-white px-4 py-2 flex justify-between items-center cursor-move text-sm font-semibold">
             <span>スクリプトマネージャー</span>
             <button
@@ -138,7 +139,7 @@ export default function ControlPanel() {
               ✕
             </button>
           </div>
-          
+          <ScriptManagerPanel/>
         </div>
       </Draggable>
       )}
