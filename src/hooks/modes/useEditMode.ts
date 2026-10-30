@@ -1,4 +1,4 @@
-import { BaseBody, BaseGround, createId, Engine, Vector } from "@/lib/engine";
+import { BaseGround, Circle, Engine, Vector } from "@/lib/engine";
 import { Point } from "../useCanvasInteraction";
 import { useCallback, useEffect } from "react";
 import { useEditState } from "@/context/EditContext";
@@ -16,8 +16,9 @@ export function useEditMode(engine: Engine | null) {
     }else{
       object.resource.color = editConfig.color ?? "#ff0000";
 
-      if(object instanceof BaseBody){
+      if(object instanceof Circle){
         object.stiffness = editConfig.stiffness ?? 0.8;
+        object.diameter = editConfig.diameter ?? 15;
       }else if(object instanceof BaseGround){
         object.width = editConfig.width ?? 10;
       }
@@ -37,10 +38,11 @@ export function useEditMode(engine: Engine | null) {
       setSelectedObjectId(object.id);
       setSelectedObjectType(object.type);
 
-      if(object instanceof BaseBody){
+      if(object instanceof Circle){
         updateEditConfig({
           color: object.resource.color,
-          stiffness: object.stiffness
+          stiffness: object.stiffness,
+          diameter: object.diameter
         });
       }else if(object instanceof BaseGround){
         updateEditConfig({

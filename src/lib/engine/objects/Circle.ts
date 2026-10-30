@@ -3,16 +3,25 @@ import { createId } from "../utils/createId";
 import { BaseBody } from "./BaseBody";
 
 export class Circle extends BaseBody{
-  public diameter: number;
+  private _diameter: number;
 
   constructor(option: CircleOption){
     super(option);
 
-    this.diameter = option.diameter;
+    this._diameter = option.diameter;
   }
 
   public get radius(): number {
     return this.diameter / 2;
+  }
+
+  public get diameter(): number {
+    return this._diameter;
+  }
+
+  public set diameter(value: number) {
+    this._diameter = value;
+    this.entities[0].diameter = value;
   }
 
   public override toJSON(): CircleOption {

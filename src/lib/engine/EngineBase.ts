@@ -34,7 +34,7 @@ export class EngineBase{
   }
 
   public set gravity(value: number) {
-    if(value <= 0) throw new Error("重力加速度は0を超える必要があります");
+    if(value < 0) throw new Error("重力加速度は0を超える必要があります");
 
     this._gravity = value;
     this.onChanged();

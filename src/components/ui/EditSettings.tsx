@@ -14,16 +14,28 @@ export default function EditSettings() {
   return (
     <>
       {(selectedObjectType === "circle") && (
-        <SliderField
-          label="剛性"
-          value={editConfig.stiffness ?? 0.8}
-          min="0.1"
-          max="1"
-          step="0.1"
-          onChange={(e) => {
-            updateEditConfig({ stiffness: parseFloat(e.target.value) });
-          }}
-        />
+        <>
+          <SliderField
+            label="直径"
+            value={editConfig.diameter ?? 15}
+            min="1"
+            max="100"
+            step="1"
+            onChange={(e) => {
+              updateEditConfig({ diameter: parseFloat(e.target.value) });
+            }}
+          />
+          <SliderField
+            label="剛性"
+            value={editConfig.stiffness ?? 0.8}
+            min="0.1"
+            max="1"
+            step="0.1"
+            onChange={(e) => {
+              updateEditConfig({ stiffness: parseFloat(e.target.value) });
+            }}
+          />
+        </>
       )}
       {(selectedObjectType === "line" || selectedObjectType === "curve") && (
         <SliderField
