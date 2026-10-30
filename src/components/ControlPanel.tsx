@@ -18,7 +18,9 @@ export default function ControlPanel() {
   const state = useEngineState();
   const { setSelectedObjectId, setSelectedObjectType } = useEditState();
   const [isSettingOpen, setIsSettingOpen] = useState(false);
-  const nodeRef = useRef<HTMLDivElement>(null);
+  const [isScriptManagerOpen, setIsScriptManagerOpen] = useState(false);
+  const settingNodeRef = useRef<HTMLDivElement>(null);
+  const scriptManagerNodeRef = useRef<HTMLDivElement>(null);
   const { mode, setMode } = useToolMode();
 
   if (!engine||!state) return null;
@@ -74,6 +76,14 @@ export default function ControlPanel() {
               リセット
             </button>
           </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setIsScriptManagerOpen(!isScriptManagerOpen)}
+              className="flex-1 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition focus:outline-none"
+            >
+              スクリプトマネージャー
+            </button>
+          </div>
         </div>
         <hr className="my-1 border-t border-gray-400" />
         <EnvSettings/>
@@ -100,21 +110,37 @@ export default function ControlPanel() {
         <EditSettings/>
         )}
       </div>
-        {isSettingOpen && (
-        <Draggable handle=".drag-handle" nodeRef={nodeRef} bounds="body">
-          <div ref={nodeRef} className="absolute top-10 right-100 w-72 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50">
-            <div className="drag-handle bg-gray-500 text-white px-4 py-2 flex justify-between items-center cursor-move text-sm font-semibold">
-              <span>設定</span>
-              <button
-                onClick={() => setIsSettingOpen(false)}
-                className="text-gray-400 hover:text-white"
-              >
-                ✕
-              </button>
-            </div>
-            <SettingPanel/>
+      {isSettingOpen && (
+      <Draggable handle=".drag-handle" nodeRef={settingNodeRef} bounds="body">
+        <div ref={settingNodeRef} className="absolute top-10 right-100 w-72 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50">
+          <div className="drag-handle bg-gray-500 text-white px-4 py-2 flex justify-between items-center cursor-move text-sm font-semibold">
+            <span>設定</span>
+            <button
+              onClick={() => setIsSettingOpen(false)}
+              className="text-gray-400 hover:text-white"
+            >
+              ✕
+            </button>
           </div>
-        </Draggable>
+          <SettingPanel/>
+        </div>
+      </Draggable>
+      )}
+      {isScriptManagerOpen && (
+      <Draggable handle=".drag-handle" nodeRef={scriptManagerNodeRef} bounds="body">
+        <div ref={scriptManagerNodeRef} className="absolute top-10 right-100 w-72 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50">
+          <div className="drag-handle bg-gray-500 text-white px-4 py-2 flex justify-between items-center cursor-move text-sm font-semibold">
+            <span>スクリプトマネージャー</span>
+            <button
+              onClick={() => setIsScriptManagerOpen(false)}
+              className="text-gray-400 hover:text-white"
+            >
+              ✕
+            </button>
+          </div>
+          
+        </div>
+      </Draggable>
       )}
     </>
   )
