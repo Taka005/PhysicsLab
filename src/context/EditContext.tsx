@@ -10,6 +10,7 @@ export type EditConfig = {
   width?: number;
   velocityX?: number;
   velocityY?: number;
+  scriptId?: string | null;
 };
 
 type EditContextType = {

@@ -15,6 +15,7 @@ export function useEditMode(engine: Engine | null) {
       setSelectedObjectType(null);
     }else{
       object.resource.color = editConfig.color ?? "#ff0000";
+      object.scriptId = editConfig.scriptId ?? null;
 
       if(object instanceof Circle){
         object.stiffness = editConfig.stiffness ?? 0.8;
@@ -42,12 +43,14 @@ export function useEditMode(engine: Engine | null) {
         updateEditConfig({
           color: object.resource.color,
           stiffness: object.stiffness,
-          diameter: object.diameter
+          diameter: object.diameter,
+          scriptId: object.scriptId
         });
       }else if(object instanceof BaseGround){
         updateEditConfig({
           color: object.resource.color,
-          width: object.width
+          width: object.width,
+          scriptId: object.scriptId
         });
       }
     }else{

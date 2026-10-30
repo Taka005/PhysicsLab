@@ -85,8 +85,8 @@ export default function ControlPanel() {
           label="モード"
           value={mode}
           options={modeOptions}
-          onChange={(e) => {
-            setMode(e.target.value);
+          onChange={(value) => {
+            setMode(value);
 
             setSelectedObjectId(null);
             setSelectedObjectType(null);

@@ -27,8 +27,8 @@ export default function SpawnSettings() {
         label="生成タイプ"
         value={spawnConfig.type}
         options={ObjectOptions}
-        onChange={(e) => {
-          updateSpawnConfig({ type: e.target.value });
+        onChange={(value) => {
+          updateSpawnConfig({ type: value });
         }}
       />
       <InputField
@@ -119,8 +119,8 @@ export default function SpawnSettings() {
         label="スクリプト"
         value={spawnConfig.scriptId || ""}
         options={[{ label: "なし", value: ""},...scripts.map(script=>({ label: `${script.name}(${script.id})`, value: script.id }))]}
-        onChange={(e) => {
-          updateSpawnConfig({ scriptId: e.target.value !== "" ? e.target.value : null});
+        onChange={(value) => {
+          updateSpawnConfig({ scriptId: value !== "" ? value : null });
         }}
       />
     </>

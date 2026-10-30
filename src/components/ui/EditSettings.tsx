@@ -3,10 +3,13 @@ import { useEngineState } from "@/hooks/useEngineState";
 import SliderField from "./SliderField";
 import { useEditState } from "@/context/EditContext";
 import ColorPicker from "./ColorPicker";
+import SelectField from "./SelectField";
+import { useScriptState } from "@/hooks/useScriptState";
 
 export default function EditSettings() {
   const engine = useEngine();
   const state = useEngineState();
+  const { scripts } = useScriptState();
   const { selectedObjectId, editConfig, updateEditConfig, selectedObjectType } = useEditState();
 
   if (!engine||!state||!selectedObjectId) return null;
@@ -54,6 +57,14 @@ export default function EditSettings() {
         value={editConfig.color}
         onChange={(value) => {
           updateEditConfig({ color: value });
+        }}
+      />
+      <SelectField
+        label="スクリプト"
+        value={editConfig.scriptId || ""}
+        options={[{ label: "なし", value: ""},...scripts.map(script=>({ label: `${script.name}(${script.id})`, value: script.id }))]}
+        onChange={(value) => {
+          updateEditConfig({ scriptId: value !== "" ? value : null });
         }}
       />
     </>
