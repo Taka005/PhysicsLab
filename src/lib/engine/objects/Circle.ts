@@ -45,7 +45,7 @@ export class Circle extends BaseBody{
 
   public static create(option: CircleCreateOption): Circle {
     const entityOption: EntityOption = {
-      id: createId(12),
+      id: createId(10),
       position: option.position,
       velocity: option.velocity,
       diameter: option.diameter,

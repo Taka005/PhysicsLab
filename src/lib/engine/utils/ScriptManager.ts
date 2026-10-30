@@ -7,9 +7,9 @@ export class ScriptManager{
   public scripts: Script[] = [];
   private globalVarMap = new Map<string, { [key: string]: any }>();
 
-  public register(id: string, name: string, code: string) {
+  public register(name: string, code: string) {
     this.scripts.push(Script.from({
-      id: id,
+      id: createId(10),
       name: name,
       code: code
     }));
