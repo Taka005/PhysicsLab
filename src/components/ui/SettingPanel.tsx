@@ -249,7 +249,7 @@ export default function SettingPanel() {
         </div>
       )}
       {activeTab === "data" && (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           <div className="flex gap-2">
             <button
               onClick={() => fileInputRef.current?.click()}
