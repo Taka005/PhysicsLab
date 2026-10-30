@@ -62,7 +62,7 @@ export default function EditSettings() {
       <SelectField
         label="スクリプト"
         value={editConfig.scriptId || ""}
-        options={[{ label: "なし", value: ""},...scripts.map(script=>({ label: `${script.name}(${script.id})`, value: script.id }))]}
+        options={[{ label: "なし", value: ""},...scripts.map(script=>({ label: script.name, value: script.id }))]}
         onChange={(value) => {
           updateEditConfig({ scriptId: value !== "" ? value : null });
         }}

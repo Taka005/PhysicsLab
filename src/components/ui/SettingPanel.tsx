@@ -328,6 +328,7 @@ export default function SettingPanel({ onOpenScriptManager }: SettingPanelProps)
                     width: 10,
                     velocityX: 0,
                     velocityY: 0,
+                    scriptId: null
                   });
 
                   updateConnectionConfig({

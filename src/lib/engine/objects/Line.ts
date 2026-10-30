@@ -13,6 +13,10 @@ export class Line extends BaseGround {
     this.end = Vector.from(option.end);
   }
 
+  public get length(): number{
+    return Vector.distance(this.start,this.end);
+  }
+
   public override solvePosition(position: Vector): Vector {
     const flag = ((position.x - this.start.x)*(this.end.x - this.start.x) + (position.y - this.start.y)*(this.end.y - this.start.y))/Vector.distanceSquared(this.start,this.end);
 

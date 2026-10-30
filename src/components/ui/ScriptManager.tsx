@@ -66,7 +66,6 @@ export default function ScriptManagerPanel() {
           ? error.message
           : "スクリプトの保存に失敗しました"
       );
-
     }
   };
 
