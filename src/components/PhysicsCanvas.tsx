@@ -12,11 +12,15 @@ import { useDeleteMode } from "@/hooks/modes/useDeleteMode";
 import { useConnectMode } from "@/hooks/modes/useConnectMode";
 import { useDisconnectMode } from "@/hooks/modes/useDisconnect";
 import { useEditMode } from "@/hooks/modes/useEditMode";
+import { Vector } from "@/lib/engine";
+import { useEngineState } from "@/hooks/useEngineState";
 
 export default function PhysicsCanvas() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const fpsRef = useRef<HTMLSpanElement | null>(null);
   const engine = useEngine();
+  const state = useEngineState();
   const { handleWheel } = useViewportControl(engine);
   const spawnMode = useSpawnMode(engine);
   const moveMode = useMoveMode(engine);
@@ -25,6 +29,8 @@ export default function PhysicsCanvas() {
   const connectMode = useConnectMode(engine);
   const disconnectMode = useDisconnectMode(engine);
   const { mode } = useToolMode();
+
+  if(!engine) return;
 
   const activeMode = (() => {
     switch (mode) {
@@ -38,7 +44,7 @@ export default function PhysicsCanvas() {
     }
   })();
 
-  const { handlers } = useCanvasInteraction({
+  const { currentPoint, handlers } = useCanvasInteraction({
     canvasRef,
     onDown: (point) => activeMode.onDown(point),
     onMove: (point, isDragging) => activeMode.onMove(point, isDragging),
@@ -46,12 +52,16 @@ export default function PhysicsCanvas() {
     onWheel: (e) => handleWheel(e),
   });
 
+  const worldPoint = currentPoint !== null ? engine.toWorldPosition(Vector.from(currentPoint)) : null;
+
   useEffect(() => {
     if (!canvasRef.current || !containerRef.current || !engine) return;
 
     const renderer = new Renderer(engine);
 
     let animationFrameId: number;
+    let previousFpsTime = performance.now();
+    let frameCount = 0;
 
     const initPixi = async () => {
      const { clientWidth, clientHeight } = containerRef.current!;
@@ -66,6 +76,22 @@ export default function PhysicsCanvas() {
 
       const loop = () => {
         renderer.render();
+
+        frameCount++;
+
+        const currentTime = performance.now();
+        const elapsedTime = currentTime - previousFpsTime;
+
+        if (elapsedTime >= 500) {
+          const fps = (frameCount * 1000) / elapsedTime;
+
+          if (fpsRef.current) {
+            fpsRef.current.textContent = fps.toFixed(1);
+          }
+
+          frameCount = 0;
+          previousFpsTime = currentTime;
+        }
 
         animationFrameId = requestAnimationFrame(loop);
       };
@@ -99,6 +125,45 @@ export default function PhysicsCanvas() {
       className="flex-1 h-full relative bg-white rounded-lg shadow-sm overflow-hidden"
     >
       <canvas ref={canvasRef} className="block w-full h-full" {...handlers}/>
+      {state.isDebugMode && (
+        <>
+          <div className="pointer-events-none absolute left-3 top-3 z-10 select-none">
+            <div className="min-w-52 rounded-xl border border-gray-200/80 bg-white/90 px-3 py-2.5 shadow-lg backdrop-blur-sm">
+              <div className="flex items-center justify-between gap-6">
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                  <span className="text-xs font-medium text-gray-500">
+                    FPS
+                  </span>
+                </div>
+                <span
+                  ref={fpsRef}
+                  className="font-mono text-sm font-semibold tabular-nums text-gray-800"
+                >
+                  --
+                </span>
+              </div>
+              <div className="my-2 border-t border-gray-100" />
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-xs text-gray-700">
+                  Screen
+                </span>
+                <span className="font-mono text-xs tabular-nums text-gray-700">
+                  {currentPoint ? `(${currentPoint.x.toFixed(1)}, ${currentPoint.y.toFixed(1)})` : "—"}
+                </span>
+              </div>
+              <div className="mt-2 flex items-center justify-between gap-4">
+                <span className="text-xs text-gray-700">
+                  World
+                </span>
+                <span className="font-mono text-xs tabular-nums text-gray-700">
+                  {worldPoint ? `(${worldPoint.x.toFixed(1)}, ${worldPoint.y.toFixed(1)})` : "—"}
+                </span>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

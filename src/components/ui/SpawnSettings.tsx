@@ -1,5 +1,4 @@
 import { useEngine } from "@/context/EngineContext";
-import { useEngineState } from "@/hooks/useEngineState";
 import SliderField from "./SliderField";
 import { useSpawnState } from "@/context/SpawnContext";
 import SelectField from "./SelectField";
@@ -9,7 +8,6 @@ import { useScriptState } from "@/hooks/useScriptState";
 
 export default function SpawnSettings() {
   const engine = useEngine();
-  const state = useEngineState();
   const { scripts } = useScriptState();
   const { spawnConfig, updateSpawnConfig } = useSpawnState();
 
@@ -19,7 +17,7 @@ export default function SpawnSettings() {
     { label: "曲線", value: "curve" },
   ];
 
-  if (!engine||!state) return null;
+  if (!engine) return null;
 
   return (
     <>

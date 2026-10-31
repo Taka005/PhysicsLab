@@ -6,7 +6,7 @@ export default function EnvSettings() {
   const engine = useEngine();
   const state = useEngineState();
 
-  if (!engine||!state) return null;
+  if (!engine) return null;
 
   return (
     <>

@@ -1,5 +1,4 @@
 import { useEngine } from "@/context/EngineContext";
-import { useEngineState } from "@/hooks/useEngineState";
 import SliderField from "./SliderField";
 import { useEditState } from "@/context/EditContext";
 import ColorPicker from "./ColorPicker";
@@ -8,11 +7,10 @@ import { useScriptState } from "@/hooks/useScriptState";
 
 export default function EditSettings() {
   const engine = useEngine();
-  const state = useEngineState();
   const { scripts } = useScriptState();
   const { selectedObjectId, editConfig, updateEditConfig, selectedObjectType } = useEditState();
 
-  if (!engine||!state||!selectedObjectId) return null;
+  if (!engine||!selectedObjectId) return null;
 
   return (
     <>
@@ -50,7 +48,7 @@ export default function EditSettings() {
           />
           <SliderField
             label="初速度X"
-            value={editConfig.velocityX ?? 0}
+            value={Math.floor((editConfig.velocityX ?? 0)*100)/100}
             min="-300"
             max="300"
             step="1"
@@ -60,7 +58,7 @@ export default function EditSettings() {
           />
           <SliderField
             label="初速度Y"
-            value={editConfig.velocityY ?? 0}
+            value={Math.floor((editConfig.velocityY ?? 0)*100)/100}
             min="-300"
             max="300"
             step="1"

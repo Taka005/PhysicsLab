@@ -1,12 +1,10 @@
 import { useEngine } from "@/context/EngineContext";
-import { useEngineState } from "@/hooks/useEngineState";
 import SelectField from "./SelectField";
 import { useConnectionState } from "@/context/ConnectionContext";
 import SliderField from "./SliderField";
 
 export default function ConnectionSettings() {
   const engine = useEngine();
-  const state = useEngineState();
   const { connectionConfig, updateConnectionConfig } = useConnectionState();
 
   const shapeOptions = [
@@ -14,7 +12,7 @@ export default function ConnectionSettings() {
     { label: "固定接続", value: "static" },
   ];
 
-  if (!engine||!state) return null;
+  if (!engine) return null;
 
   return (
     <>

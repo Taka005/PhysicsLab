@@ -24,7 +24,7 @@ export default function ControlPanel() {
   const scriptManagerNodeRef = useRef<HTMLDivElement>(null);
   const { mode, setMode } = useToolMode();
 
-  if (!engine||!state) return null;
+  if (!engine) return null;
 
   const modeOptions = [
     { label: "生成", value: "spawn" },

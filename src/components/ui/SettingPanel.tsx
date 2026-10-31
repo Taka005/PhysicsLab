@@ -22,7 +22,7 @@ export default function SettingPanel({ onOpenScriptManager }: SettingPanelProps)
 
   const [activeTab, setActiveTab] = useState<"display" | "data">("display");
 
-  if (!engine || !state) return null;
+  if (!engine) return null;
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
