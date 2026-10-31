@@ -12,7 +12,7 @@ import { useDeleteMode } from "@/hooks/modes/useDeleteMode";
 import { useConnectMode } from "@/hooks/modes/useConnectMode";
 import { useDisconnectMode } from "@/hooks/modes/useDisconnect";
 import { useEditMode } from "@/hooks/modes/useEditMode";
-import { Curve, Line, Vector } from "@/lib/engine";
+import { Curve, Line, Vector, capitalize } from "@/lib/engine";
 import { useEngineState } from "@/hooks/useEngineState";
 
 export default function PhysicsCanvas() {
@@ -227,7 +227,7 @@ export default function PhysicsCanvas() {
               className="mb-2 rounded-md border border-gray-700 bg-gray-800/80 p-2 last:mb-0"
             >
               <p className="mb-1 text-xs font-semibold text-sky-400">
-                Body / {body.constructor.name}
+                Body / {capitalize(body.type)}
               </p>
               <p className="break-all font-mono text-[10px] text-gray-400">
                 ID: {body.id}
@@ -268,7 +268,7 @@ export default function PhysicsCanvas() {
               className="mb-2 rounded-md border border-gray-700 bg-gray-800/80 p-2 last:mb-0"
             >
               <p className="mb-1 text-xs font-semibold text-amber-400">
-                Ground / {ground.constructor.name}
+                Ground / {capitalize(ground.type)}
               </p>
               <p className="break-all font-mono text-[10px] text-gray-400">
                 ID: {ground.id}

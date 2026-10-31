@@ -10,5 +10,6 @@ export { BaseObject } from "./objects/BaseObject";
 export { Viewport } from "./utils/Viewport";
 export { Script } from "./utils/Script";
 export { createId } from "./utils/createId";
+export { capitalize } from "./utils/capitalize";
 export { normalizeAngle } from "./utils/normalizeAngle";
 export { EngineError } from "./utils/EngineError";
