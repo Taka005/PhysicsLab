@@ -2,6 +2,7 @@ import { EngineBaseOption, Target } from "./types";
 import { Entity } from "./objects/Entity";
 import { BaseGround } from "./objects/BaseGround";
 import { Vector } from "./utils/Vector";
+import { EngineError } from "./utils/EngineError";
 
 export class EngineBase{
   public _pps: number;
@@ -23,7 +24,7 @@ export class EngineBase{
   }
 
   public set pps(value: number) {
-    if(value <= 0) throw new Error("PPSは0を超える必要があります");
+    if(value <= 0) throw new EngineError("PPSは0を超える必要があります");
 
     this._pps = value;
     this.onChanged();
@@ -34,7 +35,7 @@ export class EngineBase{
   }
 
   public set gravity(value: number) {
-    if(value < 0) throw new Error("重力加速度は0を超える必要があります");
+    if(value < 0) throw new EngineError("重力加速度は0を超える必要があります");
 
     this._gravity = value;
     this.onChanged();

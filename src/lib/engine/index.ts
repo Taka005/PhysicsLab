@@ -11,3 +11,4 @@ export { Viewport } from "./utils/Viewport";
 export { Script } from "./utils/Script";
 export { createId } from "./utils/createId";
 export { normalizeAngle } from "./utils/normalizeAngle";
+export { EngineError } from "./utils/EngineError";

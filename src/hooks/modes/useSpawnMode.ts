@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { createId, Engine, Vector } from "@/lib/engine";
+import { createId, Engine, EngineError, Vector } from "@/lib/engine";
 import { CircleCreateOption, CurveCreateOption, LineCreateOption } from "@/lib/engine/types";
 import { useSpawnState } from "@/context/SpawnContext";
 import { Point } from "../useCanvasInteraction";
@@ -71,8 +71,14 @@ export function useSpawnMode(engine: Engine | null) {
             scriptId: spawnConfig.scriptId
           } as CurveCreateOption);
         }
-      }catch{
-        toast.error("既に同じIDが設定されています");
+      }catch(error){
+        if(error instanceof EngineError){
+          toast.error(error.message);
+          return;
+        }
+
+        console.error(error);
+        toast.error("不明なエラーが発生しました");
       }
 
       updateSpawnConfig({ id: "" });

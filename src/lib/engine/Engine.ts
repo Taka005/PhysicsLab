@@ -9,6 +9,7 @@ import { Line } from "./objects/Line";
 import { saveDataSchema } from "./typeSchema";
 import { BaseCreateOption, DEFAULT_ENGINE_VALUE, DEFAULT_VIEWPORT_VALUE, EdgeData, EngineOption, EngineSnapShot, SaveData, ViewportOption } from "./types";
 import { ContentManager } from "./utils/ContentManager";
+import { EngineError } from "./utils/EngineError";
 import { ScriptManager } from "./utils/ScriptManager";
 import { Vector } from "./utils/Vector";
 import { Viewport } from "./utils/Viewport";
@@ -116,7 +117,7 @@ export class Engine extends EngineBase {
   }
 
   public set playBackSpeed(value: number) {
-    if(value <= 0) throw new Error("再生速度は0を超える必要があります");
+    if(value <= 0) throw new EngineError("再生速度は0を超える必要があります");
 
     this._playBackSpeed = value;
     this.notify();
@@ -127,7 +128,7 @@ export class Engine extends EngineBase {
   }
 
   public set trackingInterval(value: number) {
-    if(value <= 0) throw new Error("トラッキング間隔は0を超える必要があります");
+    if(value <= 0) throw new EngineError("トラッキング間隔は0を超える必要があります");
 
     this._trackingInterval = value;
     this.notify();
@@ -138,7 +139,7 @@ export class Engine extends EngineBase {
   }
 
   public set trackingLimit(value: number) {
-    if(value <= 0) throw new Error("最大トラッキング数は0を超える必要があります");
+    if(value <= 0) throw new EngineError("最大トラッキング数は0を超える必要があります");
 
     this._trackingLimit = value;
     this.notify();
@@ -149,7 +150,7 @@ export class Engine extends EngineBase {
   }
 
   public set scriptExecuteInterval(value: number) {
-    if(value <= 0) throw new Error("スクリプト実行間隔は0を超える必要があります");
+    if(value <= 0) throw new EngineError("スクリプト実行間隔は0を超える必要があります");
 
     this._scriptExecuteInterval = value;
     this.notify();
@@ -160,7 +161,7 @@ export class Engine extends EngineBase {
   }
 
   public set worldSize(value: number) {
-    if(value <= 0) throw new Error("ワールドサイズは0を超える必要があります");
+    if(value <= 0) throw new EngineError("ワールドサイズは0を超える必要があります");
 
     this._worldSize = value;
     this.notify();
@@ -354,7 +355,7 @@ export class Engine extends EngineBase {
     if(
       option.scriptId !== null&&
       !this.scriptManager.get(option.scriptId)
-    ) throw new Error("存在しないスクリプトを設定しています");
+    ) throw new EngineError("存在しないスクリプトを設定しています");
 
     if(Circle.isCircleCreateOption(option)){
       const circle = Circle.create(option);
@@ -376,7 +377,7 @@ export class Engine extends EngineBase {
       return curve;
     }
 
-    throw new Error("存在しないオブジェクトタイプです");
+    throw new EngineError("存在しないオブジェクトタイプです");
   }
 
   public deSpawn(id: string): void {
@@ -517,7 +518,7 @@ export class Engine extends EngineBase {
 
     const validData = saveDataSchema.parse(rawData);
 
-    if(validData.version !== Engine.SAVE_DATA_VERSION) throw new Error("セーブデータのバージョンが違います");
+    if(validData.version !== Engine.SAVE_DATA_VERSION) throw new EngineError("セーブデータのバージョンが違います");
 
     const allIds = [
       ...validData.objects.bodies.map((body) => body.id),
@@ -525,7 +526,7 @@ export class Engine extends EngineBase {
     ];
 
     const uniqueIds = new Set(allIds);
-    if (uniqueIds.size !== allIds.length) throw new Error("セーブデータ内に重複している物体IDが存在します");
+    if (uniqueIds.size !== allIds.length) throw new EngineError("セーブデータ内に重複している物体IDが存在します");
 
     this.stop();
 

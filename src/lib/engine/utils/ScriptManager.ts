@@ -1,6 +1,7 @@
 import { BaseObject } from "../objects/BaseObject";
 import { ScriptOption } from "../types";
 import { createId } from "./createId";
+import { EngineError } from "./EngineError";
 import { Script } from "./Script";
 
 export class ScriptManager{
@@ -44,7 +45,7 @@ export class ScriptManager{
 
   public setScripts(scripts: ScriptOption[]): void{
     const uniqueIds = new Set(scripts);
-    if (uniqueIds.size !== scripts.length) throw new Error("データ内に重複しているスクリプトIDが存在します");
+    if (uniqueIds.size !== scripts.length) throw new EngineError("データ内に重複しているスクリプトIDが存在します");
 
     this._scripts = scripts.map(body=>{
       return Script.from(body);

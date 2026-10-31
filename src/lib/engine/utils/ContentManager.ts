@@ -6,6 +6,7 @@ import { Curve } from "../objects/Curve";
 import { Entity } from "../objects/Entity";
 import { Line } from "../objects/Line";
 import { BaseBodyOption, BaseGroundOption } from "../types";
+import { EngineError } from "./EngineError";
 
 export class ContentManager {
   public bodies: BaseBody[] = [];
@@ -89,7 +90,7 @@ export class ContentManager {
   }
 
   public addBody(body: BaseBody): void {
-    if (this.isExistedId(body.id)) throw new Error("既に存在するIDが指定されています");
+    if (this.isExistedId(body.id)) throw new EngineError("既に存在するIDが指定されています");
 
     this.bodies.push(body);
 
@@ -97,7 +98,7 @@ export class ContentManager {
   }
 
   public addGround(ground: BaseGround): void {
-    if (this.isExistedId(ground.id)) throw new Error("既に存在するIDが指定されています");
+    if (this.isExistedId(ground.id)) throw new EngineError("既に存在するIDが指定されています");
 
     this.grounds.push(ground);
   }
