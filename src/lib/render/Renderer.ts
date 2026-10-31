@@ -32,6 +32,8 @@ export class Renderer{
       height,
       backgroundColor: "white",
       antialias: true,
+      autoStart: false,
+      sharedTicker: false
     });
 
     this.width = width;
@@ -50,7 +52,7 @@ export class Renderer{
 
     this.trackingContainer.alpha = 0.3;
 
-    this.updateTransforms()
+    this.updateTransforms();
   }
 
   public render(): void{
@@ -129,6 +131,8 @@ export class Renderer{
     }else{
       this.trackingContainer.visible = false;
     }
+
+    this.app.render();
   }
 
   private drawObject(view: Graphics, object: BaseObject): void {
@@ -152,10 +156,6 @@ export class Renderer{
   private updateTransforms(): void{
     this.mainContainer.scale.set(this.engine.viewport.zoomRatio, this.engine.viewport.zoomRatio);
     this.mainContainer.position.set(this.engine.viewport.offset.x, this.engine.viewport.offset.y);
-
-    if (this.isInitialized) {
-      this.app.render();
-    }
   }
 
   public resize(width: number,height: number): void{
