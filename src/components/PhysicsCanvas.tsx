@@ -160,6 +160,32 @@ export default function PhysicsCanvas() {
                   {worldPoint ? `(${worldPoint.x.toFixed(1)}, ${worldPoint.y.toFixed(1)})` : "—"}
                 </span>
               </div>
+              <div className="my-2 border-t border-gray-100" />
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-xs text-gray-500">
+                  Bodies
+                </span>
+                <span className="font-mono text-xs tabular-nums text-gray-700">
+                  {state.bodiesCount}
+                </span>
+              </div>
+              <div className="mt-2 flex items-center justify-between gap-4">
+                <span className="text-xs text-gray-500">
+                  Grounds
+                </span>
+                <span className="font-mono text-xs tabular-nums text-gray-700">
+                  {state.groundsCount}
+                </span>
+              </div>
+
+              <div className="mt-2 flex items-center justify-between gap-4">
+                <span className="text-xs text-gray-500">
+                  Entities
+                </span>
+                <span className="font-mono text-xs tabular-nums text-gray-700">
+                  {state.entitiesCount}
+                </span>
+              </div>
             </div>
           </div>
         </>

@@ -167,6 +167,9 @@ export type EngineSnapShot = {
   gravity: number;
   pps: number;
   friction: number;
+  bodiesCount: number;
+  groundsCount: number;
+  entitiesCount: number;
 }
 
 export const DEFAULT_ENGINE_VALUE: EngineOption = {

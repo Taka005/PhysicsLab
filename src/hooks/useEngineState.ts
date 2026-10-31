@@ -26,7 +26,10 @@ export function useEngineState() {
     gridWidth: DEFAULT_VIEWPORT_VALUE.gridWidth,
     gravity: DEFAULT_ENGINE_VALUE.gravity,
     pps: DEFAULT_ENGINE_VALUE.pps,
-    friction: DEFAULT_ENGINE_VALUE.friction
+    friction: DEFAULT_ENGINE_VALUE.friction,
+    bodiesCount: 0,
+    groundsCount: 0,
+    entitiesCount: 0
   } as EngineSnapShot), []);
 
   const subscribe = engine ? engine.subscribe : emptySubscribe;

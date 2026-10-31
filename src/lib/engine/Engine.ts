@@ -188,7 +188,10 @@ export class Engine extends EngineBase {
       gridWidth: this.viewport.gridWidth,
       gravity: this.gravity,
       pps: this.pps,
-      friction: this.friction
+      friction: this.friction,
+      bodiesCount: this.content.bodiesCount,
+      groundsCount: this.content.groundsCount,
+      entitiesCount: this.content.entitiesCount
     };
   }
 
@@ -377,6 +380,8 @@ export class Engine extends EngineBase {
       return curve;
     }
 
+    this.notify();
+
     throw new EngineError("存在しないオブジェクトタイプです");
   }
 
@@ -384,6 +389,8 @@ export class Engine extends EngineBase {
     this.content.removeBody(id);
     this.content.removeGround(id);
     this.scriptManager.removeMap(id);
+
+    this.notify();
   }
 
   public getObjects(): BaseObject[]{
