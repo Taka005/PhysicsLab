@@ -48,6 +48,26 @@ export default function EditSettings() {
               updateEditConfig({ stiffness: parseFloat(e.target.value) });
             }}
           />
+          <SliderField
+            label="初速度X"
+            value={editConfig.velocityX ?? 0}
+            min="-300"
+            max="300"
+            step="1"
+            onChange={(e) => {
+              updateEditConfig({ velocityX: parseFloat(e.target.value) });
+            }}
+          />
+          <SliderField
+            label="初速度Y"
+            value={editConfig.velocityY ?? 0}
+            min="-300"
+            max="300"
+            step="1"
+            onChange={(e) => {
+              updateEditConfig({ velocityY: parseFloat(e.target.value) });
+            }}
+          />
         </>
       )}
       {(selectedObjectType === "line" || selectedObjectType === "curve") && (

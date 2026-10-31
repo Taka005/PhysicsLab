@@ -21,6 +21,7 @@ export function useEditMode(engine: Engine | null) {
         object.stiffness = editConfig.stiffness ?? 0.8;
         object.diameter = editConfig.diameter ?? 15;
         object.mass = editConfig.mass ?? 10;
+        object.velocity = new Vector(editConfig.velocityX ?? 0,editConfig.velocityY ?? 0);
       }else if(object instanceof BaseGround){
         object.width = editConfig.width ?? 10;
       }
@@ -46,7 +47,9 @@ export function useEditMode(engine: Engine | null) {
           stiffness: object.stiffness,
           diameter: object.diameter,
           mass: object.mass,
-          scriptId: object.scriptId
+          scriptId: object.scriptId,
+          velocityX: object.velocity.x,
+          velocityY: object.velocity.y
         });
       }else if(object instanceof BaseGround){
         updateEditConfig({
