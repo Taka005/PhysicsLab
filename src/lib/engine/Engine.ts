@@ -395,6 +395,7 @@ export class Engine extends EngineBase {
     this.content.removeBody(id);
     this.content.removeGround(id);
     this.scriptManager.removeMap(id);
+    this.scriptManager.clearErrorsByObject(id);
 
     this.notify();
   }

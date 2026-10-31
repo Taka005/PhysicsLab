@@ -172,6 +172,13 @@ export type EngineSnapShot = {
   entitiesCount: number;
 }
 
+export type ScriptError = {
+  objectId: string;
+  scriptId: string;
+  scriptName: string;
+  errorMessage: string;
+};
+
 export const DEFAULT_ENGINE_VALUE: EngineOption = {
   trackingInterval: 100,
   trackingLimit: 100,
