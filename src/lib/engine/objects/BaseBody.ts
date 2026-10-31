@@ -60,6 +60,10 @@ export abstract class BaseBody extends BaseObject{
   }
 
   public set mass(value: number) {
+    if(value === 0){
+      this.velocity = new Vector(0,0);
+    }
+
     this.entities.forEach(entity => {
       entity.mass = value / this.count;
     });

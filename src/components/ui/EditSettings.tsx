@@ -29,6 +29,16 @@ export default function EditSettings() {
             }}
           />
           <SliderField
+            label="質量"
+            value={editConfig.mass ?? 10}
+            min="0"
+            max="100"
+            step="1"
+            onChange={(e) => {
+              updateEditConfig({ mass: parseFloat(e.target.value) });
+            }}
+          />
+          <SliderField
             label="剛性"
             value={editConfig.stiffness ?? 0.8}
             min="0.1"

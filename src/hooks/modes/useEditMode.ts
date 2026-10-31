@@ -20,6 +20,7 @@ export function useEditMode(engine: Engine | null) {
       if(object instanceof Circle){
         object.stiffness = editConfig.stiffness ?? 0.8;
         object.diameter = editConfig.diameter ?? 15;
+        object.mass = editConfig.mass ?? 10;
       }else if(object instanceof BaseGround){
         object.width = editConfig.width ?? 10;
       }
@@ -44,6 +45,7 @@ export function useEditMode(engine: Engine | null) {
           color: object.resource.color,
           stiffness: object.stiffness,
           diameter: object.diameter,
+          mass: object.mass,
           scriptId: object.scriptId
         });
       }else if(object instanceof BaseGround){
