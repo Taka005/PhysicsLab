@@ -14,6 +14,8 @@ import { Vector } from "./utils/Vector";
 import { Viewport } from "./utils/Viewport";
 
 export class Engine extends EngineBase {
+  public static readonly SAVE_DATA_VERSION: number = 1;
+
   public isStarted: boolean = false;
 
   private _isTrackingMode = false;
@@ -515,6 +517,8 @@ export class Engine extends EngineBase {
 
     const validData = saveDataSchema.parse(rawData);
 
+    if(validData.version !== Engine.SAVE_DATA_VERSION) throw new Error("セーブデータのバージョンが違います");
+
     const allIds = [
       ...validData.objects.bodies.map((body) => body.id),
       ...validData.objects.grounds.map((ground) => ground.id),
@@ -539,6 +543,7 @@ export class Engine extends EngineBase {
 
   public export(): string {
     const exportData: SaveData = {
+      version: Engine.SAVE_DATA_VERSION,
       engine:{
         playBackSpeed: this.playBackSpeed,
         trackingInterval: this.trackingInterval,

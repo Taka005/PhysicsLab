@@ -86,6 +86,7 @@ const groundOptionSchema = z.discriminatedUnion("type",[
 ]);
 
 export const saveDataSchema = z.object({
+  version: z.number(),
   engine: engineOptionSchema,
   viewport: viewportOptionSchema,
   scripts: z.array(ScriptOptionSchema),

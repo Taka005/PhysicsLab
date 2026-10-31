@@ -136,6 +136,7 @@ export type TranspiledScript = {
 }
 
 export type SaveData = {
+  version: number;
   engine: EngineOption;
   viewport: ViewportOption;
   scripts: ScriptOption[];
