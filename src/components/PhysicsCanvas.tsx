@@ -132,7 +132,7 @@ export default function PhysicsCanvas() {
               <div className="flex items-center justify-between gap-6">
                 <div className="flex items-center gap-2">
                   <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                  <span className="text-xs font-medium text-gray-500">
+                  <span className="text-xs font-medium text-gray-700">
                     FPS
                   </span>
                 </div>
@@ -162,7 +162,7 @@ export default function PhysicsCanvas() {
               </div>
               <div className="my-2 border-t border-gray-100" />
               <div className="flex items-center justify-between gap-4">
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-700">
                   Bodies
                 </span>
                 <span className="font-mono text-xs tabular-nums text-gray-700">
@@ -170,7 +170,7 @@ export default function PhysicsCanvas() {
                 </span>
               </div>
               <div className="mt-2 flex items-center justify-between gap-4">
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-700">
                   Grounds
                 </span>
                 <span className="font-mono text-xs tabular-nums text-gray-700">
@@ -179,7 +179,7 @@ export default function PhysicsCanvas() {
               </div>
 
               <div className="mt-2 flex items-center justify-between gap-4">
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-700">
                   Entities
                 </span>
                 <span className="font-mono text-xs tabular-nums text-gray-700">
