@@ -22,7 +22,7 @@ export class Engine extends EngineBase {
 
   private _isSetGridCrossMode: boolean = false;
 
-  private _isExecuteScript: boolean = true;
+  private _isDisabledScript: boolean = false;
 
   private _isDebugMode: boolean = false;
 
@@ -91,12 +91,12 @@ export class Engine extends EngineBase {
     this.notify();
   }
 
-  public get isExecuteScript(): boolean{
-    return this._isExecuteScript;
+  public get isDisabledScript(): boolean{
+    return this._isDisabledScript;
   }
 
-  public set isExecuteScript(value: boolean) {
-    this._isExecuteScript = value;
+  public set isDisabledScript(value: boolean) {
+    this._isDisabledScript = value;
     this.notify();
   }
 
@@ -171,7 +171,7 @@ export class Engine extends EngineBase {
       isDynamicTrackingMode: this.isDynamicTrackingMode,
       isDebugMode: this.isDebugMode,
       isSetGridCrossMode: this.isSetGridCrossMode,
-      isExecuteScript: this.isExecuteScript,
+      isDisabledScript: this.isDisabledScript,
       isDisplayGrid: this.viewport.isDisplayGrid,
       isDisplayVector: this.viewport.isDisplayVector,
       isDisplayEdge: this.viewport.isDisplayEdge,
@@ -213,7 +213,7 @@ export class Engine extends EngineBase {
     this.isDynamicTrackingMode = false;
     this.isDebugMode = false;
     this.isSetGridCrossMode = false;
-    this.isExecuteScript = true;
+    this.isDisabledScript = false;
     this.trackingInterval = DEFAULT_ENGINE_VALUE.trackingInterval;
     this.trackingLimit = DEFAULT_ENGINE_VALUE.trackingLimit;
     this.scriptExecuteInterval = DEFAULT_ENGINE_VALUE.scriptExecuteInterval;
@@ -282,7 +282,7 @@ export class Engine extends EngineBase {
       this.trackingCount %= this.trackingInterval;
     }
 
-    if(this.isExecuteScript){
+    if(!this.isDisabledScript){
       this.scriptExecuteCount += 1000/this.pps;
 
       if(this.scriptExecuteCount >= this.scriptExecuteInterval){

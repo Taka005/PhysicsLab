@@ -174,10 +174,10 @@ export default function SettingPanel({ onOpenScriptManager }: SettingPanelProps)
             </div>
             <div className="flex-1 gap-2">
               <ToggleSwitch
-                label="スクリプトの実行を許可"
-                checked={state.isExecuteScript}
+                label="スクリプトを無効化"
+                checked={state.isDisabledScript}
                 onChange={(checked) => {
-                  engine.isExecuteScript = checked;
+                  engine.isDisabledScript = checked;
                 }}
               />
             </div>

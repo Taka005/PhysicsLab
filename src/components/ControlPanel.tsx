@@ -121,7 +121,7 @@ export default function ControlPanel() {
       )}
       {isScriptManagerOpen && (
       <Draggable handle=".drag-handle" nodeRef={scriptManagerNodeRef} bounds="body">
-        <div ref={scriptManagerNodeRef} className="absolute top-10 right-100 w-72 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50 w-[750px] h-[500px] flex flex-col">
+        <div ref={scriptManagerNodeRef} className="absolute top-50 right-50 w-72 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50 w-[750px] h-[500px] flex flex-col">
           <div className="drag-handle bg-gray-500 text-white px-4 py-2 flex justify-between items-center cursor-move text-sm font-semibold">
             <span>スクリプトマネージャー</span>
             <button
