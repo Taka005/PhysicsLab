@@ -12,7 +12,7 @@ import { useDeleteMode } from "@/hooks/modes/useDeleteMode";
 import { useConnectMode } from "@/hooks/modes/useConnectMode";
 import { useDisconnectMode } from "@/hooks/modes/useDisconnect";
 import { useEditMode } from "@/hooks/modes/useEditMode";
-import { Vector } from "@/lib/engine";
+import { Curve, Line, Vector } from "@/lib/engine";
 import { useEngineState } from "@/hooks/useEngineState";
 
 export default function PhysicsCanvas() {
@@ -53,6 +53,29 @@ export default function PhysicsCanvas() {
   });
 
   const worldPoint = currentPoint !== null ? engine.toWorldPosition(Vector.from(currentPoint)) : null;
+
+  const hoveredBodies = state.isDebugMode && worldPoint !== null ? engine.getBodiesAt(worldPoint) : [];
+
+  const hoveredGrounds = state.isDebugMode && worldPoint !== null ? engine.getGroundsAt(worldPoint) : [];
+
+  const cursorInfoPosition = currentPoint !== null && containerRef.current !== null
+    ? {
+        left: Math.max(
+          8,
+          Math.min(
+            currentPoint.x + 16,
+            containerRef.current.clientWidth - 300
+          )
+        ),
+        top: Math.max(
+          8,
+          Math.min(
+            currentPoint.y + 16,
+            containerRef.current.clientHeight - 240
+          )
+        )
+      }
+    : null;
 
   useEffect(() => {
     if (!canvasRef.current || !containerRef.current || !engine) return;
@@ -189,6 +212,99 @@ export default function PhysicsCanvas() {
             </div>
           </div>
         </>
+      )}
+      {state.isDebugMode &&
+      currentPoint !== null &&
+      cursorInfoPosition !== null &&
+      (hoveredBodies.length > 0 || hoveredGrounds.length > 0) && (
+        <div
+          className="pointer-events-none absolute z-20 w-72 overflow-y-auto rounded-lg border border-gray-700 bg-gray-900/95 p-3 text-gray-100 shadow-xl backdrop-blur-sm"
+          style={cursorInfoPosition}
+        >
+          {hoveredBodies.map((body) => (
+            <div
+              key={body.id}
+              className="mb-2 rounded-md border border-gray-700 bg-gray-800/80 p-2 last:mb-0"
+            >
+              <p className="mb-1 text-xs font-semibold text-sky-400">
+                Body / {body.constructor.name}
+              </p>
+              <p className="break-all font-mono text-[10px] text-gray-400">
+                ID: {body.id}
+              </p>
+              <p className="break-all font-mono text-[10px] text-gray-400">
+                スクリプトID: {body.scriptId ?? "なし"}
+              </p>
+              <p className="mt-2 text-[10px] font-semibold text-gray-300">
+                エンティティー {body.entities.length}
+              </p>
+              {body.entities.map((entity) => (
+                <div
+                  key={entity.id}
+                  className="mt-1 border-l-2 border-sky-500 pl-2"
+                >
+                  <p className="break-all font-mono text-[10px] text-gray-400">
+                    ID: {entity.id}
+                  </p>
+                  <p className="font-mono text-[10px]">
+                    位置: {`(${entity.position.x.toFixed(2)}, ${entity.position.y.toFixed(2)})`}
+                  </p>
+                  <p className="font-mono text-[10px]">
+                    速度: {`(${entity.velocity.x.toFixed(2)}, ${entity.velocity.y.toFixed(2)})`}
+                  </p>
+                  <p className="font-mono text-[10px]">
+                    直径: {entity.diameter.toFixed(2)}
+                  </p>
+                  <p className="font-mono text-[10px]">
+                    質量: {entity.mass}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ))}
+          {hoveredGrounds.map((ground) => (
+            <div
+              key={ground.id}
+              className="mb-2 rounded-md border border-gray-700 bg-gray-800/80 p-2 last:mb-0"
+            >
+              <p className="mb-1 text-xs font-semibold text-amber-400">
+                Ground / {ground.constructor.name}
+              </p>
+              <p className="break-all font-mono text-[10px] text-gray-400">
+                ID: {ground.id}
+              </p>
+              <p className="break-all font-mono text-[10px] text-gray-400">
+                スクリプトID: {ground.scriptId ?? "なし"}
+              </p>
+              <p className="mt-1 font-mono text-[10px]">
+                幅: {ground.width.toFixed(2)}
+              </p>
+              {ground instanceof Line && (
+                <>
+                  <p className="font-mono text-[10px]">
+                    始点: {`(${ground.start.x.toFixed(2)}, ${ground.start.y.toFixed(2)})`}
+                  </p>
+                  <p className="font-mono text-[10px]">
+                    終点: {`(${ground.end.x.toFixed(2)}, ${ground.end.y.toFixed(2)})`}
+                  </p>
+                </>
+              )}
+              {ground instanceof Curve && (
+                <>
+                  <p className="font-mono text-[10px]">
+                    始点: {`(${ground.start.x.toFixed(2)}, ${ground.start.y.toFixed(2)})`}
+                  </p>
+                  <p className="font-mono text-[10px]">
+                    中点: {`(${ground.middle.x.toFixed(2)}, ${ground.middle.y.toFixed(2)})`}
+                  </p>
+                  <p className="font-mono text-[10px]">
+                    終点: {`(${ground.start.x.toFixed(2)}, ${ground.start.y.toFixed(2)})`}
+                  </p>
+                </>
+              )}
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

@@ -166,7 +166,7 @@ return (
                 value={draftCode}
                 onChange={(event) => setDraftCode(event.target.value)}
                 placeholder={"init {\n\n}\n\nupdate {\n\n}"}
-                className="w-full flex-1 min-h-0 p-3 bg-gray-900 text-gray-100 font-mono text-xs rounded-lg shadow-inner border border-gray-700 resize-none focus:outline-none leading-relaxed"
+                className="scrollbar-none w-full flex-1 min-h-0 p-3 bg-gray-900 text-gray-100 font-mono text-xs rounded-lg shadow-inner border border-gray-700 resize-none focus:outline-none leading-relaxed"
                 spellCheck={false}
               />
               {errorMessage && (
