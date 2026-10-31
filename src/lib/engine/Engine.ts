@@ -255,6 +255,8 @@ export class Engine extends EngineBase {
       this.content.removeAllGrounds();
       this.content.removeAllTrackBodies();
     }
+
+    this.notify();
   }
 
   public clearTrack(): void{
@@ -365,11 +367,15 @@ export class Engine extends EngineBase {
 
       this.content.addBody(circle);
 
+      this.notify();
+
       return circle;
     }else if(Line.isLineCreateOption(option)){
       const line = Line.create(option);
 
       this.content.addGround(line);
+
+      this.notify();
 
       return line;
     }else if(Curve.isCurveCreateOption(option)){
@@ -377,10 +383,10 @@ export class Engine extends EngineBase {
 
       this.content.addGround(curve);
 
+      this.notify();
+
       return curve;
     }
-
-    this.notify();
 
     throw new EngineError("存在しないオブジェクトタイプです");
   }
@@ -547,6 +553,8 @@ export class Engine extends EngineBase {
     this.content.setBodies(validData.objects.bodies);
 
     this.content.setGrounds(validData.objects.grounds);
+
+    this.notify();
   }
 
   public export(): string {
