@@ -7,6 +7,10 @@ export class Connection {
     this.targets = targets;
   }
 
+  public get targetCount(): number{
+    return this.targets.length;
+  }
+
   public get(targetId: string): Target | undefined {
     return this.targets.find(t => t.entityId === targetId);
   }

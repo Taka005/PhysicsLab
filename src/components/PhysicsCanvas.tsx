@@ -236,7 +236,7 @@ export default function PhysicsCanvas() {
                 スクリプトID: {body.scriptId ?? "なし"}
               </p>
               <p className="mt-2 text-[10px] font-semibold text-gray-300">
-                エンティティー {body.entities.length}
+                エンティティー {`(${body.entities.length})`}
               </p>
               {body.entities.map((entity) => (
                 <div
@@ -257,6 +257,9 @@ export default function PhysicsCanvas() {
                   </p>
                   <p className="font-mono text-[10px]">
                     質量: {entity.mass}
+                  </p>
+                  <p className="font-mono text-[10px]">
+                    接続数: {entity.connection.targetCount}
                   </p>
                 </div>
               ))}
