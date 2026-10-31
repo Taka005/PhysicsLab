@@ -38,12 +38,12 @@ export default function SettingPanel({ onOpenScriptManager }: SettingPanelProps)
           toast.success("ファイルを読み込みました");
         } catch {
           toast.error("ファイルの読み込みに失敗しました", {
-            description: "ファイル形式が不正です",
+            description: "ファイル形式が不正です"
           });
         }
       } else {
         toast.error("ファイルの読み込みに失敗しました", {
-          description: "選択された形式が正しくありません",
+          description: "選択された形式が正しくありません"
         });
       }
     };
@@ -76,7 +76,7 @@ export default function SettingPanel({ onOpenScriptManager }: SettingPanelProps)
           accept=".json"
           className="hidden"
         />
-        <div className="flex border-b border-gray-300">
+        <div className="flex border-b border-gray-400">
           <button
             onClick={() => setActiveTab("display")}
             className={`flex-1 pb-2 font-medium text-center transition-colors border-b-2 ${
@@ -353,6 +353,37 @@ export default function SettingPanel({ onOpenScriptManager }: SettingPanelProps)
               >
                 すべてリセット
               </button>
+            </div>
+            <hr className="my-1 border-t border-gray-400" />
+            <div className="grid grid-rows-1 gap-2">
+              <a
+                href="https://github.com/Taka005/PhysicsLab/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-3 rounded-xl border border-gray-300 bg-white p-3 transition-all hover:border-gray-300 hover:bg-gray-50 hover:shadow-sm"
+              >
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-700 transition-colors group-hover:bg-gray-200">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="h-5 w-5"
+                  >
+                    <path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.54v-2.1c-3.1.67-3.75-1.31-3.75-1.31-.5-1.28-1.24-1.62-1.24-1.62-1.01-.69.08-.68.08-.68 1.12.08 1.71 1.15 1.71 1.15.99 1.7 2.59 1.21 3.22.93.1-.72.39-1.21.7-1.49-2.47-.28-5.07-1.24-5.07-5.49 0-1.21.43-2.2 1.15-2.98-.12-.28-.5-1.41.11-2.94 0 0 .94-.3 3.05 1.14a10.6 10.6 0 0 1 5.55 0c2.11-1.44 3.05-1.14 3.05-1.14.61 1.53.23 2.66.11 2.94.72.78 1.15 1.77 1.15 2.98 0 4.26-2.6 5.2-5.08 5.48.4.35.75 1.02.75 2.06v3.07c0 .3.2.65.76.54A11.1 11.1 0 0 0 12 .9Z" />
+                  </svg>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-xs font-semibold text-gray-800">
+                    GitHub
+                  </p>
+                  <p className="mt-1 truncate text-[10px] text-gray-400">
+                    ソースコード
+                  </p>
+                </div>
+                <span className="text-xs text-gray-400 transition-transform group-hover:translate-x-0.5 group-hover:text-gray-500">
+                  ↗
+                </span>
+              </a>
             </div>
           </div>
         )}
