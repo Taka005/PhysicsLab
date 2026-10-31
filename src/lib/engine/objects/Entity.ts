@@ -8,9 +8,10 @@ export class Entity {
   public prePosition: Vector;
   public velocity: Vector;
   public diameter: number;
-  public mass: number;
   public stiffness: number;
   public connection: Connection;
+  private _mass: number;
+  private _invMass: number;
 
   constructor(option: EntityOption) {
     this.id = option.id;
@@ -18,7 +19,8 @@ export class Entity {
     this.prePosition = Vector.from(option.position);
     this.velocity = Vector.from(option.velocity);
     this.diameter = option.diameter;
-    this.mass = option.mass;
+    this._mass = option.mass;
+    this._invMass = option.mass === 0 ? 0 : 1 / option.mass;
     this.stiffness = option.stiffness;
     this.connection = new Connection(option.connections);
   }
@@ -27,10 +29,18 @@ export class Entity {
     return this.diameter / 2;
   }
 
-  public get invMass(): number {
-    if(this.mass === 0) return 0;
+  public get mass(): number {
+    return this._mass;
+  }
 
-    return 1/this.mass;
+  public set mass(value: number){
+    this._mass = value;
+
+    this._invMass = this.mass === 0 ? 0 : 1 / this.mass;
+  }
+
+  public get invMass(): number {
+    return this._invMass;
   }
 
   public get isStop(): boolean {

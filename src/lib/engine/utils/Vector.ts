@@ -34,9 +34,10 @@ export class Vector {
   }
 
   public static distanceSquared(a: Vector,b: Vector): number{
-    const diff = this.subtract(a,b);
+    const diffX = a.x - b.x;
+    const diffY = a.y - b.y;
 
-    return diff.x * diff.x + diff.y * diff.y;
+    return diffX * diffX + diffY * diffY;
   }
 
   public static distance(a: Vector,b: Vector): number{
@@ -56,24 +57,39 @@ export class Vector {
   public add(scalar: number): Vector;
   public add(value: Vector | number): Vector {
     if(value instanceof Vector){
-      return new Vector(this.x + value.x, this.y + value.y);
+      this.x += value.x;
+      this.y += value.y;
+
+      return this;
     }
 
-    return new Vector(this.x + value, this.y + value);
+    this.x += value;
+    this.y += value;
+
+    return this;
   }
 
   public subtract(vector: Vector): Vector;
   public subtract(scalar: number): Vector;
   public subtract(value: Vector | number): Vector {
     if(value instanceof Vector){
-      return new Vector(this.x - value.x, this.y - value.y);
+      this.x -= value.x;
+      this.y -= value.y;
+
+      return this;
     }
 
-    return new Vector(this.x - value, this.y - value);
+    this.x -= value;
+    this.y -= value;
+
+    return this;
   }
 
   public multiply(scalar: number): Vector {
-    return new Vector(this.x * scalar, this.y * scalar);
+    this.x *= scalar;
+    this.y *= scalar;
+
+    return this;
   }
 
   public divide(scalar: number): Vector {
@@ -81,7 +97,10 @@ export class Vector {
       throw new Error("ゼロ除算は許可されていません");
     }
 
-    return new Vector(this.x / scalar, this.y / scalar);
+    this.x /= scalar;
+    this.y /= scalar;
+
+    return this;
   }
 
   public dot(vector: Vector): number {

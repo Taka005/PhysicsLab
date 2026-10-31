@@ -56,7 +56,7 @@ export class EngineBase{
 
   protected solvePosition(source: Entity,target: Entity): void{
     const totalInvMass = source.invMass + target.invMass;
-    if(totalInvMass == 0) return;
+    if(totalInvMass === 0) return;
 
     const diff = Vector.subtract(target.position,source.position);
     const totalRadius = source.radius + target.radius;
@@ -82,11 +82,11 @@ export class EngineBase{
   }
 
   protected solveGroundPosition(entity: Entity,ground: BaseGround): void{
-    if(entity.invMass == 0) return;
+    if(entity.invMass === 0) return;
 
     const cross = ground.solvePosition(entity.position);
 
-    const diff = cross.subtract(entity.position);
+    const diff = Vector.subtract(cross,entity.position);
 
     const distanceSquared = diff.distanceSquared();
     if(distanceSquared > (entity.radius + ground.width/2) * (entity.radius + ground.width/2)) return;
@@ -102,7 +102,7 @@ export class EngineBase{
 
   protected solveConnection(source: Entity,target: Entity,targetData: Target): void{
     const totalInvMass = source.invMass + target.invMass;
-    if(totalInvMass == 0) return;
+    if(totalInvMass === 0) return;
 
     const diff = Vector.subtract(target.position,source.position);
 
@@ -126,7 +126,7 @@ export class EngineBase{
   }
 
   protected updateVelocity(entity: Entity): void{
-    entity.velocity = entity.position.subtract(entity.prePosition).divide(this.deltaTime);
+    entity.velocity = Vector.subtract(entity.position,entity.prePosition).divide(this.deltaTime);
 
     if(entity.mass != 0){
       entity.velocity.y += this.gravity*this.deltaTime;

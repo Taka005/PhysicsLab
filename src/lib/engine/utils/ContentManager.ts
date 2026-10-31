@@ -13,9 +13,14 @@ export class ContentManager {
   public grounds: BaseGround[] = [];
   public trackBodies: BaseBody[] = [];
   private cacheEntities: Entity[] | null = [];
+  private cacheObjects: BaseObject[] | null = null;
 
-  public get objects(): BaseObject[]{
-    return [...this.bodies,...this.grounds];
+  public get objects(): BaseObject[] {
+    if (this.cacheObjects !== null) return this.cacheObjects;
+
+    this.cacheObjects = [...this.bodies, ...this.grounds];
+
+    return this.cacheObjects;
   }
 
   public get bodiesCount(): number {
@@ -54,6 +59,7 @@ export class ContentManager {
       .filter(body=>body != null)
 
     this.cacheEntities = null;
+    this.cacheObjects = null;
   }
 
   public setGrounds(grounds: BaseGroundOption[]) {
@@ -67,7 +73,9 @@ export class ContentManager {
 
         return null;
       })
-      .filter(ground=>ground != null)
+      .filter(ground=>ground != null);
+
+    this.cacheObjects = null;
   }
 
   public getEntity(id: string): Entity | undefined{
@@ -82,11 +90,19 @@ export class ContentManager {
   }
 
   public getBody(id: string): BaseBody | undefined {
-    return this.bodies.find(body => body.id === id);
+    const body = this.bodies.find(body => body.id === id);
+
+    this.cacheObjects = null;
+
+    return body;
   }
 
   public getGround(id: string): BaseGround | undefined {
-    return this.grounds.find(ground => ground.id === id);
+    const ground = this.grounds.find(ground => ground.id === id);
+
+    this.cacheObjects = null;
+
+    return ground;
   }
 
   public addBody(body: BaseBody): void {
@@ -95,12 +111,15 @@ export class ContentManager {
     this.bodies.push(body);
 
     this.cacheEntities = null;
+    this.cacheObjects = null;
   }
 
   public addGround(ground: BaseGround): void {
     if (this.isExistedId(ground.id)) throw new EngineError("既に存在するIDが指定されています");
 
     this.grounds.push(ground);
+
+    this.cacheObjects = null;
   }
 
   public addTrackBody(body: BaseBody): void {
@@ -111,10 +130,13 @@ export class ContentManager {
     this.bodies = this.bodies.filter(body => body.id !== id);
 
     this.cacheEntities = null;
+    this.cacheObjects = null;
   }
 
   public removeGround(id: string): void {
     this.grounds = this.grounds.filter(ground => ground.id !== id);
+
+    this.cacheObjects = null;
   }
 
   public removeFirstTrackBody(){
@@ -123,13 +145,20 @@ export class ContentManager {
 
   public removeAllBodies(){
     this.bodies = [];
+
+    this.cacheEntities = null;
+    this.cacheObjects = null;
   }
 
   public removeAllGrounds(){
     this.grounds = [];
+
+    this.cacheObjects = null;
   }
 
   public removeAllTrackBodies(){
     this.trackBodies = [];
+
+    this.cacheObjects = null;
   }
 }
