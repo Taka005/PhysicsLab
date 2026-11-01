@@ -66,7 +66,7 @@ export default function SelectField({
         {isOpen && (
           <div
             role="listbox"
-            className="absolute left-0 right-0 mt-2 py-1 bg-white rounded-xl shadow-xl border border-gray-200 z-50 max-h-60 overflow-y-auto"
+            className="absolute left-0 right-0 mt-2 py-1 bg-white rounded-xl shadow-xl border border-gray-200 z-50 max-h-60 overflow-y-auto scrollbar-none"
           >
             {options.map((option) => {
               const isSelected = String(option.value) === String(value);
