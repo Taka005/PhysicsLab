@@ -27,22 +27,26 @@ export function useViewportControl(engine: Engine | null) {
         }
 
         if (pressedKeysRef.current.has("Digit2")){
-          setMode("move");
+          setMode("fill");
         }
 
         if (pressedKeysRef.current.has("Digit3")){
-          setMode("delete");
+          setMode("move");
         }
 
         if (pressedKeysRef.current.has("Digit4")){
-          setMode("edit");
+          setMode("delete");
         }
 
         if (pressedKeysRef.current.has("Digit5")){
-          setMode("connect");
+          setMode("edit");
         }
 
         if (pressedKeysRef.current.has("Digit6")){
+          setMode("connect");
+        }
+
+        if (pressedKeysRef.current.has("Digit7")){
           setMode("disconnect");
         }
       }
@@ -59,7 +63,7 @@ export function useViewportControl(engine: Engine | null) {
     const loop = () => {
       if (engine) {
         const speed = 3;
-        
+
         if (pressedKeysRef.current.has("KeyW")) engine.viewport.offset.y += speed;
         if (pressedKeysRef.current.has("KeyS")) engine.viewport.offset.y -= speed;
         if (pressedKeysRef.current.has("KeyA")) engine.viewport.offset.x += speed;

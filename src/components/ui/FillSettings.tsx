@@ -1,0 +1,100 @@
+import { useEngine } from "@/context/EngineContext";
+import SliderField from "./SliderField";
+import { useFillState } from "@/context/FillContext";
+import SelectField from "./SelectField";
+import ColorPicker from "./ColorPicker";
+import { useScriptState } from "@/hooks/useScriptState";
+
+export default function FillSettings() {
+  const engine = useEngine();
+  const { scripts } = useScriptState();
+  const { fillConfig, updateFillConfig } = useFillState();
+
+  const ObjectOptions = [
+    { label: "円", value: "circle" }
+  ];
+
+  if (!engine) return null;
+
+  return (
+    <>
+      <SelectField
+        label="生成タイプ"
+        value={fillConfig.type}
+        options={ObjectOptions}
+        onChange={(value) => {
+          updateFillConfig({ type: value });
+        }}
+      />
+      {fillConfig.type === "circle" && (
+        <>
+          <SliderField
+            label="直径"
+            value={fillConfig.diameter ?? 15}
+            min="0"
+            max="100"
+            step="1"
+            onChange={(e) => {
+              updateFillConfig({ diameter: parseFloat(e.target.value) });
+            }}
+          />
+          <SliderField
+            label="質量"
+            value={fillConfig.mass ?? 10}
+            min="0"
+            max="100"
+            step="1"
+            onChange={(e) => {
+              updateFillConfig({ mass: parseFloat(e.target.value) });
+            }}
+          />
+          <SliderField
+            label="剛性"
+            value={fillConfig.stiffness ?? 0.8}
+            min="0.1"
+            max="1"
+            step="0.1"
+            onChange={(e) => {
+              updateFillConfig({ stiffness: parseFloat(e.target.value) });
+            }}
+          />
+          <SliderField
+            label="初速度X"
+            value={fillConfig.velocityX ?? 0}
+            min="-300"
+            max="300"
+            step="1"
+            onChange={(e) => {
+              updateFillConfig({ velocityX: parseFloat(e.target.value) });
+            }}
+          />
+          <SliderField
+            label="初速度Y"
+            value={fillConfig.velocityY ?? 0}
+            min="-300"
+            max="300"
+            step="1"
+            onChange={(e) => {
+              updateFillConfig({ velocityY: parseFloat(e.target.value) });
+            }}
+          />
+        </>
+      )}
+      <ColorPicker
+        label="カラー"
+        value={fillConfig.color}
+        onChange={(value) => {
+          updateFillConfig({ color: value });
+        }}
+      />
+      <SelectField
+        label="スクリプト"
+        value={fillConfig.scriptId || ""}
+        options={[{ label: "なし", value: ""},...scripts.map(script=>({ label: script.name, value: script.id }))]}
+        onChange={(value) => {
+          updateFillConfig({ scriptId: value !== "" ? value : null });
+        }}
+      />
+    </>
+  );
+}

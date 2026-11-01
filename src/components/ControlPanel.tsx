@@ -8,6 +8,7 @@ import EnvSettings from "./ui/EnvSettings";
 import SpawnSettings from "./ui/SpawnSettings";
 import SettingPanel from "./ui/SettingPanel";
 import SelectField from "./ui/SelectField";
+import FillSettings from "./ui/FillSettings";
 import { useToolMode } from "@/context/ToolModeContext";
 import ConnectionSettings from "./ui/ConnectionSettings";
 import EditSettings from "./ui/EditSettings";
@@ -28,6 +29,7 @@ export default function ControlPanel() {
 
   const modeOptions = [
     { label: "生成", value: "spawn" },
+    { label: "充填", value: "fill" },
     { label: "移動", value: "move" },
     { label: "削除", value: "delete" },
     { label: "編集", value: "edit" },
@@ -95,6 +97,9 @@ export default function ControlPanel() {
         <hr className="my-1 border-t border-gray-400" />
         {mode == "spawn" && (
         <SpawnSettings/>
+        )}
+        {mode == "fill" && (
+        <FillSettings/>
         )}
         {mode == "connect" && (
         <ConnectionSettings/>

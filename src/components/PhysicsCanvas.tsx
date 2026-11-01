@@ -12,6 +12,7 @@ import { useDeleteMode } from "@/hooks/modes/useDeleteMode";
 import { useConnectMode } from "@/hooks/modes/useConnectMode";
 import { useDisconnectMode } from "@/hooks/modes/useDisconnect";
 import { useEditMode } from "@/hooks/modes/useEditMode";
+import { useFillMode } from "@/hooks/modes/useFillMode";
 import { Curve, Line, Vector, capitalize } from "@/lib/engine";
 import { useEngineState } from "@/hooks/useEngineState";
 
@@ -23,6 +24,7 @@ export default function PhysicsCanvas() {
   const state = useEngineState();
   const { handleWheel } = useViewportControl(engine);
   const spawnMode = useSpawnMode(engine);
+  const fillMode = useFillMode(engine);
   const moveMode = useMoveMode(engine);
   const deleteMode = useDeleteMode(engine);
   const editMode = useEditMode(engine);
@@ -35,6 +37,7 @@ export default function PhysicsCanvas() {
   const activeMode = (() => {
     switch (mode) {
       case "spawn": return spawnMode;
+      case "fill": return fillMode;
       case "move": return moveMode;
       case "delete": return deleteMode;
       case "edit": return editMode;
@@ -218,7 +221,7 @@ export default function PhysicsCanvas() {
       cursorInfoPosition !== null &&
       (hoveredBodies.length > 0 || hoveredGrounds.length > 0) && (
         <div
-          className="pointer-events-none absolute z-20 w-72 overflow-y-auto rounded-xl border border-gray-200/80 bg-white/90 p-3 text-gray-700 shadow-lg backdrop-blur-sm"
+          className="pointer-events-none absolute z-20 w-72 overflow-y-auto rounded-xl border border-gray-200/80 bg-white p-3 text-gray-700 shadow-lg"
           style={cursorInfoPosition}
         >
           {hoveredBodies.map((body) => (

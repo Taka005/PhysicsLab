@@ -5,6 +5,7 @@ import { SpawnProvider } from "@/context/SpawnContext";
 import { ToolModeProvider } from "@/context/ToolModeContext";
 import { ConnectionProvider } from "@/context/ConnectionContext";
 import { EditProvider } from "@/context/EditContext";
+import { FillProvider } from "@/context/FillContext";
 
 export default function Home() {
   return (
@@ -13,10 +14,12 @@ export default function Home() {
         <ToolModeProvider>
           <SpawnProvider>
             <EditProvider>
-              <ConnectionProvider>
-                <PhysicsCanvas/>
-                <ControlPanel/>
-              </ConnectionProvider>
+              <FillProvider>
+                <ConnectionProvider>
+                  <PhysicsCanvas/>
+                  <ControlPanel/>
+                </ConnectionProvider>
+              </FillProvider>
             </EditProvider>
           </SpawnProvider>
         </ToolModeProvider>
