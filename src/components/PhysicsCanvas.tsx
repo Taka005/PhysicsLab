@@ -235,7 +235,7 @@ export default function PhysicsCanvas() {
               <p className="break-all font-mono text-[10px] text-gray-500">
                 スクリプトID: {body.scriptId ?? "なし"}
               </p>
-              <div className="my-2 border-t border-gray-200/80" />
+              <div className="my-1 border-t border-gray-200/80" />
               <p className="mb-1 text-[10px] font-semibold text-gray-600">
                 エンティティー ({body.entities.length})
               </p>
@@ -280,7 +280,7 @@ export default function PhysicsCanvas() {
               <p className="break-all font-mono text-[10px] text-gray-500">
                 スクリプトID: {ground.scriptId ?? "なし"}
               </p>
-              <div className="my-2 border-t border-gray-200/80" />
+              <div className="my-1 border-t border-gray-200/80" />
               <p className="font-mono text-[10px] text-gray-700">
                 幅: {ground.width.toFixed(2)}
               </p>
