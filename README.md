@@ -4,6 +4,8 @@ Web上で動作する物理シミュレーション
 - スクリプトの記述方法については以下を参照していください
 - [Script Docment](Script.md)
 
+![スクリーンショット](./screenshot.png)
+
 ## Getting Started
 ```bash
 bun dev
