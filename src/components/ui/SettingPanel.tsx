@@ -319,6 +319,14 @@ export default function SettingPanel({ onOpenScriptManager }: SettingPanelProps)
             </div>
             <div className="flex gap-2">
               <button
+                onClick={() => engine.scriptManager.resetMap()}
+                className="flex-1 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition focus:outline-none"
+              >
+                グローバル変数をリセット
+              </button>
+            </div>
+            <div className="flex gap-2">
+              <button
                 onClick={() => {
                   updateSpawnConfig({
                     type: "circle",

@@ -193,4 +193,8 @@ export class ScriptManager{
   public removeMap(id: string) {
     this.globalVarMap.delete(id);
   }
+
+  public resetMap(): void {
+    this.globalVarMap.clear();
+  }
 }
