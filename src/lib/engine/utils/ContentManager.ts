@@ -1,16 +1,19 @@
 import { BaseBody } from "../objects/BaseBody";
+import { BaseEffect } from "../objects/BaseEffect";
 import { BaseGround } from "../objects/BaseGround";
 import { BaseObject } from "../objects/BaseObject";
+import { Booster } from "../objects/Booster";
 import { Circle } from "../objects/Circle";
 import { Curve } from "../objects/Curve";
 import { Entity } from "../objects/Entity";
 import { Line } from "../objects/Line";
-import { BaseBodyOption, BaseGroundOption } from "../types";
+import { BaseBodyOption, BaseCreateEffectOption, BaseEffectOption, BaseGroundOption } from "../types";
 import { EngineError } from "./EngineError";
 
 export class ContentManager {
   public bodies: BaseBody[] = [];
   public grounds: BaseGround[] = [];
+  public effects: BaseEffect[] = [];
   public trackBodies: BaseBody[] = [];
   private cacheEntities: Entity[] | null = [];
   private cacheObjects: BaseObject[] | null = null;
@@ -18,7 +21,7 @@ export class ContentManager {
   public get objects(): BaseObject[] {
     if (this.cacheObjects !== null) return this.cacheObjects;
 
-    this.cacheObjects = [...this.bodies, ...this.grounds];
+    this.cacheObjects = [...this.bodies, ...this.grounds,...this.effects];
 
     return this.cacheObjects;
   }
@@ -29,6 +32,10 @@ export class ContentManager {
 
   public get groundsCount(): number {
     return this.grounds.length;
+  }
+
+  public get effectsCount(): number {
+    return this.effects.length;
   }
 
   public get trackBodiesCount(): number {
@@ -78,6 +85,20 @@ export class ContentManager {
     this.cacheObjects = null;
   }
 
+  public setEffects(effects: BaseEffectOption[]) {
+    this.effects = effects
+      .map(effect=>{
+        if(Booster.isBoosterOption(effect)){
+          return Booster.from(effect);
+        }
+
+        return null;
+      })
+      .filter(effect=>effect != null);
+
+    this.cacheObjects = null;
+  }
+
   public getEntity(id: string): Entity | undefined{
     return this.entities.find(entity => entity.id === id);
   }
@@ -105,6 +126,14 @@ export class ContentManager {
     return ground;
   }
 
+  public getEffect(id: string): BaseEffect | undefined {
+    const effect = this.effects.find(effect => effect.id === id);
+
+    this.cacheObjects = null;
+
+    return effect;
+  }
+
   public addBody(body: BaseBody): void {
     if (this.isExistedId(body.id)) throw new EngineError("既に存在するIDが指定されています");
 
@@ -118,6 +147,14 @@ export class ContentManager {
     if (this.isExistedId(ground.id)) throw new EngineError("既に存在するIDが指定されています");
 
     this.grounds.push(ground);
+
+    this.cacheObjects = null;
+  }
+
+  public addEffect(effect: BaseEffect): void {
+    if (this.isExistedId(effect.id)) throw new EngineError("既に存在するIDが指定されています");
+
+    this.effects.push(effect);
 
     this.cacheObjects = null;
   }
@@ -138,6 +175,12 @@ export class ContentManager {
 
     this.cacheObjects = null;
   }
+  
+  public removeEffect(id: string): void {
+    this.effects = this.effects.filter(effect => effect.id !== id);
+
+    this.cacheObjects = null;
+  }
 
   public removeFirstTrackBody(){
     this.trackBodies.shift();
@@ -152,6 +195,12 @@ export class ContentManager {
 
   public removeAllGrounds(){
     this.grounds = [];
+
+    this.cacheObjects = null;
+  }
+
+  public removeAllEffects(){
+    this.effects = [];
 
     this.cacheObjects = null;
   }
