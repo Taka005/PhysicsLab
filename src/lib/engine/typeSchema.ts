@@ -89,9 +89,9 @@ export const saveDataSchema = z.object({
   version: z.number(),
   engine: engineOptionSchema,
   viewport: viewportOptionSchema,
-  scripts: z.array(ScriptOptionSchema),
+  scripts: z.array(ScriptOptionSchema).default([]),
   objects: z.object({
-    bodies: z.array(bodyOptionSchema),
-    grounds: z.array(groundOptionSchema)
+    bodies: z.array(bodyOptionSchema).default([]),
+    grounds: z.array(groundOptionSchema).default([])
   })
 });
