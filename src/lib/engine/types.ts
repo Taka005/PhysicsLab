@@ -6,7 +6,7 @@ export type VectorData = {
   y: number;
 }
 
-export type ObjectType = "circle" | "line" | "curve";
+export type ObjectType = "circle" | "line" | "curve" | "booster";
 
 export type EdgeType = "start" | "end" | "middle";
 
@@ -40,6 +40,8 @@ export interface BaseGroundOption extends BaseObjectOption {
   width: number;
 }
 
+export interface BaseEffectOption extends BaseObjectOption {}
+
 export interface CircleOption extends BaseBodyOption {
   type: "circle";
   diameter: number;
@@ -56,6 +58,13 @@ export interface CurveOption extends BaseGroundOption {
   start: VectorData;
   middle: VectorData;
   end: VectorData;
+}
+
+export interface BoosterOption extends BaseEffectOption {
+  type: "booster";
+  start: VectorData;
+  end: VectorData;
+  velocity: VectorData;
 }
 
 export interface BaseCreateOption {
@@ -76,6 +85,8 @@ export interface BaseCreateGroundOption extends BaseCreateOption {
   width: number;
 }
 
+export interface BaseCreateEffectOption extends BaseCreateOption {}
+
 export interface CircleCreateOption extends BaseCreateBodyOption {
   type: "circle";
   diameter: number;
@@ -92,6 +103,13 @@ export interface CurveCreateOption extends BaseCreateGroundOption {
   start: VectorData;
   middle: VectorData;
   end: VectorData;
+}
+
+export interface BoosterCreateOption extends BaseCreateEffectOption {
+  type: "booster";
+  start: VectorData;
+  end: VectorData;
+  velocity: VectorData;
 }
 
 export interface EngineBaseOption {
