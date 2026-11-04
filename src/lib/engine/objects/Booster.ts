@@ -17,7 +17,17 @@ export class Booster extends BaseEffect{
   }
 
   public override setEffect(target: Entity, deltaTime: number): void {
-    
+    if(target.mass == 0) return;
+
+    const diff = Vector.subtract(target.position, Vector.add(this.start,this.end).divide(2));
+
+    if(
+      Math.abs(diff.x) >= Math.abs(this.start.x - this.end.x)/2||
+      Math.abs(diff.y) >= Math.abs(this.start.y - this.end.y)/2
+    ) return;
+
+    target.velocity.x += this.velocity.x*deltaTime;
+    target.velocity.y += this.velocity.y*deltaTime;
   }
 
   public override equals(target: BaseEffect): boolean {

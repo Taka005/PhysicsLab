@@ -1,25 +1,26 @@
 import { z } from "zod";
+import { DEFAULT_ENGINE_VALUE, DEFAULT_VIEWPORT_VALUE } from "./types";
 
 const vectorDataSchema = z.object({
-  x: z.number(),
-  y: z.number()
+  x: z.number().default(DEFAULT_VIEWPORT_VALUE.offset.x),
+  y: z.number().default(DEFAULT_VIEWPORT_VALUE.offset.y)
 });
 
 const engineOptionSchema = z.object({
-  pps: z.number().int().min(1),
-  gravity: z.number().int(),
-  friction: z.number(),
-  playBackSpeed: z.number().gt(0),
-  trackingInterval: z.number().int().min(1),
-  trackingLimit: z.number().int().min(1),
-  scriptExecuteInterval: z.number().int().min(1),
-  worldSize: z.number().int().min(1)
+  pps: z.number().int().min(1).default(DEFAULT_ENGINE_VALUE.pps),
+  gravity: z.number().int().default(DEFAULT_ENGINE_VALUE.gravity),
+  friction: z.number().default(DEFAULT_ENGINE_VALUE.friction),
+  playBackSpeed: z.number().gt(0).default(DEFAULT_ENGINE_VALUE.playBackSpeed),
+  trackingInterval: z.number().int().min(1).default(DEFAULT_ENGINE_VALUE.trackingInterval),
+  trackingLimit: z.number().int().min(1).default(DEFAULT_ENGINE_VALUE.trackingLimit),
+  scriptExecuteInterval: z.number().int().min(1).default(DEFAULT_ENGINE_VALUE.scriptExecuteInterval),
+  worldSize: z.number().int().min(1).default(DEFAULT_ENGINE_VALUE.worldSize)
 });
 
 const viewportOptionSchema = z.object({
   offset: vectorDataSchema,
-  zoomRatio: z.number().gt(0),
-  gridWidth: z.number().gt(0)
+  zoomRatio: z.number().gt(0).default(DEFAULT_VIEWPORT_VALUE.zoomRatio),
+  gridWidth: z.number().gt(0).default(DEFAULT_VIEWPORT_VALUE.gridWidth)
 });
 
 const ScriptOptionSchema = z.object({
@@ -86,7 +87,7 @@ const groundOptionSchema = z.discriminatedUnion("type",[
 ]);
 
 export const saveDataSchema = z.object({
-  version: z.number(),
+  version: z.number().default(1),
   engine: engineOptionSchema,
   viewport: viewportOptionSchema,
   scripts: z.array(ScriptOptionSchema).default([]),
