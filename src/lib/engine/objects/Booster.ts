@@ -62,7 +62,7 @@ export class Booster extends BaseEffect{
   }
 
   public static isBoosterOption(option: BaseEffectOption): option is BoosterOption {
-    return option.type == "circle";
+    return option.type == "booster";
   }
 
   public static from(option: BoosterOption): Booster{
