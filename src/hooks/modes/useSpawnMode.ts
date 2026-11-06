@@ -11,7 +11,7 @@ export function useSpawnMode(engine: Engine | null) {
 
   useEffect(() => {
     setClickedPoints([]);
-    updateSpawnConfig({ scriptId: null});
+    updateSpawnConfig({ id: "", color: "#ff0000", scriptId: null, velocityX: 0, velocityY: 0 });
   }, [spawnConfig.type]);
 
   const getRequiredPointsCount = (type: string) => {
