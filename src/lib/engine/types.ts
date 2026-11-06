@@ -167,6 +167,7 @@ export type SaveData = {
   objects: {
     bodies: BaseBodyOption[];
     grounds: BaseGroundOption[];
+    effects: BaseEffectOption[];
   };
 }
 

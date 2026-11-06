@@ -77,6 +77,15 @@ const CurveOptionSchema = z.object({
   scriptId: z.string().nullable()
 });
 
+const BoosterOptionSchema = z.object({
+  type: z.literal("booster"),
+  id: z.string(),
+  resource: resourceOption,
+  start: vectorDataSchema,
+  end: vectorDataSchema,
+  scriptId: z.string().nullable()
+});
+
 const bodyOptionSchema = z.discriminatedUnion("type",[
   circleOptionSchema
 ]);
@@ -86,6 +95,10 @@ const groundOptionSchema = z.discriminatedUnion("type",[
   CurveOptionSchema
 ]);
 
+const EffectOptionSchema = z.discriminatedUnion("type",[
+  BoosterOptionSchema
+]);
+
 export const saveDataSchema = z.object({
   version: z.number().default(1),
   engine: engineOptionSchema,
@@ -93,6 +106,7 @@ export const saveDataSchema = z.object({
   scripts: z.array(ScriptOptionSchema).default([]),
   objects: z.object({
     bodies: z.array(bodyOptionSchema).default([]),
-    grounds: z.array(groundOptionSchema).default([])
+    grounds: z.array(groundOptionSchema).default([]),
+    effects: z.array(EffectOptionSchema).default([])
   })
 });

@@ -1,5 +1,6 @@
 import { EngineBase } from "./EngineBase";
 import { BaseBody } from "./objects/BaseBody";
+import { BaseEffect } from "./objects/BaseEffect";
 import { BaseGround } from "./objects/BaseGround";
 import { BaseObject } from "./objects/BaseObject";
 import { Booster } from "./objects/Booster";
@@ -8,7 +9,7 @@ import { Curve } from "./objects/Curve";
 import { Entity } from "./objects/Entity";
 import { Line } from "./objects/Line";
 import { saveDataSchema } from "./typeSchema";
-import { BaseCreateOption, DEFAULT_ENGINE_VALUE, DEFAULT_VIEWPORT_VALUE, GroundEdgeData, EngineOption, EngineSnapShot, SaveData, ViewportOption } from "./types";
+import { BaseCreateOption, DEFAULT_ENGINE_VALUE, DEFAULT_VIEWPORT_VALUE, GroundEdgeData, EngineOption, EngineSnapShot, SaveData, ViewportOption, EffectEdgeData } from "./types";
 import { ContentManager } from "./utils/ContentManager";
 import { EngineError } from "./utils/EngineError";
 import { ScriptManager } from "./utils/ScriptManager";
@@ -432,7 +433,7 @@ export class Engine extends EngineBase {
   public getBodiesAt(target: Vector): BaseBody[]{
     const bodies: BaseBody[] = [];
 
-    for (let i = 0; i < this.content.bodies.length; i++) {
+    for (let i = 0; i < this.content.bodiesCount; i++) {
       const body = this.content.bodies[i];
 
       const entities = body.entities.filter(entity=>{
@@ -452,9 +453,9 @@ export class Engine extends EngineBase {
   }
 
   public getGroundsAt(target: Vector): BaseGround[]{
-    const bodies: BaseGround[] = [];
+    const grounds: BaseGround[] = [];
 
-    for (let i = 0; i < this.content.grounds.length; i++) {
+    for (let i = 0; i < this.content.groundsCount; i++) {
       const ground = this.content.grounds[i];
 
       const cross = ground.solvePosition(target);
@@ -465,16 +466,36 @@ export class Engine extends EngineBase {
 
       if(distance > ground.width / 2) continue;
 
-      bodies.push(ground);
+      grounds.push(ground);
     }
 
-    return bodies;
+    return grounds;
+  }
+
+  public getEffectsAt(target: Vector): BaseEffect[]{
+    const effects: BaseEffect[] = [];
+
+    for (let i = 0; i < this.content.effectsCount; i++) {
+      const effect = this.content.effects[i];
+      if(effect instanceof Booster){
+        const diff = Vector.subtract(target,Vector.add(effect.start,effect.end).divide(2));
+
+        if(
+          Math.abs(diff.x) >= Math.abs(effect.start.x - effect.end.x)/2||
+          Math.abs(diff.y) >= Math.abs(effect.start.y - effect.end.y)/2
+        ) continue;
+
+        effects.push(effect);
+      }
+    }
+
+    return effects;
   }
 
   public getEntitiesAt(target: Vector): Entity[]{
     const entities: Entity[] = [];
 
-    for (let i = 0; i < this.content.entities.length; i++) {
+    for (let i = 0; i < this.content.entitiesCount; i++) {
       const entity = this.content.entities[i];
 
       const diff = Vector.subtract(entity.position,target);
@@ -492,7 +513,7 @@ export class Engine extends EngineBase {
   public getGroundsEdgeAt(target: Vector): GroundEdgeData[]{
     const edges: GroundEdgeData[] = [];
 
-    for (let i = 0; i < this.content.grounds.length; i++) {
+    for (let i = 0; i < this.content.groundsCount; i++) {
       const ground = this.content.grounds[i];
 
       if(ground instanceof Line){
@@ -544,6 +565,36 @@ export class Engine extends EngineBase {
     return edges;
   }
 
+  public getEffectsEdgeAt(target: Vector): EffectEdgeData[]{
+    const edges: EffectEdgeData[] = [];
+
+    for (let i = 0; i < this.content.effectsCount; i++) {
+      const effect = this.content.effects[i];
+
+      if(effect instanceof Booster){
+        const diffStart = Vector.subtract(effect.start,target);
+        const diffEnd = Vector.subtract(effect.end,target);
+
+        const distanceStart = diffStart.distance();
+        const distanceEnd = diffEnd.distance();
+
+        if(distanceStart <= 1.5){
+          edges.push({
+            type: "start",
+            effect: effect
+          });
+        }else if(distanceEnd <= 1.5){
+          edges.push({
+            type: "end",
+            effect: effect
+          });
+        }
+      }
+    }
+
+    return edges;
+  }
+
   public import(saveData: string): void {
     const rawData = JSON.parse(saveData);
 
@@ -552,8 +603,9 @@ export class Engine extends EngineBase {
     if(validData.version !== Engine.SAVE_DATA_VERSION) throw new EngineError("セーブデータのバージョンが違います");
 
     const allIds = [
-      ...validData.objects.bodies.map((body) => body.id),
-      ...validData.objects.grounds.map((ground) => ground.id),
+      ...validData.objects.bodies.map(body => body.id),
+      ...validData.objects.grounds.map(ground => ground.id),
+      ...validData.objects.effects.map(effect=>effect.id)
     ];
 
     const uniqueIds = new Set(allIds);
@@ -571,6 +623,8 @@ export class Engine extends EngineBase {
     this.content.setBodies(validData.objects.bodies);
 
     this.content.setGrounds(validData.objects.grounds);
+
+    this.content.setEffects(validData.objects.effects);
 
     this.notify();
   }
@@ -596,7 +650,8 @@ export class Engine extends EngineBase {
       scripts: this.scriptManager.scripts.map(script=>script.toJSON()),
       objects:{
         bodies: this.content.bodies.map(body=>body.toJSON()),
-        grounds: this.content.grounds.map(ground=>ground.toJSON())
+        grounds: this.content.grounds.map(ground=>ground.toJSON()),
+        effects: this.content.effects.map(effect=>effect.toJSON())
       }
     }
 
