@@ -578,12 +578,12 @@ export class Engine extends EngineBase {
         const distanceStart = diffStart.distance();
         const distanceEnd = diffEnd.distance();
 
-        if(distanceStart <= 1.5){
+        if(distanceStart <= 2){
           edges.push({
             type: "start",
             effect: effect
           });
-        }else if(distanceEnd <= 1.5){
+        }else if(distanceEnd <= 2){
           edges.push({
             type: "end",
             effect: effect

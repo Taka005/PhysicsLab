@@ -12,6 +12,6 @@ export class BoosterView{
 
     graphics.rect(minX, minY, maxX - minX, maxY - minY);
 
-    graphics.stroke({ width: 1.5, color: booster.resource.color });
+    graphics.stroke({ width: 4, color: booster.resource.color });
   }
 }
