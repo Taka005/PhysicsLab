@@ -17,6 +17,10 @@ export class ContentManager {
   public trackBodies: BaseBody[] = [];
   private cacheEntities: Entity[] | null = null;
   private cacheObjects: BaseObject[] | null = null;
+  private bodiesById = new Map<string, BaseBody>();
+  private groundsById = new Map<string, BaseGround>();
+  private effectsById = new Map<string, BaseEffect>();
+  private entitiesById = new Map<string, Entity>();
 
   public get objects(): BaseObject[] {
     if (this.cacheObjects !== null) return this.cacheObjects;
@@ -65,6 +69,8 @@ export class ContentManager {
       })
       .filter(body=>body != null)
 
+    this.buildBodiesById();
+    this.buildEntitiesById();
     this.cacheEntities = null;
     this.cacheObjects = null;
   }
@@ -82,6 +88,7 @@ export class ContentManager {
       })
       .filter(ground=>ground != null);
 
+    this.buildGroundsById();
     this.cacheObjects = null;
   }
 
@@ -96,43 +103,44 @@ export class ContentManager {
       })
       .filter(effect=>effect != null);
 
+    this.buildEffectsById();
     this.cacheObjects = null;
   }
 
   public getEntity(id: string): Entity | undefined{
-    return this.entities.find(entity => entity.id === id);
+    return this.entitiesById.get(id);
+  }
+
+  public getObject(id: string): BaseObject | undefined {
+    return this.getBody(id) ?? this.getGround(id) ?? this.getEffect(id);
   }
 
   private isExistedId(id: string): boolean {
     return (
-      this.getBody(id) != null||
-      this.getGround(id) != null||
-      this.getEffect(id) != null
+      this.bodiesById.has(id) ||
+      this.groundsById.has(id) ||
+      this.effectsById.has(id)
     );
   }
 
   public getBody(id: string): BaseBody | undefined {
-    const body = this.bodies.find(body => body.id === id);
-
-    return body;
+    return this.bodiesById.get(id);
   }
 
   public getGround(id: string): BaseGround | undefined {
-    const ground = this.grounds.find(ground => ground.id === id);
-
-    return ground;
+    return this.groundsById.get(id);
   }
 
   public getEffect(id: string): BaseEffect | undefined {
-    const effect = this.effects.find(effect => effect.id === id);
-
-    return effect;
+    return this.effectsById.get(id);
   }
 
   public addBody(body: BaseBody): void {
     if (this.isExistedId(body.id)) throw new EngineError("既に存在するIDが指定されています");
 
     this.bodies.push(body);
+    this.bodiesById.set(body.id, body);
+    this.addEntitiesToMap(body);
 
     this.cacheEntities = null;
     this.cacheObjects = null;
@@ -142,6 +150,7 @@ export class ContentManager {
     if (this.isExistedId(ground.id)) throw new EngineError("既に存在するIDが指定されています");
 
     this.grounds.push(ground);
+    this.groundsById.set(ground.id, ground);
 
     this.cacheObjects = null;
   }
@@ -150,6 +159,7 @@ export class ContentManager {
     if (this.isExistedId(effect.id)) throw new EngineError("既に存在するIDが指定されています");
 
     this.effects.push(effect);
+    this.effectsById.set(effect.id, effect);
 
     this.cacheObjects = null;
   }
@@ -161,6 +171,8 @@ export class ContentManager {
   public removeBody(id: string): void {
     this.bodies = this.bodies.filter(body => body.id !== id);
 
+    this.buildBodiesById();
+    this.buildEntitiesById();
     this.cacheEntities = null;
     this.cacheObjects = null;
   }
@@ -168,12 +180,14 @@ export class ContentManager {
   public removeGround(id: string): void {
     this.grounds = this.grounds.filter(ground => ground.id !== id);
 
+    this.buildGroundsById();
     this.cacheObjects = null;
   }
 
   public removeEffect(id: string): void {
     this.effects = this.effects.filter(effect => effect.id !== id);
 
+    this.buildEffectsById();
     this.cacheObjects = null;
   }
 
@@ -183,6 +197,8 @@ export class ContentManager {
 
   public removeAllBodies(){
     this.bodies = [];
+    this.bodiesById.clear();
+    this.entitiesById.clear();
 
     this.cacheEntities = null;
     this.cacheObjects = null;
@@ -190,17 +206,61 @@ export class ContentManager {
 
   public removeAllGrounds(){
     this.grounds = [];
+    this.groundsById.clear();
 
     this.cacheObjects = null;
   }
 
   public removeAllEffects(){
     this.effects = [];
+    this.effectsById.clear();
 
     this.cacheObjects = null;
   }
 
   public removeAllTrackBodies(){
     this.trackBodies = [];
+  }
+
+  private buildBodiesById(): void {
+    this.bodiesById.clear();
+    for (const body of this.bodies) {
+      if (!this.bodiesById.has(body.id)){
+        this.bodiesById.set(body.id, body);
+      }
+    }
+  }
+
+  private buildGroundsById(): void {
+    this.groundsById.clear();
+    for (const ground of this.grounds) {
+      if (!this.groundsById.has(ground.id)){
+        this.groundsById.set(ground.id, ground);
+      }
+    }
+  }
+
+  private buildEffectsById(): void {
+    this.effectsById.clear();
+    for (const effect of this.effects) {
+      if (!this.effectsById.has(effect.id)){
+        this.effectsById.set(effect.id, effect);
+      }
+    }
+  }
+
+  private buildEntitiesById(): void {
+    this.entitiesById.clear();
+    for (const body of this.bodies) {
+      this.addEntitiesToMap(body);
+    }
+  }
+
+  private addEntitiesToMap(body: BaseBody): void {
+    for (const entity of body.entities) {
+      if (!this.entitiesById.has(entity.id)){
+        this.entitiesById.set(entity.id, entity);
+      }
+    }
   }
 }

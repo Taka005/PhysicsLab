@@ -429,7 +429,7 @@ export class Engine extends EngineBase {
   }
 
   public getObject(id: string): BaseObject | undefined{
-    return this.getObjects().find(obj=>obj.id == id);
+    return this.content.getObject(id);
   }
 
   public getBodiesAt(target: Vector): BaseBody[]{
