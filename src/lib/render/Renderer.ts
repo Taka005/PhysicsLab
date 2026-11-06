@@ -70,7 +70,7 @@ export class Renderer{
     }
 
     this.bodyContainer.visible = !this.engine.viewport.isHiddenBody;
-    this.effectContainer.visible = !this.engine.viewport.isHiddenGround;//将来的に要変更
+    this.effectContainer.visible = !this.engine.viewport.isHiddenEffect;
     this.groundContainer.visible = !this.engine.viewport.isHiddenGround;
 
     const activeIds = new Set<string>();

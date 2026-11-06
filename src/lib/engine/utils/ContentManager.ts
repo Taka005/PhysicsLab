@@ -7,7 +7,7 @@ import { Circle } from "../objects/Circle";
 import { Curve } from "../objects/Curve";
 import { Entity } from "../objects/Entity";
 import { Line } from "../objects/Line";
-import { BaseBodyOption, BaseCreateEffectOption, BaseEffectOption, BaseGroundOption } from "../types";
+import { BaseBodyOption, BaseEffectOption, BaseGroundOption } from "../types";
 import { EngineError } from "./EngineError";
 
 export class ContentManager {
@@ -15,7 +15,7 @@ export class ContentManager {
   public grounds: BaseGround[] = [];
   public effects: BaseEffect[] = [];
   public trackBodies: BaseBody[] = [];
-  private cacheEntities: Entity[] | null = [];
+  private cacheEntities: Entity[] | null = null;
   private cacheObjects: BaseObject[] | null = null;
 
   public get objects(): BaseObject[] {
@@ -106,14 +106,13 @@ export class ContentManager {
   private isExistedId(id: string): boolean {
     return (
       this.getBody(id) != null||
-      this.getGround(id) != null
+      this.getGround(id) != null||
+      this.getEffect(id) != null
     );
   }
 
   public getBody(id: string): BaseBody | undefined {
     const body = this.bodies.find(body => body.id === id);
-
-    this.cacheObjects = null;
 
     return body;
   }
@@ -121,15 +120,11 @@ export class ContentManager {
   public getGround(id: string): BaseGround | undefined {
     const ground = this.grounds.find(ground => ground.id === id);
 
-    this.cacheObjects = null;
-
     return ground;
   }
 
   public getEffect(id: string): BaseEffect | undefined {
     const effect = this.effects.find(effect => effect.id === id);
-
-    this.cacheObjects = null;
 
     return effect;
   }
@@ -175,7 +170,7 @@ export class ContentManager {
 
     this.cacheObjects = null;
   }
-  
+
   public removeEffect(id: string): void {
     this.effects = this.effects.filter(effect => effect.id !== id);
 
@@ -207,7 +202,5 @@ export class ContentManager {
 
   public removeAllTrackBodies(){
     this.trackBodies = [];
-
-    this.cacheObjects = null;
   }
 }

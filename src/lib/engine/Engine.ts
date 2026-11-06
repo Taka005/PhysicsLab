@@ -181,6 +181,7 @@ export class Engine extends EngineBase {
       isDisplayVector: this.viewport.isDisplayVector,
       isDisplayEdge: this.viewport.isDisplayEdge,
       isHiddenBody: this.viewport.isHiddenBody,
+      isHiddenEffect: this.viewport.isHiddenEffect,
       isHiddenGround: this.viewport.isHiddenGround,
       playBackSpeed: this.playBackSpeed,
       worldSize: this.worldSize,
@@ -255,6 +256,7 @@ export class Engine extends EngineBase {
     this.content.removeAllBodies();
 
     if(isAll){
+      this.content.removeAllEffects();
       this.content.removeAllGrounds();
       this.content.removeAllTrackBodies();
     }
@@ -312,7 +314,7 @@ export class Engine extends EngineBase {
 
       for (let i = 0; i < this.content.effectsCount; i++) {
         const effect = this.content.effects[i];
-        
+
         effect.setEffect(entity,this.deltaTime);
       }
 

@@ -165,6 +165,15 @@ export default function SettingPanel({ onOpenScriptManager }: SettingPanelProps)
             </div>
             <div className="flex-1 gap-2">
               <ToggleSwitch
+                label="エフェクトを非表示"
+                checked={state.isHiddenEffect}
+                onChange={(checked) => {
+                  engine.viewport.isHiddenEffect = checked;
+                }}
+              />
+            </div>
+            <div className="flex-1 gap-2">
+              <ToggleSwitch
                 label="地面を非表示"
                 checked={state.isHiddenGround}
                 onChange={(checked) => {
@@ -282,7 +291,7 @@ export default function SettingPanel({ onOpenScriptManager }: SettingPanelProps)
               <button
                 onClick={() => {
                   const worldData = localStorage.getItem("worldData");
-                  
+
                   if (worldData) {
                     try{
                       engine.import(worldData);

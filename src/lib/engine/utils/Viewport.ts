@@ -9,6 +9,7 @@ export class Viewport{
   private _isDisplayGrid: boolean = false;
   private _isDisplayEdge: boolean = false;
   private _isHiddenBody: boolean = false;
+  private _isHiddenEffect: boolean = false;
   private _isHiddenGround: boolean = false;
   private onChanged: () => void;
 
@@ -61,6 +62,15 @@ export class Viewport{
 
   public set isHiddenBody(value: boolean) {
     this._isHiddenBody = value;
+    this.onChanged();
+  }
+
+  public get isHiddenEffect(): boolean{
+    return this._isHiddenEffect;
+  }
+
+  public set isHiddenEffect(value: boolean) {
+    this._isHiddenEffect = value;
     this.onChanged();
   }
 
@@ -119,6 +129,7 @@ export class Viewport{
     this.isDisplayVector = false;
     this.isDisplayEdge = false;
     this.isHiddenBody = false;
+    this.isHiddenEffect = false;
     this.isHiddenGround = false;
 
     this.onChanged();

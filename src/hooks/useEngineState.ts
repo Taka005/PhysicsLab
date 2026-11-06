@@ -17,6 +17,7 @@ export function useEngineState() {
     isDisplayVector: false,
     isDisplayEdge: false,
     isHiddenBody: false,
+    isHiddenEffect: false,
     isHiddenGround: false,
     trackingInterval: DEFAULT_ENGINE_VALUE.trackingInterval,
     trackingLimit: DEFAULT_ENGINE_VALUE.trackingLimit,

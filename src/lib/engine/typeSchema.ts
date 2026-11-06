@@ -2,8 +2,8 @@ import { z } from "zod";
 import { DEFAULT_ENGINE_VALUE, DEFAULT_VIEWPORT_VALUE } from "./types";
 
 const vectorDataSchema = z.object({
-  x: z.number().default(DEFAULT_VIEWPORT_VALUE.offset.x),
-  y: z.number().default(DEFAULT_VIEWPORT_VALUE.offset.y)
+  x: z.number(),
+  y: z.number()
 });
 
 const engineOptionSchema = z.object({
@@ -18,7 +18,7 @@ const engineOptionSchema = z.object({
 });
 
 const viewportOptionSchema = z.object({
-  offset: vectorDataSchema,
+  offset: vectorDataSchema.default(DEFAULT_VIEWPORT_VALUE.offset),
   zoomRatio: z.number().gt(0).default(DEFAULT_VIEWPORT_VALUE.zoomRatio),
   gridWidth: z.number().gt(0).default(DEFAULT_VIEWPORT_VALUE.gridWidth)
 });
@@ -83,6 +83,7 @@ const BoosterOptionSchema = z.object({
   resource: resourceOption,
   start: vectorDataSchema,
   end: vectorDataSchema,
+  velocity: vectorDataSchema,
   scriptId: z.string().nullable()
 });
 
@@ -101,8 +102,8 @@ const EffectOptionSchema = z.discriminatedUnion("type",[
 
 export const saveDataSchema = z.object({
   version: z.number().default(1),
-  engine: engineOptionSchema,
-  viewport: viewportOptionSchema,
+  engine: engineOptionSchema.default(DEFAULT_ENGINE_VALUE),
+  viewport: viewportOptionSchema.default(DEFAULT_VIEWPORT_VALUE),
   scripts: z.array(ScriptOptionSchema).default([]),
   objects: z.object({
     bodies: z.array(bodyOptionSchema).default([]),

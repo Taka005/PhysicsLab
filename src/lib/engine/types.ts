@@ -182,6 +182,7 @@ export type EngineSnapShot = {
   isDisplayVector: boolean;
   isDisplayEdge: boolean;
   isHiddenBody: boolean;
+  isHiddenEffect: boolean;
   isHiddenGround: boolean;
   playBackSpeed: number;
   worldSize: number;
