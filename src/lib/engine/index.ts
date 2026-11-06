@@ -3,6 +3,7 @@ export { Engine } from "./Engine";
 export { Circle } from "./objects/Circle";
 export { Line } from "./objects/Line";
 export { Curve } from "./objects/Curve";
+export { Booster } from "./objects/Booster";
 export { Entity } from "./objects/Entity";
 export { BaseBody } from "./objects/BaseBody";
 export { BaseGround } from "./objects/BaseGround";

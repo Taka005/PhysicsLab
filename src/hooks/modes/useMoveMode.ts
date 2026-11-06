@@ -1,11 +1,12 @@
-import { Curve, Engine, Entity, Line, Vector } from "@/lib/engine";
+import { Booster, Curve, Engine, Entity, Line, Vector } from "@/lib/engine";
 import { Point } from "../useCanvasInteraction";
 import { useCallback, useState } from "react";
-import { GroundEdgeData } from "@/lib/engine/types";
+import { EffectEdgeData, GroundEdgeData } from "@/lib/engine/types";
 
 export function useMoveMode(engine: Engine | null) {
   const [selectedEntity, setSelectedEntity] = useState<Entity | null>();
   const [selectedGroundEdge, setSelectedGroundEdge] = useState<GroundEdgeData | null>();
+  const [selectedEffectEdge, setSelectedEffectEdge] = useState<EffectEdgeData | null>();
 
   const onDown = useCallback((point: Point) => {
     if (!engine) return;
@@ -14,11 +15,14 @@ export function useMoveMode(engine: Engine | null) {
 
     const entities = engine.getEntitiesAt(target);
     const groundEdges = engine.getGroundsEdgeAt(target);
+    const effectEdges = engine.getEffectsEdgeAt(target);
 
     if (entities.length > 0) {
       setSelectedEntity(entities[0]);
     } else if (groundEdges.length > 0) {
       setSelectedGroundEdge(groundEdges[0]);
+    } else if (effectEdges.length > 0) {
+      setSelectedEffectEdge(effectEdges[0]);
     }
   }, [engine]);
 
@@ -46,12 +50,21 @@ export function useMoveMode(engine: Engine | null) {
           selectedGroundEdge.ground.end = target;
         }
       }
+    } else if (selectedEffectEdge != null) {
+      if (selectedEffectEdge.effect instanceof Booster) {
+        if (selectedEffectEdge.type == "start") {
+          selectedEffectEdge.effect.start = target;
+        } else if (selectedEffectEdge.type == "end") {
+          selectedEffectEdge.effect.end = target;
+        }
+      }
     }
   }, [engine, selectedEntity, selectedGroundEdge]);
 
   const onUp = useCallback(() => {
     setSelectedEntity(null);
     setSelectedGroundEdge(null);
+    setSelectedEffectEdge(null);
   }, []);
 
   return {

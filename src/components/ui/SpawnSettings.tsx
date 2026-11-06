@@ -15,6 +15,7 @@ export default function SpawnSettings() {
     { label: "円", value: "circle" },
     { label: "直線", value: "line" },
     { label: "曲線", value: "curve" },
+    { label: "加速器", value: "booster" },
   ];
 
   if (!engine) return null;
@@ -102,6 +103,30 @@ export default function SpawnSettings() {
             step="1"
             onChange={(e) => {
               updateSpawnConfig({ width: parseFloat(e.target.value) });
+            }}
+          />
+        </>
+      )}
+      {(spawnConfig.type === "booster") && (
+        <>
+          <SliderField
+            label="初速度X"
+            value={spawnConfig.velocityX ?? 0}
+            min="-300"
+            max="300"
+            step="1"
+            onChange={(e) => {
+              updateSpawnConfig({ velocityX: parseFloat(e.target.value) });
+            }}
+          />
+          <SliderField
+            label="初速度Y"
+            value={spawnConfig.velocityY ?? 0}
+            min="-300"
+            max="300"
+            step="1"
+            onChange={(e) => {
+              updateSpawnConfig({ velocityY: parseFloat(e.target.value) });
             }}
           />
         </>

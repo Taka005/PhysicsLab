@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { createId, Engine, EngineError, Vector } from "@/lib/engine";
-import { CircleCreateOption, CurveCreateOption, LineCreateOption } from "@/lib/engine/types";
+import { BoosterCreateOption, CircleCreateOption, CurveCreateOption, LineCreateOption } from "@/lib/engine/types";
 import { useSpawnState } from "@/context/SpawnContext";
 import { Point } from "../useCanvasInteraction";
 import { toast } from "sonner";
@@ -19,6 +19,7 @@ export function useSpawnMode(engine: Engine | null) {
       case "circle": return 1;
       case "line": return 2;
       case "curve": return 3;
+      case "booster": return 2;
       default: return 1;
     }
   };
@@ -71,12 +72,25 @@ export function useSpawnMode(engine: Engine | null) {
             width: spawnConfig.width,
             scriptId: spawnConfig.scriptId
           } as CurveCreateOption);
+        } else if (spawnConfig.type === "booster") {
+          engine.spawn({
+            type: "booster",
+            id: spawnConfig.id == "" ? createId(10) : spawnConfig.id,
+            resource:{
+              color: spawnConfig.color
+            },
+            start: { x: nextPoints[0].x, y: nextPoints[0].y },
+            end: { x: nextPoints[1].x, y: nextPoints[1].y },
+            velocity: { x: spawnConfig.velocityX, y: spawnConfig.velocityY },
+            scriptId: spawnConfig.scriptId
+          } as BoosterCreateOption);
         }
       }catch(error){
         if(error instanceof EngineError){
           toast.error(error.message);
           return;
         }
+        console.log(error)
 
         toast.error("不明なエラーが発生しました");
       }
