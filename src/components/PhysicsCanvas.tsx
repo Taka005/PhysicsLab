@@ -203,7 +203,14 @@ export default function PhysicsCanvas() {
                   {state.groundsCount}
                 </span>
               </div>
-
+              <div className="mt-2 flex items-center justify-between gap-4">
+                <span className="text-xs text-gray-700">
+                  Effects
+                </span>
+                <span className="font-mono text-xs tabular-nums text-gray-700">
+                  {state.effectsCount}
+                </span>
+              </div>
               <div className="mt-2 flex items-center justify-between gap-4">
                 <span className="text-xs text-gray-700">
                   Entities

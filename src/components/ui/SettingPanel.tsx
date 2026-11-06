@@ -282,13 +282,14 @@ export default function SettingPanel({ onOpenScriptManager }: SettingPanelProps)
               <button
                 onClick={() => {
                   const worldData = localStorage.getItem("worldData");
+                  
                   if (worldData) {
-                    try {
+                    try{
                       engine.import(worldData);
                       toast.success("ロードしました");
-                    } catch {
+                    }catch{
                       toast.error("ファイルの読み込みに失敗しました", {
-                        description: "ファイル形式が不正です",
+                        description: "ファイル形式が不正です"
                       });
                     }
                   } else {

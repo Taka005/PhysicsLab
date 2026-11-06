@@ -603,8 +603,8 @@ export class Engine extends EngineBase {
     if(validData.version !== Engine.SAVE_DATA_VERSION) throw new EngineError("セーブデータのバージョンが違います");
 
     const allIds = [
-      ...validData.objects.bodies.map(body => body.id),
-      ...validData.objects.grounds.map(ground => ground.id),
+      ...validData.objects.bodies.map(body=>body.id),
+      ...validData.objects.grounds.map(ground=>ground.id),
       ...validData.objects.effects.map(effect=>effect.id)
     ];
 

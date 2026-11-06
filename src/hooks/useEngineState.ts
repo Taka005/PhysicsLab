@@ -28,6 +28,7 @@ export function useEngineState() {
     pps: DEFAULT_ENGINE_VALUE.pps,
     friction: DEFAULT_ENGINE_VALUE.friction,
     bodiesCount: 0,
+    effectsCount: 0,
     groundsCount: 0,
     entitiesCount: 0
   } as EngineSnapShot), []);
