@@ -49,8 +49,8 @@ export default function EditSettings() {
           <SliderField
             label="初速度X"
             value={Math.floor((editConfig.velocityX ?? 0)*100)/100}
-            min="-300"
-            max="300"
+            min="-500"
+            max="500"
             step="1"
             onChange={(e) => {
               updateEditConfig({ velocityX: parseFloat(e.target.value) });
@@ -59,8 +59,8 @@ export default function EditSettings() {
           <SliderField
             label="初速度Y"
             value={Math.floor((editConfig.velocityY ?? 0)*100)/100}
-            min="-300"
-            max="300"
+            min="-500"
+            max="500"
             step="1"
             onChange={(e) => {
               updateEditConfig({ velocityY: parseFloat(e.target.value) });
@@ -87,8 +87,8 @@ export default function EditSettings() {
           <SliderField
             label="初速度X"
             value={Math.floor((editConfig.velocityX ?? 0)*100)/100}
-            min="-300"
-            max="300"
+            min="-500"
+            max="500"
             step="1"
             onChange={(e) => {
               updateEditConfig({ velocityX: parseFloat(e.target.value) });
@@ -97,8 +97,8 @@ export default function EditSettings() {
           <SliderField
             label="初速度Y"
             value={Math.floor((editConfig.velocityY ?? 0)*100)/100}
-            min="-300"
-            max="300"
+            min="-500"
+            max="500"
             step="1"
             onChange={(e) => {
               updateEditConfig({ velocityY: parseFloat(e.target.value) });

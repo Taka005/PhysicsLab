@@ -74,8 +74,8 @@ export default function SpawnSettings() {
           <SliderField
             label="初速度X"
             value={spawnConfig.velocityX ?? 0}
-            min="-300"
-            max="300"
+            min="-500"
+            max="500"
             step="1"
             onChange={(e) => {
               updateSpawnConfig({ velocityX: parseFloat(e.target.value) });
@@ -84,8 +84,8 @@ export default function SpawnSettings() {
           <SliderField
             label="初速度Y"
             value={spawnConfig.velocityY ?? 0}
-            min="-300"
-            max="300"
+            min="-500"
+            max="500"
             step="1"
             onChange={(e) => {
               updateSpawnConfig({ velocityY: parseFloat(e.target.value) });
@@ -112,8 +112,8 @@ export default function SpawnSettings() {
           <SliderField
             label="初速度X"
             value={spawnConfig.velocityX ?? 0}
-            min="-300"
-            max="300"
+            min="-500"
+            max="500"
             step="1"
             onChange={(e) => {
               updateSpawnConfig({ velocityX: parseFloat(e.target.value) });
@@ -122,8 +122,8 @@ export default function SpawnSettings() {
           <SliderField
             label="初速度Y"
             value={spawnConfig.velocityY ?? 0}
-            min="-300"
-            max="300"
+            min="-500"
+            max="500"
             step="1"
             onChange={(e) => {
               updateSpawnConfig({ velocityY: parseFloat(e.target.value) });
