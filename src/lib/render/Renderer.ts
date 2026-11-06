@@ -1,17 +1,19 @@
 import { Application, Container, Graphics } from "pixi.js";
-import { Curve, Engine, Line, Circle, BaseBody, BaseGround, BaseObject } from "@/lib/engine";
+import { Curve, Engine, Line, Circle, BaseBody, BaseGround, BaseObject, BaseEffect, Booster } from "@/lib/engine";
 import { CircleView } from "./views/CircleView";
 import { LineView } from "./views/LineView";
 import { CurveView } from "./views/CurveView";
 import { VectorView } from "./views/VectorView";
 import { EdgeView } from "./views/EdgeView";
 import { GridView } from "./views/GridView";
+import { BoosterView } from "./views/BoosterView";
 
 export class Renderer{
   private app: Application = new Application();
   private engine: Engine;
   private mainContainer: Container = new Container();
   private trackingContainer: Container = new Container();
+  private effectContainer: Container = new Container();
   private groundContainer: Container = new Container();
   private bodyContainer: Container = new Container();
   private viewMap: Map<string,Graphics> = new Map();
@@ -47,6 +49,7 @@ export class Renderer{
 
     this.mainContainer.addChild(this.gridGraphics);
     this.mainContainer.addChild(this.groundContainer);
+    this.mainContainer.addChild(this.effectContainer);
     this.mainContainer.addChild(this.trackingContainer);
     this.mainContainer.addChild(this.bodyContainer);
 
@@ -67,6 +70,7 @@ export class Renderer{
     }
 
     this.bodyContainer.visible = !this.engine.viewport.isHiddenBody;
+    this.effectContainer.visible = !this.engine.viewport.isHiddenGround;//将来的に要変更
     this.groundContainer.visible = !this.engine.viewport.isHiddenGround;
 
     const activeIds = new Set<string>();
@@ -84,6 +88,8 @@ export class Renderer{
 
         if(object instanceof BaseGround){
           this.groundContainer.addChild(graphics);
+        }else if(object instanceof BaseEffect){
+          this.effectContainer.addChild(graphics);
         }else if(object instanceof BaseBody){
           this.bodyContainer.addChild(graphics);
         }
@@ -142,13 +148,15 @@ export class Renderer{
       LineView.draw(view, object);
     }else if(object instanceof Curve){
       CurveView.draw(view, object);
+    }else if(object instanceof Booster){
+      BoosterView.draw(view, object);
     }
 
     if(object instanceof BaseBody && this.engine.viewport.isDisplayVector){
       VectorView.draw(view, object);
     }
 
-    if(object instanceof BaseGround && this.engine.viewport.isDisplayEdge){
+    if(this.engine.viewport.isDisplayEdge){
       EdgeView.draw(view, object);
     }
   }

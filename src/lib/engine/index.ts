@@ -7,6 +7,7 @@ export { Booster } from "./objects/Booster";
 export { Entity } from "./objects/Entity";
 export { BaseBody } from "./objects/BaseBody";
 export { BaseGround } from "./objects/BaseGround";
+export { BaseEffect } from "./objects/BaseEffect";
 export { BaseObject } from "./objects/BaseObject";
 export { Viewport } from "./utils/Viewport";
 export { Script } from "./utils/Script";

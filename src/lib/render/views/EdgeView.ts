@@ -1,4 +1,4 @@
-import { BaseObject, Curve, Line } from "@/lib/engine";
+import { BaseObject, Booster, Curve, Line } from "@/lib/engine";
 import { Graphics } from "pixi.js";
 
 export class EdgeView{
@@ -20,6 +20,12 @@ export class EdgeView{
       graphics.stroke({ color: "gray", width: 1});
 
       graphics.circle(object.end.x,object.end.y,object.width/2);
+      graphics.stroke({ color: "gray", width: 1});
+    }else if(object instanceof Booster){
+      graphics.circle(object.start.x,object.start.y,1.5);
+      graphics.stroke({ color: "gray", width: 1});
+
+      graphics.circle(object.end.x,object.end.y,1.5);
       graphics.stroke({ color: "gray", width: 1});
     }
   }

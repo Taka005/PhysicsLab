@@ -59,7 +59,7 @@ export function useMoveMode(engine: Engine | null) {
         }
       }
     }
-  }, [engine, selectedEntity, selectedGroundEdge]);
+  }, [engine, selectedEntity, selectedGroundEdge, selectedEffectEdge]);
 
   const onUp = useCallback(() => {
     setSelectedEntity(null);
