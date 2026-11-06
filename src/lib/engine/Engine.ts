@@ -2,12 +2,13 @@ import { EngineBase } from "./EngineBase";
 import { BaseBody } from "./objects/BaseBody";
 import { BaseGround } from "./objects/BaseGround";
 import { BaseObject } from "./objects/BaseObject";
+import { Booster } from "./objects/Booster";
 import { Circle } from "./objects/Circle";
 import { Curve } from "./objects/Curve";
 import { Entity } from "./objects/Entity";
 import { Line } from "./objects/Line";
 import { saveDataSchema } from "./typeSchema";
-import { BaseCreateOption, DEFAULT_ENGINE_VALUE, DEFAULT_VIEWPORT_VALUE, EdgeData, EngineOption, EngineSnapShot, SaveData, ViewportOption } from "./types";
+import { BaseCreateOption, DEFAULT_ENGINE_VALUE, DEFAULT_VIEWPORT_VALUE, GroundEdgeData, EngineOption, EngineSnapShot, SaveData, ViewportOption } from "./types";
 import { ContentManager } from "./utils/ContentManager";
 import { EngineError } from "./utils/EngineError";
 import { ScriptManager } from "./utils/ScriptManager";
@@ -191,6 +192,7 @@ export class Engine extends EngineBase {
       friction: this.friction,
       bodiesCount: this.content.bodiesCount,
       groundsCount: this.content.groundsCount,
+      effectsCount: this.content.effectsCount,
       entitiesCount: this.content.entitiesCount
     };
   }
@@ -307,6 +309,12 @@ export class Engine extends EngineBase {
     for(let i = 0;i < this.content.entitiesCount;i++){
       const entity = this.content.entities[i];
 
+      for (let i = 0; i < this.content.effectsCount; i++) {
+        const effect = this.content.effects[i];
+        
+        effect.setEffect(entity,this.deltaTime);
+      }
+
       this.updatePosition(entity);
     }
 
@@ -386,6 +394,14 @@ export class Engine extends EngineBase {
       this.notify();
 
       return curve;
+    }else if(Booster.isBoosterCreateOption(option)){
+      const booster = Booster.create(option);
+
+      this.content.addEffect(booster);
+
+      this.notify();
+
+      return booster;
     }
 
     throw new EngineError("存在しないオブジェクトタイプです");
@@ -394,6 +410,7 @@ export class Engine extends EngineBase {
   public deSpawn(id: string): void {
     this.content.removeBody(id);
     this.content.removeGround(id);
+    this.content.removeEffect(id);
     this.scriptManager.removeMap(id);
     this.scriptManager.clearErrorsByObject(id);
 
@@ -472,8 +489,8 @@ export class Engine extends EngineBase {
     return entities;
   }
 
-  public getGroundsEdgeAt(target: Vector): EdgeData[]{
-    const edges: EdgeData[] = [];
+  public getGroundsEdgeAt(target: Vector): GroundEdgeData[]{
+    const edges: GroundEdgeData[] = [];
 
     for (let i = 0; i < this.content.grounds.length; i++) {
       const ground = this.content.grounds[i];

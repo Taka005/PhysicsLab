@@ -1,3 +1,4 @@
+import { BaseEffect } from "./objects/BaseEffect";
 import { BaseGround } from "./objects/BaseGround";
 import { BaseObject } from "./objects/BaseObject";
 
@@ -10,9 +11,14 @@ export type ObjectType = "circle" | "line" | "curve" | "booster";
 
 export type EdgeType = "start" | "end" | "middle";
 
-export type EdgeData = {
+export type GroundEdgeData = {
   type: EdgeType;
   ground: BaseGround;
+}
+
+export type EffectEdgeData = {
+  type: EdgeType;
+  effect: BaseEffect;
 }
 
 export type EntityOption = {
@@ -187,6 +193,7 @@ export type EngineSnapShot = {
   friction: number;
   bodiesCount: number;
   groundsCount: number;
+  effectsCount: number;
   entitiesCount: number;
 }
 

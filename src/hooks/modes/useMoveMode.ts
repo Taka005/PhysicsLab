@@ -1,11 +1,11 @@
 import { Curve, Engine, Entity, Line, Vector } from "@/lib/engine";
 import { Point } from "../useCanvasInteraction";
 import { useCallback, useState } from "react";
-import { EdgeData } from "@/lib/engine/types";
+import { GroundEdgeData } from "@/lib/engine/types";
 
 export function useMoveMode(engine: Engine | null) {
   const [selectedEntity, setSelectedEntity] = useState<Entity | null>();
-  const [selectedGroundEdge, setSelectedGroundEdge] = useState<EdgeData | null>();
+  const [selectedGroundEdge, setSelectedGroundEdge] = useState<GroundEdgeData | null>();
 
   const onDown = useCallback((point: Point) => {
     if (!engine) return;

@@ -57,6 +57,18 @@ export class Booster extends BaseEffect{
     }
   }
 
+  public static create(option: BoosterCreateOption): Booster {
+    return new Booster({
+      type: option.type,
+      id: option.id,
+      resource: option.resource,
+      velocity: option.velocity,
+      start: option.start,
+      end: option.end,
+      scriptId: option.scriptId
+    });
+  }
+
   public static isBoosterCreateOption(option: BaseCreateOption): option is BoosterCreateOption {
     return option.type == "booster";
   }
