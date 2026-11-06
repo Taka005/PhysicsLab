@@ -1,4 +1,4 @@
-import { BaseGround, Circle, Engine, Vector } from "@/lib/engine";
+import { BaseEffect, BaseGround, Booster, Circle, Engine, Vector } from "@/lib/engine";
 import { Point } from "../useCanvasInteraction";
 import { useCallback, useEffect } from "react";
 import { useEditState } from "@/context/EditContext";
@@ -24,6 +24,8 @@ export function useEditMode(engine: Engine | null) {
         object.velocity = new Vector(editConfig.velocityX ?? 0,editConfig.velocityY ?? 0);
       }else if(object instanceof BaseGround){
         object.width = editConfig.width ?? 10;
+      }else if(object instanceof Booster){
+        object.velocity = new Vector(editConfig.velocityX ?? 0,editConfig.velocityY ?? 0);
       }
     }
   }, [engine,editConfig, selectedObjectId]);
@@ -33,7 +35,7 @@ export function useEditMode(engine: Engine | null) {
 
     const target = engine.toWorldPosition(Vector.from(point),true);
 
-    const objects = [...engine.getBodiesAt(target),...engine.getGroundsAt(target)];
+    const objects = [...engine.getBodiesAt(target),...engine.getGroundsAt(target),...engine.getEffectsAt(target)];
 
     if(objects.length > 0){
       const object = objects[0];
@@ -55,6 +57,13 @@ export function useEditMode(engine: Engine | null) {
         updateEditConfig({
           color: object.resource.color,
           width: object.width,
+          scriptId: object.scriptId
+        });
+      }else if(object instanceof Booster){
+        updateEditConfig({
+          color: object.resource.color,
+          velocityX: object.velocity.x,
+          velocityY: object.velocity.y,
           scriptId: object.scriptId
         });
       }

@@ -69,16 +69,42 @@ export default function EditSettings() {
         </>
       )}
       {(selectedObjectType === "line" || selectedObjectType === "curve") && (
-        <SliderField
-          label="幅"
-          value={editConfig.width ?? 10}
-          min="1"
-          max="50"
-          step="1"
-          onChange={(e) => {
-            updateEditConfig({ width: parseFloat(e.target.value) });
-          }}
-        />
+        <>
+          <SliderField
+            label="幅"
+            value={editConfig.width ?? 10}
+            min="1"
+            max="50"
+            step="1"
+            onChange={(e) => {
+              updateEditConfig({ width: parseFloat(e.target.value) });
+            }}
+          />
+        </>
+      )}
+      {(selectedObjectType === "booster") && (
+        <>
+          <SliderField
+            label="初速度X"
+            value={Math.floor((editConfig.velocityX ?? 0)*100)/100}
+            min="-300"
+            max="300"
+            step="1"
+            onChange={(e) => {
+              updateEditConfig({ velocityX: parseFloat(e.target.value) });
+            }}
+          />
+          <SliderField
+            label="初速度Y"
+            value={Math.floor((editConfig.velocityY ?? 0)*100)/100}
+            min="-300"
+            max="300"
+            step="1"
+            onChange={(e) => {
+              updateEditConfig({ velocityY: parseFloat(e.target.value) });
+            }}
+          />
+        </>
       )}
       <ColorPicker
         label="カラー"
