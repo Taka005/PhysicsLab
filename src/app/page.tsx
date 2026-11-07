@@ -9,6 +9,7 @@ import { ToolModeProvider } from "@/context/ToolModeContext";
 import { ConnectionProvider } from "@/context/ConnectionContext";
 import { EditProvider } from "@/context/EditContext";
 import { FillProvider } from "@/context/FillContext";
+import { AnalysisProvider } from "@/context/AnalysisContext";
 
 export default function Home() {
   return (
@@ -20,8 +21,10 @@ export default function Home() {
               <FillProvider>
                 <ConnectionProvider>
                   <ProtractorProvider>
-                    <PhysicsCanvas/>
-                    <ControlPanel/>
+                    <AnalysisProvider>
+                      <PhysicsCanvas/>
+                      <ControlPanel/>
+                    </AnalysisProvider>
                   </ProtractorProvider>
                 </ConnectionProvider>
               </FillProvider>

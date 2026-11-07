@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
+import Draggable from "react-draggable";
 import { Renderer } from "@/lib/render";
 import { useEngine } from "@/context/EngineContext";
 import { useCanvasInteraction } from "@/hooks/useCanvasInteraction";
@@ -13,17 +14,27 @@ import { useConnectMode } from "@/hooks/modes/useConnectMode";
 import { useDisconnectMode } from "@/hooks/modes/useDisconnect";
 import { useEditMode } from "@/hooks/modes/useEditMode";
 import { useFillMode } from "@/hooks/modes/useFillMode";
-import { Vector } from "@/lib/engine";
+import { BaseBody, Vector } from "@/lib/engine";
 import { useEngineState } from "@/hooks/useEngineState";
 import { useProtractor } from "@/context/ProtractorContext";
 import ProtractorOverlay from "./ProtractorOverlay";
 import StatsPanel from "./debug/StatsPanel";
 import ObjectInfo from "./debug/ObjectInfo";
+import { useAnalysis } from "@/context/AnalysisContext";
+import BodyGraphs from "./graphs/BodyGraphs";
+
+type AnalysisMenu = {
+  bodyId: string;
+  x: number;
+  y: number;
+};
 
 export default function PhysicsCanvas() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const fpsRef = useRef<HTMLSpanElement | null>(null);
+  const analysisPanelRef = useRef<HTMLDivElement | null>(null);
+  const [analysisMenu, setAnalysisMenu] = useState<AnalysisMenu | null>(null);
   const engine = useEngine();
   const state = useEngineState();
   const { handleWheel } = useViewportControl(engine);
@@ -36,6 +47,7 @@ export default function PhysicsCanvas() {
   const disconnectMode = useDisconnectMode(engine);
   const { mode } = useToolMode();
   const { isProtractorVisible } = useProtractor();
+  const { selectedBodyId, setSelectedBodyId } = useAnalysis();
 
   if(!engine) return;
 
@@ -84,6 +96,33 @@ export default function PhysicsCanvas() {
         )
       }
     : null;
+
+  const handleCanvasContextMenu = (event: ReactMouseEvent<HTMLCanvasElement>) => {
+    event.preventDefault();
+
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+
+    if (!canvas || !container) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const point = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    const worldPosition = engine.toWorldPosition(Vector.from(point), true);
+    const body = engine.getBodiesAt(worldPosition)[0];
+
+    if (!body) {
+      setAnalysisMenu(null);
+      return;
+    }
+
+    setAnalysisMenu({
+      bodyId: body.id,
+      x: Math.max(8, Math.min(point.x, container.clientWidth - 132)),
+      y: Math.max(8, Math.min(point.y, container.clientHeight - 48))
+    });
+  };
+
+  const analyzedBody = selectedBodyId ? engine.getObject(selectedBodyId) : undefined;
 
   useEffect(() => {
     if (!canvasRef.current || !containerRef.current || !engine) return;
@@ -155,8 +194,63 @@ export default function PhysicsCanvas() {
       ref={containerRef}
       className="flex-1 h-full relative bg-white rounded-lg shadow-sm overflow-hidden"
     >
-      <canvas ref={canvasRef} className="block w-full h-full" {...handlers}/>
+      <canvas
+        ref={canvasRef}
+        className="block w-full h-full"
+        {...handlers}
+        onClick={() => setAnalysisMenu(null)}
+        onContextMenu={handleCanvasContextMenu}
+      />
       <ProtractorOverlay visible={isProtractorVisible} />
+      {analysisMenu && (
+        <div
+          role="menu"
+          className="absolute z-30 rounded-md border border-gray-200 bg-white/90 p-1 shadow-lg backdrop-blur-sm"
+          style={{ left: analysisMenu.x, top: analysisMenu.y }}
+          onPointerDown={(event) => event.stopPropagation()}
+        >
+          <button
+            type="button"
+            role="menuitem"
+            className="w-full rounded px-4 py-2 text-left text-sm text-gray-800 hover:bg-gray-100"
+            onClick={() => {
+              setSelectedBodyId(analysisMenu.bodyId);
+              setAnalysisMenu(null);
+            }}
+          >
+            分析
+          </button>
+        </div>
+      )}
+      {analyzedBody instanceof BaseBody && (
+        <Draggable
+          nodeRef={analysisPanelRef}
+          handle=".analysis-panel-handle"
+          cancel="button"
+          bounds="parent"
+        >
+          <section
+            ref={analysisPanelRef}
+            className="absolute right-3 top-3 z-20 max-h-[90%] w-[360px] max-w-[calc(100%-1.5rem)] overflow-y-auto rounded-lg border border-white/60 bg-white/75 shadow-xl backdrop-blur-md"
+          >
+            <header className="analysis-panel-handle sticky top-0 flex cursor-move items-center justify-between border-b border-gray-200/70 bg-white/65 px-3 py-2">
+              <span className="text-sm font-semibold text-gray-800">分析</span>
+              <button
+                type="button"
+                className="cursor-pointer rounded px-2 text-gray-600 hover:bg-gray-200/70"
+                onClick={() => setSelectedBodyId(null)}
+              >
+                ✕
+              </button>
+            </header>
+            <BodyGraphs
+              key={analyzedBody.id}
+              engine={engine}
+              body={analyzedBody}
+            />
+          </section>
+        </Draggable>
+      )}
       {state.isDebugMode && (
         <StatsPanel
           fpsRef={fpsRef}

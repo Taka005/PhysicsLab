@@ -53,6 +53,11 @@ export class Engine extends EngineBase {
 
   private listeners = new Set<() => void>();
 
+  private sampleListeners = new Map<
+    (deltaTime: number) => void,
+    { interval: number; elapsed: number }
+  >();
+
   private snapshot: EngineSnapShot;
 
   constructor(engineOption: EngineOption = DEFAULT_ENGINE_VALUE,viewportOption: ViewportOption = DEFAULT_VIEWPORT_VALUE) {
@@ -216,6 +221,18 @@ export class Engine extends EngineBase {
     return this.snapshot;
   };
 
+  public subscribeSample = (listener: (deltaTime: number) => void, interval: number) => {
+    if (!Number.isFinite(interval) || interval <= 0) {
+      throw new EngineError("サンプリング間隔は0を超える有限値である必要があります");
+    }
+
+    this.sampleListeners.set(listener, { interval, elapsed: 0 });
+
+    return () => {
+      this.sampleListeners.delete(listener);
+    };
+  };
+
   public reset(): void{
     this.viewport.reset();
 
@@ -363,6 +380,18 @@ export class Engine extends EngineBase {
         Math.abs(body.position.y) >= this.worldSize
       ){
         this.deSpawn(body.id);
+      }
+    }
+
+    if (this.sampleListeners.size > 0) {
+      for (const [listener, sample] of this.sampleListeners) {
+        sample.elapsed += this.deltaTime;
+
+        if (sample.elapsed >= sample.interval) {
+          const elapsed = sample.elapsed;
+          sample.elapsed = 0;
+          listener(elapsed);
+        }
       }
     }
   }

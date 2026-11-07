@@ -23,6 +23,7 @@ export function useCanvasInteraction({
 }: CanvasInteractionOptions) {
   const [currentPoint, setCurrentPoint] = useState<Point | null>(null);
   const isDraggingRef = useRef(false);
+  const activePointerIdRef = useRef<number | null>(null);
   const eventRef = useRef<PointerEvent | null>(null);
 
   const getCanvasPoint = useCallback((e: PointerEvent): Point | null => {
@@ -61,6 +62,8 @@ export function useCanvasInteraction({
   }, [getCanvasPoint, onMove]);
 
   const handlePointerDown = useCallback((e: PointerEvent) => {
+    if (e.button !== 0) return;
+
     const canvas = canvasRef.current;
     if (canvas) {
       canvas.setPointerCapture(e.pointerId);
@@ -70,6 +73,7 @@ export function useCanvasInteraction({
     if (!point) return;
 
     isDraggingRef.current = true;
+    activePointerIdRef.current = e.pointerId;
     setCurrentPoint(point);
 
     onDown?.(point, e);
@@ -88,6 +92,8 @@ export function useCanvasInteraction({
   }, [getCanvasPoint, onMove]);
 
   const handlePointerUp = useCallback((e: PointerEvent) => {
+    if (activePointerIdRef.current !== e.pointerId) return;
+
     const canvas = canvasRef.current;
     if (canvas && e.pointerId != null) {
       try {
@@ -101,6 +107,7 @@ export function useCanvasInteraction({
 
     eventRef.current = null;
     isDraggingRef.current = false;
+    activePointerIdRef.current = null;
 
     if (point) {
       onUp?.(point, e);
