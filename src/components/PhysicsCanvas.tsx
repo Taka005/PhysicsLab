@@ -15,6 +15,8 @@ import { useEditMode } from "@/hooks/modes/useEditMode";
 import { useFillMode } from "@/hooks/modes/useFillMode";
 import { Curve, Line, Vector, capitalize } from "@/lib/engine";
 import { useEngineState } from "@/hooks/useEngineState";
+import { useProtractor } from "@/context/ProtractorContext";
+import ProtractorOverlay from "./ProtractorOverlay";
 
 export default function PhysicsCanvas() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -31,6 +33,7 @@ export default function PhysicsCanvas() {
   const connectMode = useConnectMode(engine);
   const disconnectMode = useDisconnectMode(engine);
   const { mode } = useToolMode();
+  const { isProtractorVisible } = useProtractor();
 
   if(!engine) return;
 
@@ -151,6 +154,7 @@ export default function PhysicsCanvas() {
       className="flex-1 h-full relative bg-white rounded-lg shadow-sm overflow-hidden"
     >
       <canvas ref={canvasRef} className="block w-full h-full" {...handlers}/>
+      <ProtractorOverlay visible={isProtractorVisible} />
       {state.isDebugMode && (
         <>
           <div className="pointer-events-none absolute left-3 top-3 z-10 select-none">

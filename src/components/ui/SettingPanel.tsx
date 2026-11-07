@@ -8,6 +8,7 @@ import ToggleSwitch from "./ToggleSwitch";
 import SliderField from "./SliderField";
 import { useSpawnState } from "@/context/SpawnContext";
 import { useConnectionState } from "@/context/ConnectionContext";
+import { useProtractor } from "@/context/ProtractorContext";
 
 type SettingPanelProps = {
   onOpenScriptManager: () => void;
@@ -18,6 +19,7 @@ export default function SettingPanel({ onOpenScriptManager }: SettingPanelProps)
   const state = useEngineState();
   const { updateSpawnConfig } = useSpawnState();
   const { updateConnectionConfig } = useConnectionState();
+  const { isProtractorVisible, setIsProtractorVisible } = useProtractor();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [activeTab, setActiveTab] = useState<"display" | "data">("display");
@@ -152,6 +154,13 @@ export default function SettingPanel({ onOpenScriptManager }: SettingPanelProps)
                 onChange={(checked) => {
                   engine.viewport.isDisplayEdge = checked;
                 }}
+              />
+            </div>
+            <div className="flex-1 gap-2">
+              <ToggleSwitch
+                label="角度計を表示"
+                checked={isProtractorVisible}
+                onChange={setIsProtractorVisible}
               />
             </div>
             <div className="flex-1 gap-2">

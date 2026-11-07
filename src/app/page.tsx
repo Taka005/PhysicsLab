@@ -1,6 +1,9 @@
+"use client";
+
 import ControlPanel from "@/components/ControlPanel";
 import PhysicsCanvas from "@/components/PhysicsCanvas";
 import { EngineProvider } from "@/context/EngineContext";
+import { ProtractorProvider } from "@/context/ProtractorContext";
 import { SpawnProvider } from "@/context/SpawnContext";
 import { ToolModeProvider } from "@/context/ToolModeContext";
 import { ConnectionProvider } from "@/context/ConnectionContext";
@@ -16,8 +19,10 @@ export default function Home() {
             <EditProvider>
               <FillProvider>
                 <ConnectionProvider>
-                  <PhysicsCanvas/>
-                  <ControlPanel/>
+                  <ProtractorProvider>
+                    <PhysicsCanvas/>
+                    <ControlPanel/>
+                  </ProtractorProvider>
                 </ConnectionProvider>
               </FillProvider>
             </EditProvider>
