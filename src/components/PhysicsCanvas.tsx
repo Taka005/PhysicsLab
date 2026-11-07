@@ -13,10 +13,12 @@ import { useConnectMode } from "@/hooks/modes/useConnectMode";
 import { useDisconnectMode } from "@/hooks/modes/useDisconnect";
 import { useEditMode } from "@/hooks/modes/useEditMode";
 import { useFillMode } from "@/hooks/modes/useFillMode";
-import { Curve, Line, Vector, capitalize } from "@/lib/engine";
+import { Vector } from "@/lib/engine";
 import { useEngineState } from "@/hooks/useEngineState";
 import { useProtractor } from "@/context/ProtractorContext";
 import ProtractorOverlay from "./ProtractorOverlay";
+import StatsPanel from "./debug/StatsPanel";
+import ObjectInfo from "./debug/ObjectInfo";
 
 export default function PhysicsCanvas() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -156,174 +158,22 @@ export default function PhysicsCanvas() {
       <canvas ref={canvasRef} className="block w-full h-full" {...handlers}/>
       <ProtractorOverlay visible={isProtractorVisible} />
       {state.isDebugMode && (
-        <>
-          <div className="pointer-events-none absolute left-3 top-3 z-10 select-none">
-            <div className="min-w-52 rounded-xl border border-gray-200/80 bg-white/90 px-3 py-2.5 shadow-lg backdrop-blur-sm">
-              <div className="flex items-center justify-between gap-6">
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                  <span className="text-xs font-medium text-gray-700">
-                    FPS
-                  </span>
-                </div>
-                <span
-                  ref={fpsRef}
-                  className="font-mono text-sm font-semibold tabular-nums text-gray-800"
-                >
-                  --
-                </span>
-              </div>
-              <div className="my-2 border-t border-gray-100" />
-              <div className="flex items-center justify-between gap-4">
-                <span className="text-xs text-gray-700">
-                  Screen
-                </span>
-                <span className="font-mono text-xs tabular-nums text-gray-700">
-                  {currentPoint ? `(${currentPoint.x.toFixed(1)}, ${currentPoint.y.toFixed(1)})` : "—"}
-                </span>
-              </div>
-              <div className="mt-2 flex items-center justify-between gap-4">
-                <span className="text-xs text-gray-700">
-                  World
-                </span>
-                <span className="font-mono text-xs tabular-nums text-gray-700">
-                  {worldPoint ? `(${worldPoint.x.toFixed(1)}, ${worldPoint.y.toFixed(1)})` : "—"}
-                </span>
-              </div>
-              <div className="my-2 border-t border-gray-100" />
-              <div className="flex items-center justify-between gap-4">
-                <span className="text-xs text-gray-700">
-                  Bodies
-                </span>
-                <span className="font-mono text-xs tabular-nums text-gray-700">
-                  {state.bodiesCount}
-                </span>
-              </div>
-              <div className="mt-2 flex items-center justify-between gap-4">
-                <span className="text-xs text-gray-700">
-                  Grounds
-                </span>
-                <span className="font-mono text-xs tabular-nums text-gray-700">
-                  {state.groundsCount}
-                </span>
-              </div>
-              <div className="mt-2 flex items-center justify-between gap-4">
-                <span className="text-xs text-gray-700">
-                  Effects
-                </span>
-                <span className="font-mono text-xs tabular-nums text-gray-700">
-                  {state.effectsCount}
-                </span>
-              </div>
-              <div className="mt-2 flex items-center justify-between gap-4">
-                <span className="text-xs text-gray-700">
-                  Entities
-                </span>
-                <span className="font-mono text-xs tabular-nums text-gray-700">
-                  {state.entitiesCount}
-                </span>
-              </div>
-            </div>
-          </div>
-        </>
+        <StatsPanel
+          fpsRef={fpsRef}
+          currentPoint={currentPoint}
+          worldPoint={worldPoint}
+          counts={state}
+        />
       )}
       {state.isDebugMode &&
       currentPoint !== null &&
       cursorInfoPosition !== null &&
       (hoveredBodies.length > 0 || hoveredGrounds.length > 0) && (
-        <div
-          className="pointer-events-none absolute z-20 w-72 overflow-y-auto rounded-xl border border-gray-200/80 bg-white p-3 text-gray-700 shadow-lg"
-          style={cursorInfoPosition}
-        >
-          {hoveredBodies.map((body) => (
-            <div
-              key={body.id}
-              className="mb-2 rounded-lg border border-gray-200/80 bg-gray-50/80 p-2 last:mb-0"
-            >
-              <p className="mb-1 text-xs font-semibold text-sky-600">
-                Body / {capitalize(body.type)}
-              </p>
-              <p className="break-all font-mono text-[10px] text-gray-500">
-                ID: {body.id}
-              </p>
-              <p className="break-all font-mono text-[10px] text-gray-500">
-                スクリプトID: {body.scriptId ?? "なし"}
-              </p>
-              <div className="my-1 border-t border-gray-200/80" />
-              <p className="mb-1 text-[10px] font-semibold text-gray-600">
-                エンティティー ({body.entities.length})
-              </p>
-              {body.entities.map((entity) => (
-                <div
-                  key={entity.id}
-                  className="mt-1 border-l-2 border-sky-400 pl-2"
-                >
-                  <p className="break-all font-mono text-[10px] text-gray-500">
-                    ID: {entity.id}
-                  </p>
-                  <p className="font-mono text-[10px] text-gray-700">
-                    位置: ({entity.position.x.toFixed(2)}, {entity.position.y.toFixed(2)})
-                  </p>
-                  <p className="font-mono text-[10px] text-gray-700">
-                    速度: ({entity.velocity.x.toFixed(2)}, {entity.velocity.y.toFixed(2)})
-                  </p>
-                  <p className="font-mono text-[10px] text-gray-700">
-                    直径: {entity.diameter.toFixed(2)}
-                  </p>
-                  <p className="font-mono text-[10px] text-gray-700">
-                    質量: {entity.mass}
-                  </p>
-                  <p className="font-mono text-[10px] text-gray-700">
-                    接続数: {entity.connection.targetCount}
-                  </p>
-                </div>
-              ))}
-            </div>
-          ))}
-          {hoveredGrounds.map((ground) => (
-            <div
-              key={ground.id}
-              className="mb-2 rounded-lg border border-gray-200/80 bg-gray-50/80 p-2 last:mb-0"
-            >
-              <p className="mb-1 text-xs font-semibold text-amber-600">
-                Ground / {capitalize(ground.type)}
-              </p>
-              <p className="break-all font-mono text-[10px] text-gray-500">
-                ID: {ground.id}
-              </p>
-              <p className="break-all font-mono text-[10px] text-gray-500">
-                スクリプトID: {ground.scriptId ?? "なし"}
-              </p>
-              <div className="my-1 border-t border-gray-200/80" />
-              <p className="font-mono text-[10px] text-gray-700">
-                幅: {ground.width.toFixed(2)}
-              </p>
-              {ground instanceof Line && (
-                <>
-                  <p className="font-mono text-[10px] text-gray-700">
-                    始点: ({ground.start.x.toFixed(2)}, {ground.start.y.toFixed(2)})
-                  </p>
-                  <p className="font-mono text-[10px] text-gray-700">
-                    終点: ({ground.end.x.toFixed(2)}, {ground.end.y.toFixed(2)})
-                  </p>
-                </>
-              )}
-              {ground instanceof Curve && (
-                <>
-                  <p className="font-mono text-[10px] text-gray-700">
-                    始点: ({ground.start.x.toFixed(2)}, {ground.start.y.toFixed(2)})
-                  </p>
-                  <p className="font-mono text-[10px] text-gray-700">
-                    中点: ({ground.middle.x.toFixed(2)}, {ground.middle.y.toFixed(2)})
-                  </p>
-                  <p className="font-mono text-[10px] text-gray-700">
-                    終点: ({ground.end.x.toFixed(2)}, {ground.end.y.toFixed(2)})
-                  </p>
-                </>
-              )}
-            </div>
-          ))}
-        </div>
+        <ObjectInfo
+          bodies={hoveredBodies}
+          grounds={hoveredGrounds}
+          position={cursorInfoPosition}
+        />
       )}
     </div>
   );
