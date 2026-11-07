@@ -2,7 +2,7 @@ import { useCallback, useSyncExternalStore } from "react";
 import { useEngine } from "@/context/EngineContext";
 import { DEFAULT_ENGINE_VALUE, DEFAULT_VIEWPORT_VALUE, EngineSnapShot } from "@/lib/engine/types";
 
-export function useEngineState() {
+export function useEngineState(): EngineSnapShot {
   const engine = useEngine();
 
   const emptySubscribe = useCallback(() => () => {}, []);
@@ -39,7 +39,5 @@ export function useEngineState() {
 
   const state = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
-  return {
-    ...state
-  };
+  return state;
 }

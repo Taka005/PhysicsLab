@@ -4,16 +4,16 @@ import { useEngine } from "@/context/EngineContext";
 import { useEngineState } from "@/hooks/useEngineState";
 import { useRef, useState } from "react";
 import Draggable from "react-draggable";
-import EnvSettings from "./ui/EnvSettings";
-import SpawnSettings from "./ui/SpawnSettings";
-import SettingPanel from "./ui/SettingPanel";
+import EnvSettings from "./settings/EnvSettings";
+import SpawnSettings from "./settings/SpawnSettings";
+import SettingPanel from "./settings/SettingPanel";
 import SelectField from "./ui/SelectField";
-import FillSettings from "./ui/FillSettings";
+import FillSettings from "./settings/FillSettings";
 import { useToolMode } from "@/context/ToolModeContext";
-import ConnectionSettings from "./ui/ConnectionSettings";
-import EditSettings from "./ui/EditSettings";
+import ConnectionSettings from "./settings/ConnectionSettings";
+import EditSettings from "./settings/EditSettings";
 import { useEditState } from "@/context/EditContext";
-import ScriptManagerPanel from "./ui/ScriptManager";
+import ScriptManagerPanel from "./scripts/ScriptManager";
 
 export default function ControlPanel() {
   const engine = useEngine();

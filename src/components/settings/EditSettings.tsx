@@ -1,8 +1,8 @@
 import { useEngine } from "@/context/EngineContext";
-import SliderField from "./SliderField";
+import SliderField from "../ui/SliderField";
 import { useEditState } from "@/context/EditContext";
-import ColorPicker from "./ColorPicker";
-import SelectField from "./SelectField";
+import ColorPicker from "../ui/ColorPicker";
+import SelectField from "../ui/SelectField";
 import { useScriptState } from "@/hooks/useScriptState";
 
 export default function EditSettings() {

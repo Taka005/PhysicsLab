@@ -1,6 +1,6 @@
 import { useEngine } from "@/context/EngineContext";
 import { useEngineState } from "@/hooks/useEngineState";
-import SliderField from "./SliderField";
+import SliderField from "../ui/SliderField";
 
 export default function EnvSettings() {
   const engine = useEngine();

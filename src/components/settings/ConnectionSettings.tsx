@@ -1,7 +1,7 @@
 import { useEngine } from "@/context/EngineContext";
-import SelectField from "./SelectField";
+import SelectField from "../ui/SelectField";
 import { useConnectionState } from "@/context/ConnectionContext";
-import SliderField from "./SliderField";
+import SliderField from "../ui/SliderField";
 
 export default function ConnectionSettings() {
   const engine = useEngine();

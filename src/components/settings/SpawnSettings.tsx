@@ -1,9 +1,9 @@
 import { useEngine } from "@/context/EngineContext";
-import SliderField from "./SliderField";
+import SliderField from "../ui/SliderField";
 import { useSpawnState } from "@/context/SpawnContext";
-import SelectField from "./SelectField";
-import ColorPicker from "./ColorPicker";
-import InputField from "./InputField";
+import SelectField from "../ui/SelectField";
+import ColorPicker from "../ui/ColorPicker";
+import InputField from "../ui/InputField";
 import { useScriptState } from "@/hooks/useScriptState";
 
 export default function SpawnSettings() {
