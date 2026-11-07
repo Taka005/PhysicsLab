@@ -94,22 +94,8 @@ return (
   <div className="flex-1 flex flex-col overflow-hidden">
     <div className="flex-1 min-h-0 flex overflow-hidden">
       <div className="w-1/3 border-r border-gray-200 bg-gray-50 flex flex-col">
-        <div className="p-3 border-b border-gray-200 bg-white">
-          <button
-            type="button"
-            onClick={handleStartCreate}
-            className="w-full py-2 px-3 text-xs rounded-lg shadow-sm transition-colors flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white focus:outline-none"
-          >
-            <span>＋ 新規作成</span>
-          </button>
-        </div>
-
         <div className="flex-1 min-h-0 overflow-y-auto p-2 space-y-1">
-          {scripts.length === 0 ? (
-            <p className="text-center text-xs text-gray-400 mt-4">
-              保存されたスクリプトがありません
-            </p>
-          ) : (
+          {scripts.length !== 0 && (
             scripts.map((script) => {
               const isSelected = !isCreatingNew && selectedScriptId === script.id;
 
@@ -117,9 +103,9 @@ return (
                 <div
                   key={script.id}
                   onClick={() => handleSelectScript(script)}
-                  className={`group flex items-center font-semibold justify-between px-3 py-2 rounded-lg text-xs cursor-pointer transition-colors ${
+                  className={`group flex items-center h-10 font-semibold justify-between px-3 py-2 rounded-lg text-xs cursor-pointer transition-colors ${
                     isSelected
-                      ? "bg-blue-50 text-blue-700 border border-blue-200 shadow-sm"
+                      ? "bg-blue-50 text-blue-700 border border-blue-200"
                       : "text-gray-700 hover:bg-gray-200/60 border border-gray-200"
                   }`}
                 >
@@ -135,6 +121,12 @@ return (
               );
             })
           )}
+          <div
+            onClick={handleStartCreate}
+            className="group flex items-center h-[38px] font-semibold justify-between px-3 py-2 rounded-lg text-xs cursor-pointer transition-colors bg-gray-50 text-blue-500 border border-dashed border-blue-400 hover:text-blue-600"
+          >
+            <span className="truncate flex-1 text-center">＋ 新規作成</span>
+          </div>
         </div>
       </div>
       <div className="w-2/3 min-w-0 flex flex-col bg-white">
@@ -187,10 +179,10 @@ return (
       <section className="shrink-0 border-t border-red-200 bg-red-50">
         <div className="flex items-center justify-between gap-3 px-4 py-2 border-b border-red-200">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold text-red-700">
+            <span className="text-sm font-semibold text-red-600">
               スクリプトエラー
             </span>
-            <span className="px-2 py-0.5 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
+            <span className="px-2 py-0.5 rounded-full bg-red-100 text-red-600 text-xs font-semibold">
               {errors.length}
             </span>
           </div>
@@ -208,7 +200,7 @@ return (
               key={`${error.objectId}-${error.scriptId}-${error.scriptName}-${error.errorMessage}-${index}`}
               className="rounded-md border border-red-200 bg-white p-3"
             >
-              <p className="text-xs font-semibold text-red-700 break-words">
+              <p className="text-xs font-semibold text-red-600 break-words">
                 {error.scriptName} {`(${error.scriptId})`} オブジェクトID: {error.objectId}
               </p>
               <p className="mt-2 text-xs text-red-600 whitespace-pre-wrap break-words">
