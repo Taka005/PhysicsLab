@@ -269,6 +269,18 @@ export default function SettingPanel({ onOpenScriptManager }: SettingPanelProps)
                 }}
               />
             </div>
+            <div className="flex-1 gap-2">
+              <SliderField
+                label="PPS"
+                value={state.pps}
+                min="30"
+                max="300"
+                step="10"
+                onChange={(e) => {
+                  engine.pps = parseFloat(e.target.value);
+                }}
+              />
+            </div>
           </div>
         )}
         {activeTab === "data" && (
