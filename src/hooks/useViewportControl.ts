@@ -9,6 +9,9 @@ export function useViewportControl(engine: Engine | null) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement).tagName)) return;
+
+      e.preventDefault();
+
       pressedKeysRef.current.add(e.code);
 
       if (engine) {

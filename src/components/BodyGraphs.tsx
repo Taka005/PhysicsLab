@@ -12,10 +12,12 @@ type Sample = {
   positionY: number;
   velocityX: number;
   velocityY: number;
+  accelerationX: number;
+  accelerationY: number;
 };
 
 type Series = {
-  key: "positionX" | "positionY" | "velocityX" | "velocityY";
+  key: keyof Omit<Sample, "time">;
   label: string;
   color: string;
 };
@@ -40,7 +42,9 @@ function getSample(body: BaseBody, time: number): Sample {
     positionX: position.x,
     positionY: position.y,
     velocityX: velocity.x,
-    velocityY: velocity.y
+    velocityY: velocity.y,
+    accelerationX: 0,
+    accelerationY: 0
   };
 }
 
@@ -87,13 +91,26 @@ function Graph({
         viewBox={`0 0 ${GRAPH_WIDTH} ${GRAPH_HEIGHT}`}
         className="block w-full"
       >
-        {[0, 0.5, 1].map((ratio) => {
+        {[0.2, 0.4, 0.6, 0.8].map((ratio) => {
+          const x = PADDING.left + ratio * plotWidth;
+          return (
+            <line
+              key={ratio}
+              x1={x}
+              x2={x}
+              y1={PADDING.top}
+              y2={GRAPH_HEIGHT - PADDING.bottom}
+              stroke="#e5e7eb"
+            />
+          );
+        })}
+        {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
           const y = PADDING.top + ratio * plotHeight;
           const value = maxY - ratio * (maxY - minY);
           return (
             <g key={ratio}>
               <line x1={PADDING.left} x2={GRAPH_WIDTH - PADDING.right} y1={y} y2={y} stroke="#e5e7eb" />
-              <text x={PADDING.left - 4} y={y + 3} textAnchor="end" fill="#6b7280" fontSize="8">
+              <text x={PADDING.left - 4} y={y + 3} textAnchor="end" fill="#7f7f80" fontSize="8">
                 {formatValue(value)}
               </text>
             </g>
@@ -158,6 +175,7 @@ export default function BodyGraphs({ engine, body }: { engine: Engine; body: Bas
     let time = 0;
     const initialBody = engine.getObject(body.id);
     setSamples(initialBody instanceof BaseBody ? [getSample(initialBody, time)] : []);
+    let previousVelocity = initialBody instanceof BaseBody ? initialBody.velocity : null;
 
     return engine.subscribeSample((deltaTime) => {
       const currentBody = engine.getObject(body.id);
@@ -165,7 +183,14 @@ export default function BodyGraphs({ engine, body }: { engine: Engine; body: Bas
 
       time += deltaTime;
 
+      const currentVelocity = currentBody.velocity;
       const sample = getSample(currentBody, time);
+      if (previousVelocity) {
+        sample.accelerationX = (currentVelocity.x - previousVelocity.x) / deltaTime;
+        sample.accelerationY = (currentVelocity.y - previousVelocity.y) / deltaTime;
+      }
+      previousVelocity = currentVelocity;
+
       setSamples((current) => [...current, sample].slice(-MAX_SAMPLES));
     });
   }, [body.id, engine]);
@@ -178,15 +203,20 @@ export default function BodyGraphs({ engine, body }: { engine: Engine; body: Bas
     { key: "velocityX", label: "X", color: "#2563eb" },
     { key: "velocityY", label: "Y", color: "#ea580c" }
   ];
+  const accelerationSeries: Series[] = [
+    { key: "accelerationX", label: "X", color: "#2563eb" },
+    { key: "accelerationY", label: "Y", color: "#ea580c" }
+  ];
 
   return (
     <div className="rounded-lg bg-white/55 p-3">
-      <p className="mb-2 truncate font-mono text-[10px] text-gray-500" title={body.id}>
+      <p className="mb-2 truncate font-mono text-[10px] text-gray-500">
         {capitalize(body.type)} / {body.id}
       </p>
       <div className="flex flex-col gap-3">
         <Graph title="時間 - 位置" samples={samples} series={positionSeries} />
         <Graph title="時間 - 速度" samples={samples} series={velocitySeries} />
+        <Graph title="時間 - 加速度" samples={samples} series={accelerationSeries} />
       </div>
       <p className="mt-2 text-[10px] text-gray-500">
         {samples.length} / {MAX_SAMPLES}
