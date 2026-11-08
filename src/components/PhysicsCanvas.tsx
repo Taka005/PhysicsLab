@@ -21,7 +21,7 @@ import ProtractorOverlay from "./ProtractorOverlay";
 import StatsPanel from "./debug/StatsPanel";
 import ObjectInfo from "./debug/ObjectInfo";
 import { useAnalysis } from "@/context/AnalysisContext";
-import BodyGraphs from "./BodyGraphs";
+import GraphPanel from "./analysis/GraphPanel";
 
 type AnalysisMenu = {
   bodyId: string;
@@ -242,7 +242,7 @@ export default function PhysicsCanvas() {
                 ✕
               </button>
             </div>
-            <BodyGraphs
+            <GraphPanel
               key={analyzedBody.id}
               engine={engine}
               body={analyzedBody}
