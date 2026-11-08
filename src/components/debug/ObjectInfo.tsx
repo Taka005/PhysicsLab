@@ -12,13 +12,13 @@ type ObjectInfoProps = {
 export default function ObjectInfo({ bodies, grounds, position }: ObjectInfoProps) {
   return (
     <div
-      className="pointer-events-none absolute z-20 w-72 overflow-y-auto rounded-xl border border-gray-200/80 bg-white p-3 text-gray-700 shadow-lg"
+      className="pointer-events-none absolute z-20 w-72 overflow-y-auto rounded-xl border border-gray-200/80 bg-white/80 p-3 text-gray-700 shadow-lg backdrop-blur-sm"
       style={position}
     >
       {bodies.map((body) => (
         <div
           key={body.id}
-          className="mb-2 rounded-lg border border-gray-200/80 bg-gray-50/80 p-2 last:mb-0"
+          className="mb-2 rounded-lg border border-gray-200/80 bg-gray-50/50 p-2 last:mb-0"
         >
           <p className="mb-1 text-xs font-semibold text-sky-600">
             Body / {capitalize(body.type)}
