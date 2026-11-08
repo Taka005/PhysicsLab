@@ -9,12 +9,13 @@ import { Entity } from "../objects/Entity";
 import { Line } from "../objects/Line";
 import { BaseBodyOption, BaseEffectOption, BaseGroundOption } from "../types";
 import { EngineError } from "./EngineError";
+import { RingBuffer } from "./RingBuffer";
 
 export class ContentManager {
   public bodies: BaseBody[] = [];
   public grounds: BaseGround[] = [];
   public effects: BaseEffect[] = [];
-  public trackBodies: BaseBody[] = [];
+  private readonly trackBodies = new RingBuffer<BaseBody>(1);
   private cacheEntities: Entity[] | null = null;
   private cacheObjects: BaseObject[] | null = null;
   private bodiesById = new Map<string, BaseBody>();
@@ -43,7 +44,7 @@ export class ContentManager {
   }
 
   public get trackBodiesCount(): number {
-    return this.trackBodies.length;
+    return this.trackBodies.getSize();
   }
 
   public get entitiesCount(): number {
@@ -168,6 +169,14 @@ export class ContentManager {
     this.trackBodies.push(body);
   }
 
+  public setTrackBodiesCapacity(capacity: number): void {
+    this.trackBodies.resize(capacity);
+  }
+
+  public getTrackBodies(): BaseBody[] {
+    return this.trackBodies.toArray();
+  }
+
   public removeBody(id: string): void {
     this.bodies = this.bodies.filter(body => body.id !== id);
 
@@ -192,7 +201,7 @@ export class ContentManager {
   }
 
   public removeFirstTrackBody(){
-    this.trackBodies.shift();
+    this.trackBodies.pop();
   }
 
   public removeAllBodies(){
@@ -219,7 +228,7 @@ export class ContentManager {
   }
 
   public removeAllTrackBodies(){
-    this.trackBodies = [];
+    this.trackBodies.clear();
   }
 
   private buildBodiesById(): void {

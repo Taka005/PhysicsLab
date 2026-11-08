@@ -70,6 +70,8 @@ export class Engine extends EngineBase {
     this._worldSize = engineOption.worldSize;
     this._scriptExecuteInterval = engineOption.scriptExecuteInterval;
 
+    this.content.setTrackBodiesCapacity(this.trackingLimit);
+
     this.snapshot = this.createSnapshot();
   }
 
@@ -134,7 +136,7 @@ export class Engine extends EngineBase {
   }
 
   public set trackingInterval(value: number) {
-    if(value <= 0) throw new EngineError("トラッキング間隔は0を超える必要があります");
+    if(value <= 0||!Number.isInteger(value)) throw new EngineError("トラッキング間隔は0を超え、整数である必要があります");
 
     this._trackingInterval = value;
     this.notify();
@@ -145,9 +147,12 @@ export class Engine extends EngineBase {
   }
 
   public set trackingLimit(value: number) {
-    if(value <= 0) throw new EngineError("最大トラッキング数は0を超える必要があります");
+    if(value <= 0||!Number.isInteger(value)) throw new EngineError("最大トラッキング数は0を超え、整数である必要があります");
 
     this._trackingLimit = value;
+
+    this.content.setTrackBodiesCapacity(value);
+
     this.notify();
   }
 
@@ -156,7 +161,7 @@ export class Engine extends EngineBase {
   }
 
   public set scriptExecuteInterval(value: number) {
-    if(value <= 0) throw new EngineError("スクリプト実行間隔は0を超える必要があります");
+    if(value <= 0||!Number.isInteger(value)) throw new EngineError("スクリプト実行間隔は0を超え、整数である必要があります");
 
     this._scriptExecuteInterval = value;
     this.notify();
@@ -167,7 +172,7 @@ export class Engine extends EngineBase {
   }
 
   public set worldSize(value: number) {
-    if(value <= 0) throw new EngineError("ワールドサイズは0を超える必要があります");
+    if(value <= 0||!Number.isInteger(value)) throw new EngineError("ワールドサイズは0を超え、整数である必要があります");
 
     this._worldSize = value;
     this.notify();
@@ -294,14 +299,16 @@ export class Engine extends EngineBase {
     this.trackingCount += 1000/this.pps;
 
     if(this.trackingCount >= this.trackingInterval){
-      const noStopBodies = this.content.bodies.filter(obj => !obj.isStop);
+      if(trackingLimit <= 0){
+        this.content.removeAllTrackBodies();
+      }else{
+        for(let i = 0;i < this.content.bodiesCount;i++){
+          const body = this.content.bodies[i];
 
-      for(let i = 0;i < noStopBodies.length;i++){
-        this.content.addTrackBody(noStopBodies[i].clone());
-      }
-
-      while(this.content.trackBodiesCount > trackingLimit){
-        this.content.trackBodies.shift();
+          if(!body.isStop){
+            this.content.addTrackBody(body.clone());
+          }
+        }
       }
 
       this.trackingCount %= this.trackingInterval;
@@ -449,7 +456,7 @@ export class Engine extends EngineBase {
   }
 
   public getTrackBodies(): BaseBody[]{
-    return this.content.trackBodies;
+    return this.content.getTrackBodies();
   }
 
   public getObject(id: string): BaseObject | undefined{
