@@ -106,7 +106,7 @@ return (
                   className={`group flex items-center h-10 font-semibold justify-between px-3 py-2 rounded-lg text-xs cursor-pointer transition-colors ${
                     isSelected
                       ? "bg-blue-50/60 text-blue-700 border border-blue-200"
-                      : "text-gray-700 hover:bg-gray-200/60 border border-gray-200"
+                      : "text-gray-700 hover:bg-gray-200/40 border border-gray-200"
                   }`}
                 >
                   <span className="truncate flex-1">{script.name}</span>
