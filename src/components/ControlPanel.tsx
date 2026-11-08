@@ -21,8 +21,10 @@ export default function ControlPanel() {
   const { setSelectedObjectId, setSelectedObjectType } = useEditState();
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isScriptManagerOpen, setIsScriptManagerOpen] = useState(false);
+  const [isWorldManagerOpen, setIsWorldManagerOpen] = useState(false);
   const settingNodeRef = useRef<HTMLDivElement>(null);
   const scriptManagerNodeRef = useRef<HTMLDivElement>(null);
+  const worldManagerNodeRef = useRef<HTMLDivElement>(null);
   const { mode, setMode } = useToolMode();
 
   if (!engine) return null;
@@ -120,7 +122,7 @@ export default function ControlPanel() {
               ✕
             </button>
           </div>
-          <SettingPanel onOpenScriptManager={() => setIsScriptManagerOpen((prev) => !prev)} />
+          <SettingPanel onOpenScriptManager={() => setIsScriptManagerOpen((prev) => !prev)} onOpenWorldManager={() => setIsWorldManagerOpen((prev) => !prev)} />
         </div>
       </Draggable>
       )}
@@ -137,6 +139,22 @@ export default function ControlPanel() {
             </button>
           </div>
           <ScriptManagerPanel/>
+        </div>
+      </Draggable>
+      )}
+      {isWorldManagerOpen && (
+      <Draggable handle=".world-handle" nodeRef={worldManagerNodeRef} bounds="body">
+        <div ref={worldManagerNodeRef} className="absolute top-50 right-50 w-72 rounded-lg border-white bg-white/80 shadow-xl backdrop-blur-md overflow-hidden z-50 w-[750px] h-[500px] flex flex-col">
+          <div className="world-handle text-gray-700 px-4 py-2 flex justify-between items-center cursor-move text-sm font-semibold border-b border-gray-200/70">
+            <span>ワールドマネージャー</span>
+            <button
+              onClick={() => setIsWorldManagerOpen((prev) => !prev)}
+              className="cursor-pointer rounded px-2 text-gray-600 hover:bg-gray-200/70 focus:outline-none"
+            >
+              ✕
+            </button>
+          </div>
+
         </div>
       </Draggable>
       )}

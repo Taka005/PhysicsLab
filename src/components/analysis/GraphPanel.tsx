@@ -109,10 +109,12 @@ export default function GraphPanel({ engine, body }: { engine: Engine; body: Bas
     { key: "positionX", label: "X", color: "#2563eb" },
     { key: "positionY", label: "Y", color: "#ea580c" }
   ];
+
   const velocitySeries: Series[] = [
     { key: "velocityX", label: "X", color: "#2563eb" },
     { key: "velocityY", label: "Y", color: "#ea580c" }
   ];
+
   const accelerationSeries: Series[] = [
     { key: "accelerationX", label: "X", color: "#2563eb" },
     { key: "accelerationY", label: "Y", color: "#ea580c" }
