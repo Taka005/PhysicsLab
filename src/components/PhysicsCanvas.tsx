@@ -230,7 +230,7 @@ export default function PhysicsCanvas() {
         >
           <div
             ref={analysisPanelRef}
-            className="absolute top-10 right-70 w-90 rounded-lg border-white bg-white/70 overflow-hidden z-50 shadow-xl backdrop-blur-md"
+            className="absolute top-10 right-70 w-90 rounded-lg border-white bg-white/80 overflow-hidden z-50 shadow-xl backdrop-blur-md"
           >
             <div className="analysis-handle text-gray-700 px-4 py-2 flex justify-between items-center cursor-move text-sm font-semibold border-b border-gray-200/70">
               <span className="text-sm font-semibold text-gray-800">分析</span>

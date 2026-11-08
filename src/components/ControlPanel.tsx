@@ -130,7 +130,7 @@ export default function ControlPanel() {
           <div className="script-handle text-gray-700 px-4 py-2 flex justify-between items-center cursor-move text-sm font-semibold border-b border-gray-200/70">
             <span>スクリプトマネージャー</span>
             <button
-              onClick={() => setIsScriptManagerOpen(false)}
+              onClick={() => setIsScriptManagerOpen((prev) => !prev)}
               className="cursor-pointer rounded px-2 text-gray-600 hover:bg-gray-200/70 focus:outline-none"
             >
               ✕

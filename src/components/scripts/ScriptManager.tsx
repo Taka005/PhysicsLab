@@ -105,7 +105,7 @@ return (
                   onClick={() => handleSelectScript(script)}
                   className={`group flex items-center h-10 font-semibold justify-between px-3 py-2 rounded-lg text-xs cursor-pointer transition-colors ${
                     isSelected
-                      ? "bg-blue-50 text-blue-700 border border-blue-200"
+                      ? "bg-blue-50/60 text-blue-700 border border-blue-200"
                       : "text-gray-700 hover:bg-gray-200/60 border border-gray-200"
                   }`}
                 >

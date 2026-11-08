@@ -119,7 +119,7 @@ export default function GraphPanel({ engine, body }: { engine: Engine; body: Bas
   ];
 
   return (
-    <div className="rounded-lg bg-white/55 p-3">
+    <div className="p-3">
       <p className="mb-2 truncate font-mono text-[10px] text-gray-500">
         {capitalize(body.type)} / {body.id}
       </p>
