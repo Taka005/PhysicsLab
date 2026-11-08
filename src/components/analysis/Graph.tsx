@@ -5,9 +5,9 @@ const GRAPH_HEIGHT = 116;
 const PADDING = { top: 8, right: 8, bottom: 22, left: 42 };
 
 function formatValue(value: number): string {
-  if (Math.abs(value) >= 1000 || (Math.abs(value) > 0 && Math.abs(value) < 0.01)) {
-    return value.toExponential(1);
-  }
+  const magnitude = Math.abs(value);
+  if (magnitude >= 1000) return value.toFixed(0);
+  if (magnitude > 0 && magnitude < 0.1) return value.toFixed(3);
   return value.toFixed(1);
 }
 

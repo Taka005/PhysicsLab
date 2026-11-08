@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { Engine, BaseBody } from "@/lib/engine";
 import { capitalize } from "@/lib/engine";
 import { Graph } from "./Graph";
-
-const MAX_SAMPLES = 600;
+import SliderField from "../ui/SliderField";
 
 export type Sample = {
   time: number;
@@ -40,6 +39,10 @@ function getSample(body: BaseBody, time: number): Sample {
 
 export default function GraphPanel({ engine, body }: { engine: Engine; body: BaseBody }) {
   const [samples, setSamples] = useState<Sample[]>([]);
+  const [maxSamples, setMaxSamples] = useState(600);
+  const [resetVersion, setResetVersion] = useState(0);
+  const maxSamplesRef = useRef(maxSamples);
+  maxSamplesRef.current = maxSamples;
 
   useEffect(() => {
     let time = 0;
@@ -61,9 +64,15 @@ export default function GraphPanel({ engine, body }: { engine: Engine; body: Bas
       }
       previousVelocity = currentVelocity;
 
-      setSamples((current) => [...current, sample].slice(-MAX_SAMPLES));
+      setSamples((current) => [...current, sample].slice(-maxSamplesRef.current));
     });
-  }, [body.id, engine]);
+  }, [body.id, engine, resetVersion]);
+
+  const handleMaxSamplesChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const nextMaxSamples = Number(event.target.value);
+    setMaxSamples(nextMaxSamples);
+    setSamples((current) => current.slice(-nextMaxSamples));
+  };
 
   const positionSeries: Series[] = [
     { key: "positionX", label: "X", color: "#2563eb" },
@@ -88,9 +97,28 @@ export default function GraphPanel({ engine, body }: { engine: Engine; body: Bas
         <Graph title="時間 - 速度" samples={samples} series={velocitySeries} />
         <Graph title="時間 - 加速度" samples={samples} series={accelerationSeries} />
       </div>
-      <p className="mt-2 text-[10px] text-gray-500">
-        {samples.length} / {MAX_SAMPLES}
-      </p>
+      <div className="mt-3 flex flex-col gap-3 border-t border-gray-300/60 pt-3">
+        <SliderField
+          label="最大サンプル数"
+          value={maxSamples}
+          min="100"
+          max="1000"
+          step="100"
+          onChange={handleMaxSamplesChange}
+        />
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-[10px] text-gray-600">
+            {samples.length} / {maxSamples}
+          </p>
+          <button
+            type="button"
+            className="rounded border border-gray-300/80 bg-white/70 px-2 py-1 text-xs text-gray-700 hover:bg-white focus:outline-none"
+            onClick={() => setResetVersion((version) => version + 1)}
+          >
+            リセット
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
