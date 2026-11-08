@@ -21,7 +21,7 @@ import ProtractorOverlay from "./ProtractorOverlay";
 import StatsPanel from "./debug/StatsPanel";
 import ObjectInfo from "./debug/ObjectInfo";
 import { useAnalysis } from "@/context/AnalysisContext";
-import BodyGraphs from "./graphs/BodyGraphs";
+import BodyGraphs from "./BodyGraphs";
 
 type AnalysisMenu = {
   bodyId: string;
@@ -225,30 +225,29 @@ export default function PhysicsCanvas() {
       {analyzedBody instanceof BaseBody && (
         <Draggable
           nodeRef={analysisPanelRef}
-          handle=".analysis-panel-handle"
-          cancel="button"
+          handle=".analysis-handle"
           bounds="parent"
         >
-          <section
+          <div
             ref={analysisPanelRef}
-            className="absolute right-3 top-3 z-20 max-h-[90%] w-[360px] max-w-[calc(100%-1.5rem)] overflow-y-auto rounded-lg border border-white/60 bg-white/75 shadow-xl backdrop-blur-md"
+            className="absolute top-10 right-100 w-72 rounded-lg border-white bg-white/70 overflow-hidden z-50 shadow-xl backdrop-blur-md"
           >
-            <header className="analysis-panel-handle sticky top-0 flex cursor-move items-center justify-between border-b border-gray-200/70 bg-white/65 px-3 py-2">
+            <div className="analysis-handle text-gray-700 px-4 py-2 flex justify-between items-center cursor-move text-sm font-semibold border-b border-gray-200/70">
               <span className="text-sm font-semibold text-gray-800">分析</span>
               <button
                 type="button"
-                className="cursor-pointer rounded px-2 text-gray-600 hover:bg-gray-200/70"
+                className="cursor-pointer rounded px-2 text-gray-600 hover:bg-gray-200/70 focus:outline-none"
                 onClick={() => setSelectedBodyId(null)}
               >
                 ✕
               </button>
-            </header>
+            </div>
             <BodyGraphs
               key={analyzedBody.id}
               engine={engine}
               body={analyzedBody}
             />
-          </section>
+          </div>
         </Draggable>
       )}
       {state.isDebugMode && (

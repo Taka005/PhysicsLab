@@ -109,13 +109,13 @@ export default function ControlPanel() {
         )}
       </div>
       {isSettingOpen && (
-      <Draggable handle=".drag-handle" nodeRef={settingNodeRef} bounds="body">
-        <div ref={settingNodeRef} className="absolute top-10 right-100 w-72 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50">
-          <div className="drag-handle bg-gray-500 text-white px-4 py-2 flex justify-between items-center cursor-move text-sm font-semibold">
+      <Draggable handle=".setting-handle" nodeRef={settingNodeRef} bounds="body">
+        <div ref={settingNodeRef} className="absolute top-10 right-100 w-72 rounded-lg border-white bg-white/80 shadow-xl backdrop-blur-md overflow-hidden z-50">
+          <div className="setting-handle text-gray-700 px-4 py-2 flex justify-between items-center cursor-move text-sm font-semibold border-b border-gray-200/70">
             <span>設定</span>
             <button
               onClick={() => setIsSettingOpen(false)}
-              className="text-gray-400 hover:text-white"
+              className="cursor-pointer rounded px-2 text-gray-600 hover:bg-gray-200/70 focus:outline-none"
             >
               ✕
             </button>
@@ -125,13 +125,13 @@ export default function ControlPanel() {
       </Draggable>
       )}
       {isScriptManagerOpen && (
-      <Draggable handle=".drag-handle" nodeRef={scriptManagerNodeRef} bounds="body">
-        <div ref={scriptManagerNodeRef} className="absolute top-50 right-50 w-72 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50 w-[750px] h-[500px] flex flex-col">
-          <div className="drag-handle bg-gray-500 text-white px-4 py-2 flex justify-between items-center cursor-move text-sm font-semibold">
+      <Draggable handle=".script-handle" nodeRef={scriptManagerNodeRef} bounds="body">
+        <div ref={scriptManagerNodeRef} className="absolute top-50 right-50 w-72 rounded-lg border-white bg-white/80 shadow-xl backdrop-blur-md overflow-hidden z-50 w-[750px] h-[500px] flex flex-col">
+          <div className="script-handle text-gray-700 px-4 py-2 flex justify-between items-center cursor-move text-sm font-semibold border-b border-gray-200/70">
             <span>スクリプトマネージャー</span>
             <button
               onClick={() => setIsScriptManagerOpen(false)}
-              className="text-gray-400 hover:text-white"
+              className="cursor-pointer rounded px-2 text-gray-600 hover:bg-gray-200/70 focus:outline-none"
             >
               ✕
             </button>

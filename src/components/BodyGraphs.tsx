@@ -23,7 +23,6 @@ type Series = {
 const GRAPH_WIDTH = 260;
 const GRAPH_HEIGHT = 116;
 const PADDING = { top: 8, right: 8, bottom: 22, left: 42 };
-const SAMPLE_INTERVAL = 1 / 30;
 
 function formatValue(value: number): string {
   if (Math.abs(value) >= 1000 || (Math.abs(value) > 0 && Math.abs(value) < 0.01)) {
@@ -168,7 +167,7 @@ export default function BodyGraphs({ engine, body }: { engine: Engine; body: Bas
 
       const sample = getSample(currentBody, time);
       setSamples((current) => [...current, sample].slice(-MAX_SAMPLES));
-    }, SAMPLE_INTERVAL);
+    });
   }, [body.id, engine]);
 
   const positionSeries: Series[] = [

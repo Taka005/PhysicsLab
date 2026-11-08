@@ -93,7 +93,7 @@ export default function ScriptManagerPanel() {
 return (
   <div className="flex-1 flex flex-col overflow-hidden">
     <div className="flex-1 min-h-0 flex overflow-hidden">
-      <div className="w-1/3 border-r border-gray-200 bg-gray-50 flex flex-col">
+      <div className="w-1/3 border-r border-gray-200 bg-white-50/80 flex flex-col">
         <div className="flex-1 min-h-0 overflow-y-auto p-2 space-y-1">
           {scripts.length !== 0 && (
             scripts.map((script) => {
@@ -123,16 +123,16 @@ return (
           )}
           <div
             onClick={handleStartCreate}
-            className="group flex items-center h-[38px] font-semibold justify-between px-3 py-2 rounded-lg text-xs cursor-pointer transition-colors bg-gray-50 text-blue-500 border border-dashed border-blue-400 hover:text-blue-600"
+            className="group flex items-center h-[38px] font-semibold justify-between px-3 py-2 rounded-lg text-xs cursor-pointer transition-colors text-blue-500 border border-dashed border-blue-400 hover:text-blue-600"
           >
             <span className="truncate flex-1 text-center">＋ 新規作成</span>
           </div>
         </div>
       </div>
-      <div className="w-2/3 min-w-0 flex flex-col bg-white">
+      <div className="w-2/3 min-w-0 flex flex-col">
         {selectedScriptId || isCreatingNew ? (
           <>
-            <div className="px-4 py-2 border-b border-gray-200 bg-gray-50 flex items-center justify-between gap-2">
+            <div className="px-4 py-2 border-b border-gray-200 flex items-center justify-between gap-2">
               <div className="flex items-center gap-2 flex-1 min-w-0">
                 <span className="text-xs font-semibold text-gray-500 whitespace-nowrap">
                   スクリプト名:

@@ -17,7 +17,9 @@ import { Vector } from "./utils/Vector";
 import { Viewport } from "./utils/Viewport";
 
 export class Engine extends EngineBase {
-  public static readonly SAVE_DATA_VERSION: number = 1;
+  private static readonly SAVE_DATA_VERSION: number = 1;
+
+  private static readonly SAMPLE_INTERVAL = 1 / 30;
 
   public isStarted: boolean = false;
 
@@ -53,10 +55,7 @@ export class Engine extends EngineBase {
 
   private listeners = new Set<() => void>();
 
-  private sampleListeners = new Map<
-    (deltaTime: number) => void,
-    { interval: number; elapsed: number }
-  >();
+  private sampleListeners = new Map<(deltaTime: number) => void,{ elapsed: number }>();
 
   private snapshot: EngineSnapShot;
 
@@ -221,12 +220,8 @@ export class Engine extends EngineBase {
     return this.snapshot;
   };
 
-  public subscribeSample = (listener: (deltaTime: number) => void, interval: number) => {
-    if (!Number.isFinite(interval) || interval <= 0) {
-      throw new EngineError("サンプリング間隔は0を超える有限値である必要があります");
-    }
-
-    this.sampleListeners.set(listener, { interval, elapsed: 0 });
+  public subscribeSample = (listener: (deltaTime: number) => void) => {
+    this.sampleListeners.set(listener, { elapsed: 0 });
 
     return () => {
       this.sampleListeners.delete(listener);
@@ -387,9 +382,9 @@ export class Engine extends EngineBase {
       for (const [listener, sample] of this.sampleListeners) {
         sample.elapsed += this.deltaTime;
 
-        if (sample.elapsed >= sample.interval) {
+        if (sample.elapsed >= Engine.SAMPLE_INTERVAL) {
           const elapsed = sample.elapsed;
-          sample.elapsed = 0;
+          sample.elapsed %= Engine.SAMPLE_INTERVAL;
           listener(elapsed);
         }
       }
