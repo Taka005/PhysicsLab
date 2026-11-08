@@ -58,27 +58,30 @@ export class EngineBase{
     const totalInvMass = source.invMass + target.invMass;
     if(totalInvMass === 0) return;
 
-    const diff = Vector.subtract(target.position,source.position);
+    const diffX = target.position.x - source.position.x;
+    const diffY = target.position.y - source.position.y;
+
     const totalRadius = source.radius + target.radius;
 
     if(
-      Math.abs(diff.x) >= totalRadius||
-      Math.abs(diff.y) >= totalRadius
+      Math.abs(diffX) >= totalRadius||
+      Math.abs(diffY) >= totalRadius
     ) return;
 
-    const distanceSquared = diff.distanceSquared()
+    const distanceSquared = diffX*diffX + diffY*diffY;
     if(distanceSquared > totalRadius*totalRadius) return;
 
     const distance = Math.sqrt(distanceSquared);
 
     const move = (distance - totalRadius)/(distance*totalInvMass + this.CORRECTION_NUMBER) * source.stiffness;
-    const correction = diff.multiply(move);
+    const correctionX = diffX*move;
+    const correctionY = diffY*move;
 
-    source.position.x += correction.x*source.invMass;
-    source.position.y += correction.y*source.invMass;
+    source.position.x += correctionX*source.invMass;
+    source.position.y += correctionY*source.invMass;
 
-    target.position.x -= correction.x*target.invMass;
-    target.position.y -= correction.y*target.invMass;
+    target.position.x -= correctionX*target.invMass;
+    target.position.y -= correctionY*target.invMass;
   }
 
   protected solveGroundPosition(entity: Entity,ground: BaseGround): void{
@@ -86,36 +89,40 @@ export class EngineBase{
 
     const cross = ground.solvePosition(entity.position);
 
-    const diff = Vector.subtract(cross,entity.position);
+    const diffX = cross.x - entity.position.x;
+    const diffY = cross.y - entity.position.y;
 
-    const distanceSquared = diff.distanceSquared();
+    const distanceSquared = diffX*diffX + diffY*diffY;
     if(distanceSquared > (entity.radius + ground.width/2) * (entity.radius + ground.width/2)) return;
 
     const distance = Math.sqrt(distanceSquared);
 
     const move = (distance - (entity.radius + ground.width/2))/(distance*entity.invMass + this.CORRECTION_NUMBER) * entity.stiffness;
-    const correction = diff.multiply(move);
+    const correctionX = diffX*move;
+    const correctionY = diffY*move;
 
-    entity.position.x += correction.x*entity.invMass;
-    entity.position.y += correction.y*entity.invMass;
+    entity.position.x += correctionX*entity.invMass;
+    entity.position.y += correctionY*entity.invMass;
   }
 
   protected solveConnection(source: Entity,target: Entity,targetData: Target): void{
     const totalInvMass = source.invMass + target.invMass;
     if(totalInvMass === 0) return;
 
-    const diff = Vector.subtract(target.position,source.position);
+    const diffX = target.position.x - source.position.x;
+    const diffY = target.position.y - source.position.y;
 
-    const distance = diff.distance()
+    const distance = Math.sqrt(diffX*diffX + diffY*diffY);
 
     const move = (distance - targetData.distance)/(distance*totalInvMass + this.CORRECTION_NUMBER) * targetData.stiffness;
-    const correction = diff.multiply(move);
+    const correctionX = diffX*move;
+    const correctionY = diffY*move;
 
-    source.position.x += correction.x*source.invMass;
-    source.position.y += correction.y*source.invMass;
+    source.position.x += correctionX*source.invMass;
+    source.position.y += correctionY*source.invMass;
 
-    target.position.x -= correction.x*target.invMass;
-    target.position.y -= correction.y*target.invMass;
+    target.position.x -= correctionX*target.invMass;
+    target.position.y -= correctionY*target.invMass;
   }
 
   protected solveVelocity(entity: Entity): void{
@@ -126,7 +133,8 @@ export class EngineBase{
   }
 
   protected updateVelocity(entity: Entity): void{
-    entity.velocity = Vector.subtract(entity.position,entity.prePosition).divide(this.deltaTime);
+    entity.velocity.x = (entity.position.x - entity.prePosition.x)/(1/this.pps);
+    entity.velocity.y = (entity.position.y - entity.prePosition.y)/(1/this.pps);
 
     if(entity.mass != 0){
       entity.velocity.y += this.gravity*this.deltaTime;

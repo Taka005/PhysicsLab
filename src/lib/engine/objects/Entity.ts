@@ -48,7 +48,8 @@ export class Entity {
   }
 
   public savePosition(): void{
-    this.prePosition = this.position.clone();
+    this.prePosition.x = this.position.x;
+    this.prePosition.y = this.position.y;
   }
 
   public toJSON(): EntityOption {
