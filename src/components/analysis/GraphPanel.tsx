@@ -47,7 +47,9 @@ export default function GraphPanel({ engine, body }: { engine: Engine; body: Bas
   useEffect(() => {
     let time = 0;
     const initialBody = engine.getObject(body.id);
+
     setSamples(initialBody instanceof BaseBody ? [getSample(initialBody, time)] : []);
+
     let previousVelocity = initialBody instanceof BaseBody ? initialBody.velocity : null;
 
     return engine.subscribeSample((deltaTime) => {
@@ -58,10 +60,12 @@ export default function GraphPanel({ engine, body }: { engine: Engine; body: Bas
 
       const currentVelocity = currentBody.velocity;
       const sample = getSample(currentBody, time);
+
       if (previousVelocity) {
         sample.accelerationX = (currentVelocity.x - previousVelocity.x) / deltaTime;
         sample.accelerationY = (currentVelocity.y - previousVelocity.y) / deltaTime;
       }
+
       previousVelocity = currentVelocity;
 
       setSamples((current) => [...current, sample].slice(-maxSamplesRef.current));
@@ -72,6 +76,33 @@ export default function GraphPanel({ engine, body }: { engine: Engine; body: Bas
     const nextMaxSamples = Number(event.target.value);
     setMaxSamples(nextMaxSamples);
     setSamples((current) => current.slice(-nextMaxSamples));
+  };
+
+  const handleExportCsv = () => {
+    const header = ["時間(秒)", "位置X", "位置Y", "速度X", "速度Y", "加速度X", "加速度Y"];
+
+    const rows = samples.map((sample) => [
+      sample.time,
+      sample.positionX,
+      sample.positionY,
+      sample.velocityX,
+      sample.velocityY,
+      sample.accelerationX,
+      sample.accelerationY
+    ]);
+
+    const csv = [header, ...rows]
+      .map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(","))
+      .join("\r\n");
+
+    const blob = new Blob(["\uFEFF", csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "analysis.csv";
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   const positionSeries: Series[] = [
@@ -110,13 +141,23 @@ export default function GraphPanel({ engine, body }: { engine: Engine; body: Bas
           <p className="text-[10px] text-gray-600">
             {samples.length} / {maxSamples}
           </p>
-          <button
-            type="button"
-            className="rounded border border-gray-300/80 bg-white/70 px-2 py-1 text-xs text-gray-700 hover:bg-white focus:outline-none"
-            onClick={() => setResetVersion((version) => version + 1)}
-          >
-            リセット
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              className="rounded border border-gray-300/80 bg-white/70 px-2 py-1 text-xs text-gray-700 hover:bg-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              onClick={handleExportCsv}
+              disabled={samples.length === 0}
+            >
+              CSV出力
+            </button>
+            <button
+              type="button"
+              className="rounded border border-gray-300/80 bg-white/70 px-2 py-1 text-xs text-gray-700 hover:bg-white focus:outline-none"
+              onClick={() => setResetVersion((version) => version + 1)}
+            >
+              リセット
+            </button>
+          </div>
         </div>
       </div>
     </div>
