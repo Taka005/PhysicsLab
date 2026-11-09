@@ -176,7 +176,7 @@ return (
       </div>
     </div>
     {errors.length > 0 && (
-      <section className="shrink-0 border-t border-red-200 bg-red-50">
+      <section className="shrink-0 border-t border-red-200 bg-red-50/60">
         <div className="flex items-center justify-between gap-3 px-4 py-2 border-b border-red-200">
           <div className="flex items-center gap-2">
             <span className="text-sm font-semibold text-red-600">
@@ -198,7 +198,7 @@ return (
           {errors.map((error, index) => (
             <div
               key={`${error.objectId}-${error.scriptId}-${error.scriptName}-${error.errorMessage}-${index}`}
-              className="rounded-md border border-red-200 bg-white p-3"
+              className="rounded-md border border-red-200 bg-white/80 p-3"
             >
               <p className="text-xs font-semibold text-red-600 break-words">
                 {error.scriptName} {`(${error.scriptId})`} オブジェクトID: {error.objectId}
