@@ -23,15 +23,12 @@ export type Series = {
 };
 
 function getSample(body: BaseBody, time: number): Sample {
-  const position = body.position;
-  const velocity = body.velocity;
-
   return {
     time,
-    positionX: position.x,
-    positionY: position.y,
-    velocityX: velocity.x,
-    velocityY: velocity.y,
+    positionX: body.position.x,
+    positionY: body.position.y,
+    velocityX: body.velocity.x,
+    velocityY: body.velocity.y,
     accelerationX: 0,
     accelerationY: 0
   };
@@ -50,10 +47,11 @@ export default function GraphPanel({ engine, body }: { engine: Engine; body: Bas
 
     setSamples(initialBody instanceof BaseBody ? [getSample(initialBody, time)] : []);
 
-    let previousVelocity = initialBody instanceof BaseBody ? initialBody.velocity : null;
+    let preVelocity = initialBody instanceof BaseBody ? initialBody.velocity : null;
 
     return engine.subscribeSample((deltaTime) => {
       const currentBody = engine.getObject(body.id);
+
       if (!(currentBody instanceof BaseBody)) return;
 
       time += deltaTime;
@@ -61,12 +59,12 @@ export default function GraphPanel({ engine, body }: { engine: Engine; body: Bas
       const currentVelocity = currentBody.velocity;
       const sample = getSample(currentBody, time);
 
-      if (previousVelocity) {
-        sample.accelerationX = (currentVelocity.x - previousVelocity.x) / deltaTime;
-        sample.accelerationY = (currentVelocity.y - previousVelocity.y) / deltaTime;
+      if (preVelocity) {
+        sample.accelerationX = (currentVelocity.x - preVelocity.x) / deltaTime;
+        sample.accelerationY = (currentVelocity.y - preVelocity.y) / deltaTime;
       }
 
-      previousVelocity = currentVelocity;
+      preVelocity = currentVelocity;
 
       setSamples((current) => [...current, sample].slice(-maxSamplesRef.current));
     });
@@ -78,7 +76,7 @@ export default function GraphPanel({ engine, body }: { engine: Engine; body: Bas
     setSamples((current) => current.slice(-nextMaxSamples));
   };
 
-  const handleExportCsv = () => {
+  const handleExport = () => {
     const header = ["時間(秒)", "位置X", "位置Y", "速度X", "速度Y", "加速度X", "加速度Y"];
 
     const rows = samples.map((sample) => [
@@ -147,7 +145,7 @@ export default function GraphPanel({ engine, body }: { engine: Engine; body: Bas
             <button
               type="button"
               className="rounded border border-gray-300/80 bg-white/70 px-2 py-1 text-xs text-gray-700 hover:bg-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-              onClick={handleExportCsv}
+              onClick={handleExport}
               disabled={samples.length === 0}
             >
               CSV出力
