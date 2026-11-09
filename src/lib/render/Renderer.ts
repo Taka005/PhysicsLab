@@ -192,7 +192,7 @@ export class Renderer{
 
     const toBlob = canvas.toBlob;
     if (!toBlob) {
-      throw new Error("この環境ではPNG形式に変換できません");
+      throw new Error("この環境では画像に変換できません");
     }
 
     return new Promise((resolve, reject) => {
@@ -200,7 +200,7 @@ export class Renderer{
         if (blob) {
           resolve(blob);
         } else {
-          reject(new Error("PNG画像を生成できませんでした"));
+          reject(new Error("画像を生成できませんでした"));
         }
       }, "image/png");
     });
@@ -231,38 +231,45 @@ export class Renderer{
         clearColor: "white",
         antialias: true
       });
+
       const context = canvas.getContext("2d");
+
       if (!context) {
-        throw new Error("GIFのフレームを読み込めませんでした");
+        throw new Error("フレームを読み込めませんでした");
       }
 
       const image = context.getImageData(0, 0, canvas.width, canvas.height);
       if (palette === null) {
         palette = quantize(image.data, 256);
       }
+
       const indexedPixels = applyPalette(image.data, palette);
+
       encoder.writeFrame(indexedPixels, canvas.width, canvas.height, {
         ...(frameCount === 0 ? { palette } : {}),
         delay: frameInterval,
         repeat: 0
       });
+
       frameCount++;
 
       const nextFrameAt = startedAt + frameCount * frameInterval;
       const wait = nextFrameAt - performance.now();
+
       if (frameCount < maxFrames && wait > 0) {
         await new Promise((resolve) => window.setTimeout(resolve, wait));
       }
     }
 
     if (frameCount === 0) {
-      throw new Error("GIFにするフレームがありません");
+      throw new Error("フレームがありません");
     }
 
     encoder.finish();
     const bytes = encoder.bytes();
     const buffer = new ArrayBuffer(bytes.byteLength);
     new Uint8Array(buffer).set(bytes);
+
     return new Blob([buffer], { type: "image/gif" });
   }
 

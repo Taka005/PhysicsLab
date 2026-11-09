@@ -28,7 +28,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
   const [activeTab, setActiveTab] = useState<"display" | "data">("display");
   const [isGifRecording, setIsGifRecording] = useState(false);
 
-  if (!engine) return null;
+  if (!engine||!gifRecorder) return null;
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -83,13 +83,13 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "physics-world.png";
+      a.download = "physics-lab.png";
       document.body.appendChild(a);
       a.click();
       a.remove();
       window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     } catch (error) {
-      toast.error("描画をPNGとして保存できませんでした", {
+      toast.error("描画を保存できませんでした", {
         description: error instanceof Error ? error.message : "不明なエラーが発生しました"
       });
     }
@@ -108,22 +108,27 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
 
     const controller = new AbortController();
     recordingControllerRef.current = controller;
+
     setIsGifRecording(true);
-    toast.info("GIFを録画しています。最大10秒で自動的に保存します");
+
+    toast.info("録画を開始しました",{
+      description: "最大10秒で自動的に保存します"
+    });
 
     try {
       const blob = await gifRecorder(controller.signal);
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "physics-world.gif";
+      a.download = "physics-lab.gif";
       document.body.appendChild(a);
       a.click();
       a.remove();
       window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-      toast.success("GIFを保存しました");
+
+      toast.success("録画を終了しました");
     } catch (error) {
-      toast.error("GIFの録画に失敗しました", {
+      toast.error("録画に失敗しました", {
         description: error instanceof Error ? error.message : "不明なエラーが発生しました"
       });
     } finally {
@@ -372,11 +377,9 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
               </button>
               <button
                 onClick={handleGifRecord}
-                disabled={!gifRecorder}
-                title="10fps・最大10秒"
                 className="flex-1 px-3 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isGifRecording ? "停止して保存" : "GIF録画"}
+                {isGifRecording ? "停止して保存" : "録画"}
               </button>
             </div>
             <div className="flex gap-2">
