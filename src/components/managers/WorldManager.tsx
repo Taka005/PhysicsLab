@@ -10,6 +10,7 @@ const MAX_SLOT = 5;
 export default function WorldManagerPanel() {
   const engine = useEngine();
   const [slots, setSlots] = useState<string[]>([]);
+  const [activeTab, setActiveTab] = useState<"save" | "preset">("save");
 
   if (!engine) return null;
 
@@ -103,8 +104,32 @@ export default function WorldManagerPanel() {
   };
 
   return (
-    <div className="p-2 space-y-1">
-      {slots.map((slot, index) => (
+    <div className="p-4 flex flex-col gap-3 text-sm">
+      <div className="flex border-b border-gray-400">
+        <button
+          onClick={() => setActiveTab("save")}
+          className={`flex-1 pb-2 font-medium text-center transition-colors border-b-2 ${
+            activeTab === "save"
+              ? "border-blue-500 text-blue-600"
+              : "border-transparent text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          セーブ管理
+        </button>
+        <button
+          onClick={() => setActiveTab("preset")}
+          className={`flex-1 pb-2 font-medium text-center transition-colors border-b-2 ${
+            activeTab === "preset"
+              ? "border-blue-500 text-blue-600"
+              : "border-transparent text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          プリセット
+        </button>
+      </div>
+      {activeTab === "save" && (
+      <div className="flex flex-col gap-1">
+        {slots.map((slot, index) => (
         <div
           key={index}
           className="group flex items-center h-10 font-semibold justify-between gap-2 px-3 py-2 rounded-lg text-xs cursor-pointer transition-colors bg-gray-50/60 hover:bg-gray-100/70 border border-gray-300"
@@ -129,8 +154,8 @@ export default function WorldManagerPanel() {
             削除
           </button>
         </div>
-      ))}
-      {slots.length < MAX_SLOT && (
+        ))}
+        {slots.length < MAX_SLOT && (
         <div
           onClick={() => handleSave()}
           className="group flex items-center h-10 font-semibold justify-between gap-2 px-3 py-2 rounded-lg text-xs cursor-pointer transition-colors hover:bg-blue-50/30 border border-dashed border-blue-400"
@@ -138,6 +163,13 @@ export default function WorldManagerPanel() {
           <span className="truncate flex-1 ml-2 text-blue-500 hover:text-blue-600 text-center">
             ＋ セーブデータを追加
           </span>
+        </div>
+        )}
+      </div>
+      )}
+      {activeTab === "preset" && (
+        <div className="flex flex-col gap-1">
+
         </div>
       )}
     </div>

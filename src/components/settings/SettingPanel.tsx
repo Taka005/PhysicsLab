@@ -22,7 +22,6 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
   const { updateConnectionConfig } = useConnectionState();
   const { isProtractorVisible, setIsProtractorVisible } = useProtractor();
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   const [activeTab, setActiveTab] = useState<"display" | "data">("display");
 
   if (!engine) return null;
@@ -88,7 +87,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
                 : "border-transparent text-gray-500 hover:text-gray-700"
             }`}
           >
-            表示・モード設定
+            表示設定
           </button>
           <button
             onClick={() => setActiveTab("data")}
@@ -98,7 +97,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
                 : "border-transparent text-gray-500 hover:text-gray-700"
             }`}
           >
-            データ・管理
+            データ管理
           </button>
         </div>
         {activeTab === "display" && (
