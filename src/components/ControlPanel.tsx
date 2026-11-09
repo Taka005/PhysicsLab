@@ -145,7 +145,7 @@ export default function ControlPanel() {
       )}
       {isWorldManagerOpen && (
       <Draggable handle=".world-handle" nodeRef={worldManagerNodeRef} bounds="body">
-        <div ref={worldManagerNodeRef} className="absolute top-50 right-50 rounded-lg border-white bg-white/80 shadow-xl backdrop-blur-md overflow-hidden z-50 w-[350px] h-[500px] flex flex-col">
+        <div ref={worldManagerNodeRef} className="absolute top-50 right-50 rounded-lg border-white bg-white/80 shadow-xl backdrop-blur-md overflow-hidden z-50 w-72 h-[500px] flex flex-col">
           <div className="world-handle text-gray-700 px-4 py-2 flex justify-between items-center cursor-move text-sm font-semibold border-b border-gray-200/70">
             <span>ワールドマネージャー</span>
             <button
@@ -155,7 +155,7 @@ export default function ControlPanel() {
               ✕
             </button>
           </div>
-          <WorldManagerPanel />
+          <WorldManagerPanel/>
         </div>
       </Draggable>
       )}

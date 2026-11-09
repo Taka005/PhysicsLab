@@ -113,7 +113,7 @@ return (
                   <button
                     type="button"
                     onClick={(event) => handleDeleteScript(script.id, event)}
-                    className="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-600 p-1 transition-opacity focus:outline-none"
+                    className="text-red-500 hover:text-red-600 p-1 focus:outline-none"
                   >
                     削除
                   </button>
@@ -169,7 +169,7 @@ return (
             </div>
           </>
         ) : (
-          <div className="flex-1 flex items-center justify-center text-gray-400 text-xs">
+          <div className="flex-1 flex items-center justify-center text-gray-500 text-xs">
             スクリプトを選択するか、新しく作成してください
           </div>
         )}
