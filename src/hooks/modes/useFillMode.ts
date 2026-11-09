@@ -49,12 +49,13 @@ export function useFillMode(engine: Engine | null) {
           }
         }
       }catch(error){
-        if(error instanceof EngineError){
+      if(error instanceof EngineError){
           toast.error(error.message);
-          return;
+        }else{
+          toast.error("生成できませんでした", {
+            description: error instanceof Error ? error.message : "不明なエラーが発生しました"
+          });
         }
-
-        toast.error("不明なエラーが発生しました");
       }
 
       setClickedPoint(null);

@@ -58,11 +58,13 @@ export default function WorldManagerPanel() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(nextSlots));
       setSlots(nextSlots);
+      
       return true;
     } catch (error) {
       toast.error("保存できませんでした", {
         description: error instanceof Error ? error.message : "不明なエラーが発生しました",
       });
+
       return false;
     }
   };

@@ -88,11 +88,11 @@ export function useSpawnMode(engine: Engine | null) {
       }catch(error){
         if(error instanceof EngineError){
           toast.error(error.message);
-          return;
+        }else{
+          toast.error("生成できませんでした", {
+            description: error instanceof Error ? error.message : "不明なエラーが発生しました"
+          });
         }
-        console.log(error)
-
-        toast.error("不明なエラーが発生しました");
       }
 
       updateSpawnConfig({ id: "" });
