@@ -191,6 +191,15 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             </div>
             <div className="flex-1 gap-2">
               <ToggleSwitch
+                label="予測トラッキングモード"
+                checked={state.isPredictTrackingMode}
+                onChange={(checked) => {
+                  engine.isPredictTrackingMode = checked;
+                }}
+              />
+            </div>
+            <div className="flex-1 gap-2">
+              <ToggleSwitch
                 label="グリッド交点設置モード"
                 checked={state.isSetGridCrossMode}
                 onChange={(checked) => {
@@ -311,6 +320,18 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
                 step="10"
                 onChange={(e) => {
                   engine.trackingLimit = parseFloat(e.target.value);
+                }}
+              />
+            </div>
+            <div className="flex-1 gap-2">
+              <SliderField
+                label="予測トラッキング時間"
+                value={state.predictTrackingDuration}
+                min="0.5"
+                max="10"
+                step="0.5"
+                onChange={(e) => {
+                  engine.predictTrackingDuration = parseFloat(e.target.value);
                 }}
               />
             </div>

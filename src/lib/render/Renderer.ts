@@ -14,11 +14,13 @@ export class Renderer{
   private engine: Engine;
   private mainContainer: Container = new Container();
   private trackingContainer: Container = new Container();
+  private predictTrackingContainer: Container = new Container();
   private effectContainer: Container = new Container();
   private groundContainer: Container = new Container();
   private bodyContainer: Container = new Container();
   private viewMap: Map<string,Graphics> = new Map();
   private trackingViews: Graphics[] = [];
+  private predictTrackingViews: Graphics[] = [];
   private isInitialized = false;
   private gridGraphics = new Graphics();
   private width: number | null = null;
@@ -52,9 +54,11 @@ export class Renderer{
     this.mainContainer.addChild(this.groundContainer);
     this.mainContainer.addChild(this.effectContainer);
     this.mainContainer.addChild(this.trackingContainer);
+    this.mainContainer.addChild(this.predictTrackingContainer);
     this.mainContainer.addChild(this.bodyContainer);
 
     this.trackingContainer.alpha = 0.3;
+    this.predictTrackingContainer.alpha = 0.3;
 
     this.updateTransforms();
   }
@@ -137,6 +141,32 @@ export class Renderer{
       }
     }else{
       this.trackingContainer.visible = false;
+    }
+
+    if (this.engine.isPredictTrackingMode) {
+      this.predictTrackingContainer.visible = true;
+
+      const predictTrackBodies = this.engine.getPredictTrackBodies();
+      while (this.predictTrackingViews.length < predictTrackBodies.length) {
+        const graphics = new Graphics();
+        this.predictTrackingContainer.addChild(graphics);
+        this.predictTrackingViews.push(graphics);
+      }
+
+      while (this.predictTrackingViews.length > predictTrackBodies.length) {
+        const view = this.predictTrackingViews.pop();
+        if (view) {
+          view.parent?.removeChild(view);
+          view.destroy();
+        }
+      }
+
+      for (let i = 0; i < predictTrackBodies.length; i++) {
+        const graphics = this.predictTrackingViews[i];
+        this.drawObject(graphics, predictTrackBodies[i]);
+      }
+    } else {
+      this.predictTrackingContainer.visible = false;
     }
 
     this.app.render();

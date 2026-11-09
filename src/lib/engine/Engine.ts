@@ -27,6 +27,8 @@ export class Engine extends EngineBase {
 
   private _isDynamicTrackingMode: boolean = false;
 
+  private _isPredictTrackingMode = false;
+
   private _isSetGridCrossMode: boolean = false;
 
   private _isDisabledScript: boolean = false;
@@ -38,6 +40,8 @@ export class Engine extends EngineBase {
   private _trackingInterval: number;
 
   private _trackingLimit: number;
+
+  private _predictTrackingDuration: number;
 
   private _worldSize: number;
 
@@ -67,6 +71,7 @@ export class Engine extends EngineBase {
     this._playBackSpeed = engineOption.playBackSpeed;
     this._trackingInterval = engineOption.trackingInterval;
     this._trackingLimit = engineOption.trackingLimit;
+    this._predictTrackingDuration = engineOption.predictTrackingDuration;
     this._worldSize = engineOption.worldSize;
     this._scriptExecuteInterval = engineOption.scriptExecuteInterval;
 
@@ -90,6 +95,15 @@ export class Engine extends EngineBase {
 
   public set isDynamicTrackingMode(value: boolean) {
     this._isDynamicTrackingMode = value;
+    this.notify();
+  }
+
+  public get isPredictTrackingMode(): boolean {
+    return this._isPredictTrackingMode;
+  }
+
+  public set isPredictTrackingMode(value: boolean) {
+    this._isPredictTrackingMode = value;
     this.notify();
   }
 
@@ -156,6 +170,19 @@ export class Engine extends EngineBase {
     this.notify();
   }
 
+  public get predictTrackingDuration(): number {
+    return this._predictTrackingDuration;
+  }
+
+  public set predictTrackingDuration(value: number) {
+    if (!Number.isFinite(value) || value <= 0 || value > 10) {
+      throw new EngineError("予測トラッキング時間は0秒を超え、10秒以下である必要があります");
+    }
+
+    this._predictTrackingDuration = value;
+    this.notify();
+  }
+
   public get scriptExecuteInterval(): number{
     return this._scriptExecuteInterval;
   }
@@ -183,6 +210,7 @@ export class Engine extends EngineBase {
       isStarted: this.isStarted,
       isTrackingMode: this.isTrackingMode,
       isDynamicTrackingMode: this.isDynamicTrackingMode,
+      isPredictTrackingMode: this.isPredictTrackingMode,
       isDebugMode: this.isDebugMode,
       isSetGridCrossMode: this.isSetGridCrossMode,
       isDisabledScript: this.isDisabledScript,
@@ -196,6 +224,7 @@ export class Engine extends EngineBase {
       worldSize: this.worldSize,
       trackingInterval: this.trackingInterval,
       trackingLimit: this.trackingLimit,
+      predictTrackingDuration: this.predictTrackingDuration,
       scriptExecuteInterval: this.scriptExecuteInterval,
       gridWidth: this.viewport.gridWidth,
       gravity: this.gravity,
@@ -238,11 +267,13 @@ export class Engine extends EngineBase {
 
     this.isTrackingMode = false;
     this.isDynamicTrackingMode = false;
+    this.isPredictTrackingMode = false;
     this.isDebugMode = false;
     this.isSetGridCrossMode = false;
     this.isDisabledScript = false;
     this.trackingInterval = DEFAULT_ENGINE_VALUE.trackingInterval;
     this.trackingLimit = DEFAULT_ENGINE_VALUE.trackingLimit;
+    this.predictTrackingDuration = DEFAULT_ENGINE_VALUE.predictTrackingDuration;
     this.scriptExecuteInterval = DEFAULT_ENGINE_VALUE.scriptExecuteInterval;
     this.playBackSpeed = DEFAULT_ENGINE_VALUE.playBackSpeed;
     this.worldSize = DEFAULT_ENGINE_VALUE.worldSize;
@@ -459,6 +490,33 @@ export class Engine extends EngineBase {
     return this.content.getTrackBodies();
   }
 
+  public getPredictTrackBodies(): BaseBody[] {
+    const sampleInterval = 0.1;
+    const sampleCount = Math.ceil(this.predictTrackingDuration / sampleInterval);
+    const trackBodies: BaseBody[] = [];
+
+    for (const body of this.content.bodies) {
+      for (let i = 1; i <= sampleCount; i++) {
+        const time = Math.min(i * sampleInterval, this.predictTrackingDuration);
+        const predictedBody = body.clone();
+
+        for (let j = 0; j < body.entities.length; j++) {
+          const entity = body.entities[j];
+          const predictedEntity = predictedBody.entities[j];
+          const gravity = entity.mass === 0 ? 0 : this.gravity;
+          predictedEntity.position = new Vector(
+            entity.position.x + entity.velocity.x * time,
+            entity.position.y + entity.velocity.y * time + 0.5 * gravity * time * time
+          );
+        }
+
+        trackBodies.push(predictedBody);
+      }
+    }
+
+    return trackBodies;
+  }
+
   public getObject(id: string): BaseObject | undefined{
     return this.content.getObject(id);
   }
@@ -673,6 +731,7 @@ export class Engine extends EngineBase {
         playBackSpeed: this.playBackSpeed,
         trackingInterval: this.trackingInterval,
         trackingLimit: this.trackingLimit,
+        predictTrackingDuration: this.predictTrackingDuration,
         scriptExecuteInterval: this.scriptExecuteInterval,
         worldSize: this.worldSize,
         pps: this.pps,
@@ -699,6 +758,7 @@ export class Engine extends EngineBase {
     this.playBackSpeed = option.playBackSpeed;
     this.trackingInterval = option.trackingInterval;
     this.trackingLimit = option.trackingLimit;
+    this.predictTrackingDuration = option.predictTrackingDuration;
     this.scriptExecuteInterval = option.scriptExecuteInterval;
     this.worldSize = option.worldSize;
     this.pps = option.pps;
