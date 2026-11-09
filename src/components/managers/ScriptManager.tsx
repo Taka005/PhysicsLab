@@ -103,10 +103,10 @@ return (
                 <div
                   key={script.id}
                   onClick={() => handleSelectScript(script)}
-                  className={`group flex items-center h-10 font-semibold justify-between px-3 py-2 rounded-lg text-xs cursor-pointer transition-colors ${
+                  className={`group flex items-center h-10 font-semibold justify-between px-3 py-2 rounded-lg text-xs cursor-pointer transition-colors border ${
                     isSelected
-                      ? "bg-blue-50/60 text-blue-700 border border-blue-200"
-                      : "text-gray-700 hover:bg-gray-200/40 border border-gray-200"
+                      ? "bg-blue-50/60 hover:bg-blue-100/50 text-blue-700 border-blue-200"
+                      : "text-gray-600 hover:text-gray-700 hover:bg-gray-100/50 border-gray-300"
                   }`}
                 >
                   <span className="truncate flex-1">{script.name}</span>
@@ -123,7 +123,7 @@ return (
           )}
           <div
             onClick={handleStartCreate}
-            className="group flex items-center h-[38px] font-semibold justify-between px-3 py-2 rounded-lg text-xs cursor-pointer transition-colors text-blue-500 border border-dashed border-blue-400 hover:text-blue-600"
+            className="group flex items-center h-[38px] font-semibold justify-between px-3 py-2 rounded-lg text-xs cursor-pointer transition-colors text-blue-500 border border-dashed border-blue-400 hover:text-blue-600 hover:bg-blue-50/30"
           >
             <span className="truncate flex-1 text-center">＋ 新規作成</span>
           </div>

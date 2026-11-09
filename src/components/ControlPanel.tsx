@@ -14,6 +14,7 @@ import ConnectionSettings from "./settings/ConnectionSettings";
 import EditSettings from "./settings/EditSettings";
 import { useEditState } from "@/context/EditContext";
 import ScriptManagerPanel from "./managers/ScriptManager";
+import WorldManagerPanel from "./managers/WorldManager";
 
 export default function ControlPanel() {
   const engine = useEngine();
@@ -154,7 +155,7 @@ export default function ControlPanel() {
               ✕
             </button>
           </div>
-
+          <WorldManagerPanel />
         </div>
       </Draggable>
       )}
