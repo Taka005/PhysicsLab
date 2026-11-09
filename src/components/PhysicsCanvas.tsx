@@ -21,6 +21,7 @@ import ProtractorOverlay from "./ProtractorOverlay";
 import StatsPanel from "./debug/StatsPanel";
 import ObjectInfo from "./debug/ObjectInfo";
 import { useAnalysis } from "@/context/AnalysisContext";
+import { useCanvasExport } from "@/context/CanvasExportContext";
 import GraphPanel from "./analysis/GraphPanel";
 
 type AnalysisMenu = {
@@ -48,6 +49,7 @@ export default function PhysicsCanvas() {
   const { mode } = useToolMode();
   const { isProtractorVisible } = useProtractor();
   const { selectedBodyId, setSelectedBodyId } = useAnalysis();
+  const { setExporter, setGifRecorder } = useCanvasExport();
 
   if(!engine) return;
 
@@ -128,6 +130,8 @@ export default function PhysicsCanvas() {
     if (!canvasRef.current || !containerRef.current || !engine) return;
 
     const renderer = new Renderer(engine);
+    setExporter(() => () => renderer.exportPng());
+    setGifRecorder(() => (signal: AbortSignal) => renderer.recordGif(signal));
 
     let animationFrameId: number;
     let previousFpsTime = performance.now();
@@ -183,11 +187,13 @@ export default function PhysicsCanvas() {
     resizeObserver.observe(containerRef.current);
 
     return () => {
+      setExporter(null);
+      setGifRecorder(null);
       cancelAnimationFrame(animationFrameId);
       resizeObserver.disconnect();
       renderer.destroy();
     };
-  }, [engine]);
+  }, [engine, setExporter, setGifRecorder]);
 
   return (
     <div

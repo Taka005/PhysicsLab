@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "chevrotain": "^13.2.0",
+    "gifenc": "1.0.3",
     "next": "^16.4.2",
     "pixi.js": "^8.22.0",
     "react": "19.3.0",

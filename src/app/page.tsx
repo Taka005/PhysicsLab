@@ -10,6 +10,7 @@ import { ConnectionProvider } from "@/context/ConnectionContext";
 import { EditProvider } from "@/context/EditContext";
 import { FillProvider } from "@/context/FillContext";
 import { AnalysisProvider } from "@/context/AnalysisContext";
+import { CanvasExportProvider } from "@/context/CanvasExportContext";
 
 export default function Home() {
   return (
@@ -22,8 +23,10 @@ export default function Home() {
                 <ConnectionProvider>
                   <ProtractorProvider>
                     <AnalysisProvider>
-                      <PhysicsCanvas/>
-                      <ControlPanel/>
+                      <CanvasExportProvider>
+                        <PhysicsCanvas/>
+                        <ControlPanel/>
+                      </CanvasExportProvider>
                     </AnalysisProvider>
                   </ProtractorProvider>
                 </ConnectionProvider>

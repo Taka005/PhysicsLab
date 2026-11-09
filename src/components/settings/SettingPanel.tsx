@@ -9,6 +9,7 @@ import SliderField from "../ui/SliderField";
 import { useSpawnState } from "@/context/SpawnContext";
 import { useConnectionState } from "@/context/ConnectionContext";
 import { useProtractor } from "@/context/ProtractorContext";
+import { useCanvasExport } from "@/context/CanvasExportContext";
 
 type SettingPanelProps = {
   onOpenScriptManager: () => void;
@@ -21,8 +22,11 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
   const { updateSpawnConfig } = useSpawnState();
   const { updateConnectionConfig } = useConnectionState();
   const { isProtractorVisible, setIsProtractorVisible } = useProtractor();
+  const { exporter, gifRecorder } = useCanvasExport();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const recordingControllerRef = useRef<AbortController | null>(null);
   const [activeTab, setActiveTab] = useState<"display" | "data">("display");
+  const [isGifRecording, setIsGifRecording] = useState(false);
 
   if (!engine) return null;
 
@@ -66,6 +70,66 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
 
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  };
+
+  const handlePngDownload = async () => {
+    if (!exporter) {
+      toast.error("描画の準備ができていません");
+      return;
+    }
+
+    try {
+      const blob = await exporter();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "physics-world.png";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (error) {
+      toast.error("描画をPNGとして保存できませんでした", {
+        description: error instanceof Error ? error.message : "不明なエラーが発生しました"
+      });
+    }
+  };
+
+  const handleGifRecord = async () => {
+    if (recordingControllerRef.current) {
+      recordingControllerRef.current.abort();
+      return;
+    }
+
+    if (!gifRecorder) {
+      toast.error("描画の準備ができていません");
+      return;
+    }
+
+    const controller = new AbortController();
+    recordingControllerRef.current = controller;
+    setIsGifRecording(true);
+    toast.info("GIFを録画しています。最大10秒で自動的に保存します");
+
+    try {
+      const blob = await gifRecorder(controller.signal);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "physics-world.gif";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      toast.success("GIFを保存しました");
+    } catch (error) {
+      toast.error("GIFの録画に失敗しました", {
+        description: error instanceof Error ? error.message : "不明なエラーが発生しました"
+      });
+    } finally {
+      recordingControllerRef.current = null;
+      setIsGifRecording(false);
+    }
   };
 
   return (
@@ -297,6 +361,22 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
                 className="flex-1 px-4 py-2 bg-lime-500 text-white rounded hover:bg-lime-600 transition focus:outline-none"
               >
                 エクスポート
+              </button>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={handlePngDownload}
+                className="flex-1 px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition focus:outline-none"
+              >
+                描画を保存
+              </button>
+              <button
+                onClick={handleGifRecord}
+                disabled={!gifRecorder}
+                title="10fps・最大10秒"
+                className="flex-1 px-3 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isGifRecording ? "停止して保存" : "GIF録画"}
               </button>
             </div>
             <div className="flex gap-2">
