@@ -36,7 +36,7 @@ function getSample(body: BaseBody, time: number): Sample {
 
 export default function GraphPanel({ engine, body }: { engine: Engine; body: BaseBody }) {
   const [samples, setSamples] = useState<Sample[]>([]);
-  const [maxSamples, setMaxSamples] = useState(600);
+  const [maxSamples, setMaxSamples] = useState(300);
   const [resetVersion, setResetVersion] = useState(0);
   const maxSamplesRef = useRef(maxSamples);
   maxSamplesRef.current = maxSamples;
