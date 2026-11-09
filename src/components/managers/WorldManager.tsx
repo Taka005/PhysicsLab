@@ -7,19 +7,33 @@ import { toast } from "sonner";
 const STORAGE_KEY = "worldManagerSlots";
 const SLOT_COUNT = 5;
 
-function isValidSlots(value: unknown): value is (string | null)[] {
-  return (
-    Array.isArray(value) &&
-    value.length <= SLOT_COUNT &&
-    value.every((slot) => slot === null || typeof slot === "string")
-  );
-}
-
 export default function WorldManagerPanel() {
   const engine = useEngine();
-  const [slots, setSlots] = useState<(string | null)[]>(
-    () => Array(SLOT_COUNT).fill(null)
-  );
+  const [slots, setSlots] = useState<(string | null)[]>(()=>Array(SLOT_COUNT).fill(null));
+
+  if (!engine) return null;
+
+  const isValidSlots = (value: unknown): value is (string | null)[]=>{
+    if(
+      Array.isArray(value) &&
+      value.length <= SLOT_COUNT &&
+      value.every((slot) => slot === null || typeof slot === "string")
+    ){
+      try{
+        (value as (string | null)[]).forEach(data=>{
+          if(data !== null){
+            engine.parseValidData(data);
+          }
+        });
+
+        return true;
+      }catch{
+        return false;
+      }
+    }else{
+      return false;
+    }
+  }
 
   useEffect(() => {
     try {
@@ -39,8 +53,6 @@ export default function WorldManagerPanel() {
       });
     }
   }, []);
-
-  if (!engine) return null;
 
   const persistSlots = (nextSlots: (string | null)[]) => {
     try {
@@ -65,14 +77,14 @@ export default function WorldManagerPanel() {
       }
     } catch (error) {
       toast.error("ワールドの保存に失敗しました", {
-        description:
-          error instanceof Error ? error.message : "不明なエラーが発生しました",
+        description: error instanceof Error ? error.message : "不明なエラーが発生しました",
       });
     }
   };
 
   const handleLoad = (index: number, event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
+
     const data = slots[index];
     if (!data) return;
 

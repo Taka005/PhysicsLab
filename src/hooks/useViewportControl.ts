@@ -7,12 +7,12 @@ export function useViewportControl(engine: Engine | null) {
   const pressedKeysRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement).tagName)) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (["INPUT", "TEXTAREA", "SELECT"].includes((event.target as HTMLElement).tagName)) return;
 
-      e.preventDefault();
+      event.preventDefault();
 
-      pressedKeysRef.current.add(e.code);
+      pressedKeysRef.current.add(event.code);
 
       if (engine) {
         if (pressedKeysRef.current.has("Space")){
@@ -55,8 +55,8 @@ export function useViewportControl(engine: Engine | null) {
       }
     };
 
-    const handleKeyUp = (e: KeyboardEvent) => {
-      pressedKeysRef.current.delete(e.code);
+    const handleKeyUp = (event: KeyboardEvent) => {
+      pressedKeysRef.current.delete(event.code);
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -84,9 +84,9 @@ export function useViewportControl(engine: Engine | null) {
     };
   }, [engine]);
 
-  const handleWheel = (e: WheelEvent | React.WheelEvent) => {
+  const handleWheel = (event: WheelEvent | React.WheelEvent) => {
     if (!engine) return;
-    if (e.deltaY < 0) {
+    if (event.deltaY < 0) {
       engine.viewport.zoomRatio = Math.min(engine.viewport.zoomRatio + 0.1, 5);
     } else {
       engine.viewport.zoomRatio = Math.max(engine.viewport.zoomRatio - 0.1, 0.3);

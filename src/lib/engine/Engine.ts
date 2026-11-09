@@ -628,10 +628,14 @@ export class Engine extends EngineBase {
     return edges;
   }
 
-  public import(saveData: string): void {
+  public parseValidData(saveData: string){
     const rawData = JSON.parse(saveData);
 
-    const validData = saveDataSchema.parse(rawData);
+    return saveDataSchema.parse(rawData);
+  }
+
+  public import(saveData: string): void {
+    const validData = this.parseValidData(saveData);
 
     if(validData.version !== Engine.SAVE_DATA_VERSION) throw new EngineError("セーブデータのバージョンが違います");
 
