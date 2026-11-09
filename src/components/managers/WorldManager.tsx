@@ -1,11 +1,12 @@
 "use client";
 
 import { useEngine } from "@/context/EngineContext";
-import { useEffect, useState, type MouseEvent } from "react";
+import { useEffect, useState, MouseEvent } from "react";
 import { toast } from "sonner";
 
 const STORAGE_KEY = "saveDataSlots";
 const MAX_SLOT = 5;
+const PRESET_SLOT = 3;
 
 export default function WorldManagerPanel() {
   const engine = useEngine();
@@ -89,6 +90,27 @@ export default function WorldManagerPanel() {
     }
   };
 
+  const handlePresetLoad = async (index: number, event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+
+    try {
+      const response = await fetch(`/preset/${index + 1}.json`);
+      if (!response.ok) {
+        throw new Error(`ファイルの取得に失敗しました (ステータス: ${response.status})`);
+      }
+
+      const data = await response.text();
+
+      engine.import(data);
+
+      toast.success("ロードしました");
+    } catch (error) {
+      toast.error("ワールドの読み込みに失敗しました", {
+        description: error instanceof Error ? error.message : "不明なエラーが発生しました"
+      });
+    }
+  };
+
   const handleDelete = (
     index: number,
     event: MouseEvent<HTMLButtonElement>
@@ -108,7 +130,7 @@ export default function WorldManagerPanel() {
       <div className="flex border-b border-gray-400">
         <button
           onClick={() => setActiveTab("save")}
-          className={`flex-1 pb-2 font-medium text-center transition-colors border-b-2 ${
+          className={`flex-1 pb-2 font-medium text-center transition-colors border-b-2 focus:outline-none ${
             activeTab === "save"
               ? "border-blue-500 text-blue-600"
               : "border-transparent text-gray-500 hover:text-gray-700"
@@ -118,7 +140,7 @@ export default function WorldManagerPanel() {
         </button>
         <button
           onClick={() => setActiveTab("preset")}
-          className={`flex-1 pb-2 font-medium text-center transition-colors border-b-2 ${
+          className={`flex-1 pb-2 font-medium text-center transition-colors border-b-2 focus:outline-none ${
             activeTab === "preset"
               ? "border-blue-500 text-blue-600"
               : "border-transparent text-gray-500 hover:text-gray-700"
@@ -169,7 +191,23 @@ export default function WorldManagerPanel() {
       )}
       {activeTab === "preset" && (
         <div className="flex flex-col gap-1">
-
+          {Array.from({ length: PRESET_SLOT }).map((_,index)=>(
+          <div
+            key={index}
+            className="group flex items-center h-10 font-semibold justify-between gap-2 px-3 py-2 rounded-lg text-xs cursor-pointer transition-colors bg-gray-50/60 hover:bg-gray-100/70 border border-gray-300"
+          >
+            <span className="truncate flex-1 ml-2 text-gray-600 hover:text-gray-700">
+              プリセット {index + 1}
+            </span>
+            <button
+              type="button"
+              onClick={(event) => handlePresetLoad(index, event)}
+              className="text-blue-500 hover:text-blue-600 p-1 focus:outline-none disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              ロード
+            </button>
+          </div>
+          ))}
         </div>
       )}
     </div>

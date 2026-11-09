@@ -81,7 +81,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
         <div className="flex border-b border-gray-400">
           <button
             onClick={() => setActiveTab("display")}
-            className={`flex-1 pb-2 font-medium text-center transition-colors border-b-2 ${
+            className={`flex-1 pb-2 font-medium text-center transition-colors border-b-2 focus:outline-none ${
               activeTab === "display"
                 ? "border-blue-500 text-blue-600"
                 : "border-transparent text-gray-500 hover:text-gray-700"
@@ -91,7 +91,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
           </button>
           <button
             onClick={() => setActiveTab("data")}
-            className={`flex-1 pb-2 font-medium text-center transition-colors border-b-2 ${
+            className={`flex-1 pb-2 font-medium text-center transition-colors border-b-2 focus:outline-none ${
               activeTab === "data"
                 ? "border-blue-500 text-blue-600"
                 : "border-transparent text-gray-500 hover:text-gray-700"
