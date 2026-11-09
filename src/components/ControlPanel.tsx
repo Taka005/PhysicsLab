@@ -13,7 +13,7 @@ import { useToolMode } from "@/context/ToolModeContext";
 import ConnectionSettings from "./settings/ConnectionSettings";
 import EditSettings from "./settings/EditSettings";
 import { useEditState } from "@/context/EditContext";
-import ScriptManagerPanel from "./scripts/ScriptManager";
+import ScriptManagerPanel from "./managers/ScriptManager";
 
 export default function ControlPanel() {
   const engine = useEngine();
