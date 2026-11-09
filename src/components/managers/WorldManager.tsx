@@ -103,7 +103,7 @@ export default function WorldManagerPanel() {
   };
 
   return (
-    <div className="flex-1 min-h-0 overflow-y-auto p-2 space-y-1">
+    <div className="p-2 space-y-1">
       {slots.map((slot, index) => (
         <div
           key={index}
