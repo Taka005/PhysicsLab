@@ -7,6 +7,7 @@ export class Viewport{
   private _gridWidth: number;
   private _isDisplayVector: boolean = false;
   private _isDisplayGrid: boolean = false;
+  private _isDisplayConnection: boolean = false;
   private _isDisplayEdge: boolean = false;
   private _isHiddenBody: boolean = false;
   private _isHiddenEffect: boolean = false;
@@ -44,6 +45,15 @@ export class Viewport{
 
   public set isDisplayGrid(value: boolean) {
     this._isDisplayGrid = value;
+    this.onChanged();
+  }
+
+  public get isDisplayConnection(): boolean{
+    return this._isDisplayConnection;
+  }
+
+  public set isDisplayConnection(value: boolean) {
+    this._isDisplayConnection = value;
     this.onChanged();
   }
 
@@ -127,6 +137,7 @@ export class Viewport{
     this.gridWidth = DEFAULT_VIEWPORT_VALUE.gridWidth;
     this.isDisplayGrid= false;
     this.isDisplayVector = false;
+    this.isDisplayConnection = false;
     this.isDisplayEdge = false;
     this.isHiddenBody = false;
     this.isHiddenEffect = false;

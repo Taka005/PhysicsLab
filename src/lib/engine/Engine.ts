@@ -216,6 +216,7 @@ export class Engine extends EngineBase {
       isDisabledScript: this.isDisabledScript,
       isDisplayGrid: this.viewport.isDisplayGrid,
       isDisplayVector: this.viewport.isDisplayVector,
+      isDisplayConnection: this.viewport.isDisplayConnection,
       isDisplayEdge: this.viewport.isDisplayEdge,
       isHiddenBody: this.viewport.isHiddenBody,
       isHiddenEffect: this.viewport.isHiddenEffect,

@@ -16,6 +16,7 @@ export function useEngineState(): EngineSnapShot {
     isDisabledScript: false,
     isDisplayGrid: false,
     isDisplayVector: false,
+    isDisplayConnection: false,
     isDisplayEdge: false,
     isHiddenBody: false,
     isHiddenEffect: false,

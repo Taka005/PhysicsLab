@@ -8,6 +8,7 @@ import { VectorView } from "./views/VectorView";
 import { EdgeView } from "./views/EdgeView";
 import { GridView } from "./views/GridView";
 import { BoosterView } from "./views/BoosterView";
+import { ConnectionView } from "./views/ConnectionView";
 
 export class Renderer{
   private app: Application = new Application();
@@ -18,6 +19,7 @@ export class Renderer{
   private effectContainer: Container = new Container();
   private groundContainer: Container = new Container();
   private bodyContainer: Container = new Container();
+  private connectionGraphics = new Graphics();
   private viewMap: Map<string,Graphics> = new Map();
   private trackingViews: Graphics[] = [];
   private predictTrackingViews: Graphics[] = [];
@@ -56,6 +58,7 @@ export class Renderer{
     this.mainContainer.addChild(this.trackingContainer);
     this.mainContainer.addChild(this.predictTrackingContainer);
     this.mainContainer.addChild(this.bodyContainer);
+    this.bodyContainer.addChild(this.connectionGraphics);
 
     this.trackingContainer.alpha = 0.3;
     this.predictTrackingContainer.alpha = 0.3;
@@ -77,6 +80,12 @@ export class Renderer{
     this.bodyContainer.visible = !this.engine.viewport.isHiddenBody;
     this.effectContainer.visible = !this.engine.viewport.isHiddenEffect;
     this.groundContainer.visible = !this.engine.viewport.isHiddenGround;
+
+    if (this.engine.viewport.isDisplayConnection) {
+      ConnectionView.draw(this.connectionGraphics, this.engine.getObjects());
+    } else {
+      this.connectionGraphics.clear();
+    }
 
     const activeIds = new Set<string>();
 

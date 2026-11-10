@@ -227,6 +227,15 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             </div>
             <div className="flex-1 gap-2">
               <ToggleSwitch
+                label="接続を表示"
+                checked={state.isDisplayConnection}
+                onChange={(checked) => {
+                  engine.viewport.isDisplayConnection = checked;
+                }}
+              />
+            </div>
+            <div className="flex-1 gap-2">
+              <ToggleSwitch
                 label="エッジを表示"
                 checked={state.isDisplayEdge}
                 onChange={(checked) => {

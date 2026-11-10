@@ -182,6 +182,7 @@ export type EngineSnapShot = {
   isDebugMode: boolean;
   isDisplayGrid: boolean;
   isDisplayVector: boolean;
+  isDisplayConnection: boolean;
   isDisplayEdge: boolean;
   isHiddenBody: boolean;
   isHiddenEffect: boolean;
