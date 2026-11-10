@@ -12,7 +12,7 @@ import { FillProvider } from "@/context/FillContext";
 import { AnalysisProvider } from "@/context/AnalysisContext";
 import { CanvasExportProvider } from "@/context/CanvasExportContext";
 
-export default function Home() {
+export default function Page() {
   return (
     <main className="flex h-screen w-screen p-4 gap-4 overflow-hidden bg-gray-100 box-border">
       <EngineProvider>
