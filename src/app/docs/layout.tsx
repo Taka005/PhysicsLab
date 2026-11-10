@@ -14,7 +14,7 @@ export default function Layout({
         enabled: false,
       }}
       nav={{
-        title: "ドキュメンテーション"
+        title: "PhysicsLab"
       }}
     >
       {children}
