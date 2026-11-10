@@ -3,6 +3,7 @@ import nextra from "nextra";
 
 const nextConfig: NextConfig = {
   reactStrictMode: false,
+  basePath: process.env.NEXT_BASE_PATH ?? "",
   output: "export",
   images: {
     unoptimized: true,
