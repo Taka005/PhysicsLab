@@ -191,10 +191,10 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             </div>
             <div className="flex-1 gap-2">
               <ToggleSwitch
-                label="予測トラッキングモード"
-                checked={state.isPredictTrackingMode}
+                label="予測モード"
+                checked={state.isPredictMode}
                 onChange={(checked) => {
-                  engine.isPredictTrackingMode = checked;
+                  engine.isPredictMode = checked;
                 }}
               />
             </div>
@@ -325,13 +325,13 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             </div>
             <div className="flex-1 gap-2">
               <SliderField
-                label="予測トラッキング時間"
-                value={state.predictTrackingDuration}
-                min="0.5"
-                max="10"
-                step="0.5"
+                label="最大予測数"
+                value={state.predictLimit}
+                min="1"
+                max="50"
+                step="1"
                 onChange={(e) => {
-                  engine.predictTrackingDuration = parseFloat(e.target.value);
+                  engine.predictLimit = parseFloat(e.target.value);
                 }}
               />
             </div>

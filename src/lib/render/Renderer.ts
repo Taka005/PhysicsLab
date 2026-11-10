@@ -143,10 +143,10 @@ export class Renderer{
       this.trackingContainer.visible = false;
     }
 
-    if (this.engine.isPredictTrackingMode) {
+    if (this.engine.isPredictMode) {
       this.predictTrackingContainer.visible = true;
 
-      const predictTrackBodies = this.engine.getPredictTrackBodies();
+      const predictTrackBodies = this.engine.getPredictBodies();
       while (this.predictTrackingViews.length < predictTrackBodies.length) {
         const graphics = new Graphics();
         this.predictTrackingContainer.addChild(graphics);

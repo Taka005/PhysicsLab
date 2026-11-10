@@ -32,7 +32,10 @@ export function useMoveMode(engine: Engine | null) {
     const target = engine.toWorldPosition(Vector.from(point));
 
     if (selectedEntity != null) {
-      selectedEntity.velocity = new Vector(0, 0);
+      if(engine.isStarted){
+        selectedEntity.velocity = new Vector(0, 0);
+      }
+
       selectedEntity.position = target;
     } else if (selectedGroundEdge != null) {
       if (selectedGroundEdge.ground instanceof Line) {

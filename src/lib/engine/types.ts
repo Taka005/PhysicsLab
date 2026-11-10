@@ -128,7 +128,7 @@ export interface EngineOption extends EngineBaseOption {
   playBackSpeed: number;
   trackingInterval: number;
   trackingLimit: number;
-  predictTrackingDuration: number;
+  predictLimit: number;
   scriptExecuteInterval: number;
   worldSize: number;
 }
@@ -176,7 +176,7 @@ export type EngineSnapShot = {
   isStarted: boolean;
   isTrackingMode: boolean;
   isDynamicTrackingMode: boolean;
-  isPredictTrackingMode: boolean;
+  isPredictMode: boolean;
   isSetGridCrossMode: boolean;
   isDisabledScript: boolean;
   isDebugMode: boolean;
@@ -190,7 +190,7 @@ export type EngineSnapShot = {
   worldSize: number;
   trackingInterval: number;
   trackingLimit: number;
-  predictTrackingDuration: number;
+  predictLimit: number;
   scriptExecuteInterval: number;
   gridWidth: number;
   gravity: number;
@@ -212,7 +212,7 @@ export type ScriptError = {
 export const DEFAULT_ENGINE_VALUE: EngineOption = {
   trackingInterval: 100,
   trackingLimit: 100,
-  predictTrackingDuration: 3,
+  predictLimit: 20,
   scriptExecuteInterval: 100,
   playBackSpeed: 1,
   worldSize: 5000,
