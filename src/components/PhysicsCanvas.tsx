@@ -23,8 +23,9 @@ import ObjectInfo from "./debug/ObjectInfo";
 import { useAnalysis } from "@/context/AnalysisContext";
 import { useCanvasExport } from "@/context/CanvasExportContext";
 import GraphPanel from "./analysis/GraphPanel";
+import { toast } from "sonner";
 
-type AnalysisMenu = {
+type BodyContextMenu = {
   bodyId: string;
   x: number;
   y: number;
@@ -35,7 +36,7 @@ export default function PhysicsCanvas() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const fpsRef = useRef<HTMLSpanElement | null>(null);
   const analysisPanelRef = useRef<HTMLDivElement | null>(null);
-  const [analysisMenu, setAnalysisMenu] = useState<AnalysisMenu | null>(null);
+  const [bodyContextMenu, setBodyContextMenu] = useState<BodyContextMenu | null>(null);
   const engine = useEngine();
   const state = useEngineState();
   const { handleWheel } = useViewportControl(engine);
@@ -113,18 +114,44 @@ export default function PhysicsCanvas() {
     const body = engine.getBodiesAt(worldPosition)[0];
 
     if (!body) {
-      setAnalysisMenu(null);
+      setBodyContextMenu(null);
       return;
     }
 
-    setAnalysisMenu({
+    const menuHeight = mode === "move" && body.entities.some(entity => entity.connection.targetCount > 0) ? 88 : 48;
+
+    setBodyContextMenu({
       bodyId: body.id,
       x: Math.max(8, Math.min(point.x, container.clientWidth - 132)),
-      y: Math.max(8, Math.min(point.y, container.clientHeight - 48))
+      y: Math.max(8, Math.min(point.y, container.clientHeight - menuHeight))
     });
   };
 
   const analyzedBody = selectedBodyId ? engine.getObject(selectedBodyId) : undefined;
+  const contextMenuBody = bodyContextMenu ? engine.getObject(bodyContextMenu.bodyId) : undefined;
+  const canChangeConnections = mode === "move" && contextMenuBody instanceof BaseBody && contextMenuBody.entities.some(entity => entity.connection.targetCount > 0);
+
+  const handleChangeConnections = () => {
+    if (!(contextMenuBody instanceof BaseBody)) return;
+
+    for (const entity of contextMenuBody.entities) {
+      for (const target of entity.connection.targets) {
+        const connectedEntity = engine.getEntity(target.entityId);
+        if (!connectedEntity) continue;
+
+        const distance = Vector.distance(entity.position, connectedEntity.position);
+        entity.connection.setDistance(connectedEntity.id, distance);
+
+        if (connectedEntity.connection.get(entity.id)) {
+          connectedEntity.connection.setDistance(entity.id, distance);
+        }
+      }
+    }
+
+    toast.success("接続距離を変更しました");
+
+    setBodyContextMenu(null);
+  };
 
   useEffect(() => {
     if (!canvasRef.current || !containerRef.current || !engine) return;
@@ -204,15 +231,15 @@ export default function PhysicsCanvas() {
         ref={canvasRef}
         className="block w-full h-full"
         {...handlers}
-        onClick={() => setAnalysisMenu(null)}
+        onClick={() => setBodyContextMenu(null)}
         onContextMenu={handleCanvasContextMenu}
       />
       <ProtractorOverlay visible={isProtractorVisible} />
-      {analysisMenu && (
+      {bodyContextMenu && (
         <div
           role="menu"
           className="absolute z-30 rounded-md border border-gray-200 bg-white/90 p-1 shadow-lg backdrop-blur-sm"
-          style={{ left: analysisMenu.x, top: analysisMenu.y }}
+          style={{ left: bodyContextMenu.x, top: bodyContextMenu.y }}
           onPointerDown={(event) => event.stopPropagation()}
         >
           <button
@@ -220,12 +247,22 @@ export default function PhysicsCanvas() {
             role="menuitem"
             className="w-full rounded px-4 py-2 text-left text-sm text-gray-800 hover:bg-gray-100"
             onClick={() => {
-              setSelectedBodyId(analysisMenu.bodyId);
-              setAnalysisMenu(null);
+              setSelectedBodyId(bodyContextMenu.bodyId);
+              setBodyContextMenu(null);
             }}
           >
             分析
           </button>
+          {canChangeConnections && (
+            <button
+              type="button"
+              role="menuitem"
+              className="w-full rounded px-4 py-2 text-left text-sm text-gray-800 hover:bg-gray-100"
+              onClick={handleChangeConnections}
+            >
+              接続を変更
+            </button>
+          )}
         </div>
       )}
       {analyzedBody instanceof BaseBody && (

@@ -15,6 +15,16 @@ export class Connection {
     return this.targets.find(t => t.entityId === targetId);
   }
 
+  public setDistance(targetId: string, distance: number): void {
+    const targetIndex = this.targets.findIndex(t => t.entityId === targetId);
+    if (targetIndex === -1) throw new Error("接続が存在しません");
+
+    this.targets[targetIndex] = {
+      ...this.targets[targetIndex],
+      distance
+    };
+  }
+
   public add(entityId: string, distance: number, stiffness: number): void {
     if (this.get(entityId)) throw new Error("既に接続が存在します");
 

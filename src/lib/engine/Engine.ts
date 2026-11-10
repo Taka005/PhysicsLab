@@ -521,6 +521,10 @@ export class Engine extends EngineBase {
     return this.content.getObject(id);
   }
 
+  public getEntity(id: string): Entity | undefined {
+    return this.content.getEntity(id);
+  }
+
   public getBodiesAt(target: Vector): BaseBody[]{
     const bodies: BaseBody[] = [];
 
