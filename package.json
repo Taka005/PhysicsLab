@@ -9,6 +9,9 @@
   },
   "dependencies": {
     "chevrotain": "^13.2.0",
+    "fumadocs-core": "^16.18.4",
+    "fumadocs-mdx": "^15.5.3",
+    "fumadocs-ui": "^16.18.4",
     "gifenc": "1.0.3",
     "next": "^16.4.2",
     "pixi.js": "^8.22.0",
@@ -22,6 +25,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/turbopack": "^4",
+    "@types/mdx": "^2.0.14",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

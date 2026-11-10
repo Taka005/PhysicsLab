@@ -1,5 +1,3 @@
-"use client";
-
 import ControlPanel from "@/components/ControlPanel";
 import PhysicsCanvas from "@/components/PhysicsCanvas";
 import { EngineProvider } from "@/context/EngineContext";

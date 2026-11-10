@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { RootProvider } from "fumadocs-ui/provider/next";
 import "./globals.css";
 import { Toaster } from "sonner";
 
@@ -33,9 +34,20 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="ja"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        {children}
+        <RootProvider
+          theme={{ enabled: false }}
+          search={{
+            options: {
+              type: "static",
+              api: "/api/search",
+            },
+          }}
+        >
+          {children}
+        </RootProvider>
         <Toaster richColors position="bottom-left" />
       </body>
     </html>
