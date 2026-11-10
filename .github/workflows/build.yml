@@ -33,10 +33,7 @@ jobs:
 
       - name: Install dependencies
         run: bun install
-
-      - name: Generate Fumadocs source
-        run: bunx fumadocs-mdx
-
+        
       - name: Build with Next.js
         run: bun run build
 
