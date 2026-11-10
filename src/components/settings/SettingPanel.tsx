@@ -170,7 +170,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
           </button>
         </div>
         {activeTab === "display" && (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 h-[600px] overflow-y-auto scrollbar-none">
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="トラッキングモード"
