@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import nextra from "nextra";
 
 const nextConfig: NextConfig = {
   reactStrictMode: false,
@@ -8,4 +9,9 @@ const nextConfig: NextConfig = {
   }
 };
 
-export default nextConfig;
+const withNextra = nextra({
+  contentDirBasePath: "/docs",
+  search: false,
+});
+
+export default withNextra(nextConfig);
