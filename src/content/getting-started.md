@@ -1,9 +1,9 @@
 ---
-title: Getting Started
+title: 始め方
 description: はじめに
 ---
 
-# Getting Started
+# 始め方
 
 このドキュメントでは、基本的な使い方を説明します。
 

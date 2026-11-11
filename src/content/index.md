@@ -1,11 +1,15 @@
 ---
-title: ドキュメント
-description: サイトのドキュメントへようこそ
+title: トップページ
+description: ドキュメントへようこそ
 ---
 
-# ドキュメント
+# PhysicsLab
 
-ここでは、サイトの使い方や開発に関する情報をまとめています。
+PhysicsLabは簡単に物理シミュレーションをすることができるソフトです
 
-ドキュメント一覧とサイドバーは、Markdown ファイルから自動生成されます。
-新しいページを追加する場合は、`src/content/` 以下に Markdown ファイルを作成してください。
+
+Position Based Dynamics法を用いて、軽量な衝突計算を行っています
+
+![スクリーンショット](../../public/docs/screenshot.png)
+
+バグや新機能を報告する場合はGithubにIssueを作成してください
