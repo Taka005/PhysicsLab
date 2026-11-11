@@ -16,9 +16,8 @@ export default function EnvSettings() {
         min="0"
         max="1000"
         step="1"
-        onChange={(e) => {
-          const val = parseFloat(e.target.value);
-          engine.gravity = val;
+        onChange={(value) => {
+          engine.gravity = value;
         }}
       />
       <SliderField
@@ -27,9 +26,8 @@ export default function EnvSettings() {
         min="-0.3"
         max="0.3"
         step="0.001"
-        onChange={(e) => {
-          const val = parseFloat(e.target.value);
-          engine.friction = val;
+        onChange={(value) => {
+          engine.friction = value;
         }}
       />
       <SliderField
@@ -38,9 +36,8 @@ export default function EnvSettings() {
         min="0.1"
         max="2"
         step="0.1"
-        onChange={(e) => {
-          const val = parseFloat(e.target.value);
-          engine.playBackSpeed = val;
+        onChange={(value) => {
+          engine.playBackSpeed = value;
         }}
       />
     </>

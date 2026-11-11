@@ -303,8 +303,8 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
                 min="5"
                 max="100"
                 step="5"
-                onChange={(e) => {
-                  engine.viewport.gridWidth = parseFloat(e.target.value);
+                onChange={(value) => {
+                  engine.viewport.gridWidth = value;
                 }}
               />
             </div>
@@ -315,8 +315,8 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
                 min="100"
                 max="3000"
                 step="10"
-                onChange={(e) => {
-                  engine.trackingInterval = parseFloat(e.target.value);
+                onChange={(value) => {
+                  engine.trackingInterval = value;
                 }}
               />
             </div>
@@ -327,8 +327,8 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
                 min="10"
                 max="1000"
                 step="10"
-                onChange={(e) => {
-                  engine.trackingLimit = parseFloat(e.target.value);
+                onChange={(value) => {
+                  engine.trackingLimit = value;
                 }}
               />
             </div>
@@ -339,8 +339,8 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
                 min="1"
                 max="50"
                 step="1"
-                onChange={(e) => {
-                  engine.predictLimit = parseFloat(e.target.value);
+                onChange={(value) => {
+                  engine.predictLimit = value;
                 }}
               />
             </div>
@@ -351,8 +351,8 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
                 min="10"
                 max="1000"
                 step="10"
-                onChange={(e) => {
-                  engine.scriptExecuteInterval = parseFloat(e.target.value);
+                onChange={(value) => {
+                  engine.scriptExecuteInterval = value;
                 }}
               />
             </div>
@@ -363,8 +363,8 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
                 min="1000"
                 max="10000"
                 step="100"
-                onChange={(e) => {
-                  engine.worldSize = parseFloat(e.target.value);
+                onChange={(value) => {
+                  engine.worldSize = value;
                 }}
               />
             </div>
@@ -375,8 +375,8 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
                 min="30"
                 max="300"
                 step="10"
-                onChange={(e) => {
-                  engine.pps = parseFloat(e.target.value);
+                onChange={(value) => {
+                  engine.pps = value;
                 }}
               />
             </div>

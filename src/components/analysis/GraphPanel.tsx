@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Engine, BaseBody } from "@/lib/engine";
 import { capitalize } from "@/lib/engine";
 import { Graph } from "./Graph";
@@ -70,8 +70,7 @@ export default function GraphPanel({ engine, body }: { engine: Engine; body: Bas
     });
   }, [body.id, engine, resetVersion]);
 
-  const handleMaxSamplesChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const nextMaxSamples = Number(event.target.value);
+  const handleMaxSamplesChange = (nextMaxSamples: number) => {
     setMaxSamples(nextMaxSamples);
     setSamples((current) => current.slice(-nextMaxSamples));
   };

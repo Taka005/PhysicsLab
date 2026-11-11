@@ -31,11 +31,11 @@ export default function FillSettings() {
           <SliderField
             label="直径"
             value={fillConfig.diameter ?? 15}
-            min="0"
+            min="1"
             max="100"
             step="1"
-            onChange={(e) => {
-              updateFillConfig({ diameter: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateFillConfig({ diameter: value });
             }}
           />
           <SliderField
@@ -44,8 +44,8 @@ export default function FillSettings() {
             min="0"
             max="100"
             step="1"
-            onChange={(e) => {
-              updateFillConfig({ mass: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateFillConfig({ mass: value });
             }}
           />
           <SliderField
@@ -54,8 +54,8 @@ export default function FillSettings() {
             min="0.1"
             max="1"
             step="0.1"
-            onChange={(e) => {
-              updateFillConfig({ stiffness: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateFillConfig({ stiffness: value });
             }}
           />
           <SliderField
@@ -64,8 +64,8 @@ export default function FillSettings() {
             min="-300"
             max="300"
             step="1"
-            onChange={(e) => {
-              updateFillConfig({ velocityX: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateFillConfig({ velocityX: value });
             }}
           />
           <SliderField
@@ -74,8 +74,8 @@ export default function FillSettings() {
             min="-300"
             max="300"
             step="1"
-            onChange={(e) => {
-              updateFillConfig({ velocityY: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateFillConfig({ velocityY: value });
             }}
           />
         </>

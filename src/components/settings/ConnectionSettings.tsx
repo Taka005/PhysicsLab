@@ -30,8 +30,8 @@ export default function ConnectionSettings() {
         min="0.1"
         max="1"
         step="0.1"
-        onChange={(e) => {
-          updateConnectionConfig({ stiffness: parseFloat(e.target.value) });
+        onChange={(value) => {
+          updateConnectionConfig({ stiffness: value });
         }}
       />
     </>

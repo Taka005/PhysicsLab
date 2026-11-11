@@ -22,8 +22,8 @@ export default function EditSettings() {
             min="1"
             max="100"
             step="1"
-            onChange={(e) => {
-              updateEditConfig({ diameter: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateEditConfig({ diameter: value });
             }}
           />
           <SliderField
@@ -32,8 +32,8 @@ export default function EditSettings() {
             min="0"
             max="100"
             step="1"
-            onChange={(e) => {
-              updateEditConfig({ mass: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateEditConfig({ mass: value });
             }}
           />
           <SliderField
@@ -42,8 +42,8 @@ export default function EditSettings() {
             min="0.1"
             max="1"
             step="0.1"
-            onChange={(e) => {
-              updateEditConfig({ stiffness: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateEditConfig({ stiffness: value });
             }}
           />
           <SliderField
@@ -52,8 +52,8 @@ export default function EditSettings() {
             min="-500"
             max="500"
             step="1"
-            onChange={(e) => {
-              updateEditConfig({ velocityX: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateEditConfig({ velocityX: value });
             }}
           />
           <SliderField
@@ -62,8 +62,8 @@ export default function EditSettings() {
             min="-500"
             max="500"
             step="1"
-            onChange={(e) => {
-              updateEditConfig({ velocityY: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateEditConfig({ velocityY: value });
             }}
           />
         </>
@@ -76,8 +76,8 @@ export default function EditSettings() {
             min="1"
             max="50"
             step="1"
-            onChange={(e) => {
-              updateEditConfig({ width: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateEditConfig({ width: value });
             }}
           />
         </>
@@ -90,8 +90,8 @@ export default function EditSettings() {
             min="-500"
             max="500"
             step="1"
-            onChange={(e) => {
-              updateEditConfig({ velocityX: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateEditConfig({ velocityX: value });
             }}
           />
           <SliderField
@@ -100,8 +100,8 @@ export default function EditSettings() {
             min="-500"
             max="500"
             step="1"
-            onChange={(e) => {
-              updateEditConfig({ velocityY: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateEditConfig({ velocityY: value });
             }}
           />
         </>

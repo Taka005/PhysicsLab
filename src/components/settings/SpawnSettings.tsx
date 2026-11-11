@@ -44,11 +44,11 @@ export default function SpawnSettings() {
           <SliderField
             label="直径"
             value={spawnConfig.diameter ?? 15}
-            min="0"
+            min="1"
             max="100"
             step="1"
-            onChange={(e) => {
-              updateSpawnConfig({ diameter: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateSpawnConfig({ diameter: value });
             }}
           />
           <SliderField
@@ -57,8 +57,8 @@ export default function SpawnSettings() {
             min="0"
             max="100"
             step="1"
-            onChange={(e) => {
-              updateSpawnConfig({ mass: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateSpawnConfig({ mass: value });
             }}
           />
           <SliderField
@@ -67,8 +67,8 @@ export default function SpawnSettings() {
             min="0.1"
             max="1"
             step="0.1"
-            onChange={(e) => {
-              updateSpawnConfig({ stiffness: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateSpawnConfig({ stiffness: value });
             }}
           />
           <SliderField
@@ -77,8 +77,8 @@ export default function SpawnSettings() {
             min="-500"
             max="500"
             step="1"
-            onChange={(e) => {
-              updateSpawnConfig({ velocityX: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateSpawnConfig({ velocityX: value });
             }}
           />
           <SliderField
@@ -87,8 +87,8 @@ export default function SpawnSettings() {
             min="-500"
             max="500"
             step="1"
-            onChange={(e) => {
-              updateSpawnConfig({ velocityY: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateSpawnConfig({ velocityY: value });
             }}
           />
         </>
@@ -101,8 +101,8 @@ export default function SpawnSettings() {
             min="1"
             max="50"
             step="1"
-            onChange={(e) => {
-              updateSpawnConfig({ width: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateSpawnConfig({ width: value });
             }}
           />
         </>
@@ -115,8 +115,8 @@ export default function SpawnSettings() {
             min="-500"
             max="500"
             step="1"
-            onChange={(e) => {
-              updateSpawnConfig({ velocityX: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateSpawnConfig({ velocityX: value });
             }}
           />
           <SliderField
@@ -125,8 +125,8 @@ export default function SpawnSettings() {
             min="-500"
             max="500"
             step="1"
-            onChange={(e) => {
-              updateSpawnConfig({ velocityY: parseFloat(e.target.value) });
+            onChange={(value) => {
+              updateSpawnConfig({ velocityY: value });
             }}
           />
         </>
