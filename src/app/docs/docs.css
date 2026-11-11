@@ -1,5 +1,6 @@
 .docs-shell {
   min-height: 100vh;
+  min-width: 0;
   background: #fff;
   color: #1f2937;
 }
@@ -38,11 +39,11 @@
 
 .docs-layout {
   display: grid;
-  grid-template-columns: 14rem minmax(0, 1fr);
-  gap: 3rem;
+  grid-template-columns: minmax(12rem, 14rem) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
   max-width: 76rem;
   margin: 0 auto;
-  padding: 2.5rem 2rem 4rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 4vw, 2rem) 4rem;
 }
 
 .docs-sidebar {
@@ -57,13 +58,62 @@
   gap: 0.75rem;
 }
 
+.docs-page-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+
+.docs-sidebar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 .docs-main {
   min-width: 0;
   max-width: 48rem;
 }
 
+.docs-index-list {
+  margin-top: 2rem;
+}
+
+.docs-index-list h2 {
+  margin: 2.5rem 0 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+  color: #111827;
+  font-size: 1.5rem;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.docs-index-list > p {
+  margin: 1rem 0;
+}
+
+.docs-index-list .docs-page-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .docs-content {
+  min-width: 0;
   line-height: 1.75;
+}
+
+.docs-content img,
+.docs-content video {
+  max-width: 100%;
+  height: auto;
+}
+
+.docs-content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .docs-content h1,
@@ -72,11 +122,12 @@
   color: #111827;
   font-weight: 650;
   line-height: 1.25;
+  scroll-margin-top: 5rem;
 }
 
 .docs-content h1 {
   margin: 0 0 1.5rem;
-  font-size: 2.25rem;
+  font-size: clamp(1.8rem, 5vw, 2.25rem);
 }
 
 .docs-content h2 {
@@ -118,6 +169,8 @@
 
 .docs-content pre {
   overflow-x: auto;
+  max-width: 100%;
+  overscroll-behavior-x: contain;
   margin: 1.25rem 0;
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
@@ -142,21 +195,16 @@
 
 .docs-footer {
   border-top: 1px solid #e5e7eb;
-  padding: 1.5rem 2rem;
+  padding: 1.5rem clamp(1rem, 4vw, 2rem);
   color: #6b7280;
   font-size: 0.875rem;
   text-align: center;
 }
 
-@media (max-width: 700px) {
-  .docs-header {
-    padding: 0 1rem;
-  }
-
+@media (max-width: 800px) {
   .docs-layout {
     grid-template-columns: minmax(0, 1fr);
-    gap: 2rem;
-    padding: 1.5rem 1rem 3rem;
+    gap: 1.5rem;
   }
 
   .docs-sidebar {
@@ -168,6 +216,47 @@
   .docs-sidebar nav {
     flex-direction: row;
     flex-wrap: wrap;
+    align-items: flex-start;
     gap: 0.75rem 1rem;
+  }
+
+  .docs-sidebar-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+    flex: 1 1 100%;
+    gap: 0.5rem 1rem;
+  }
+
+  .docs-main {
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .docs-header {
+    height: 3.5rem;
+    padding: 0 1rem;
+  }
+
+  .docs-brand {
+    font-size: 1rem;
+  }
+
+  .docs-home-link {
+    font-size: 0.8rem;
+  }
+
+  .docs-layout {
+    gap: 1.25rem;
+    padding: 1.25rem 1rem 2.5rem;
+  }
+
+  .docs-content {
+    overflow-wrap: anywhere;
+  }
+
+  .docs-content pre {
+    padding: 0.75rem;
+    font-size: 0.8rem;
   }
 }

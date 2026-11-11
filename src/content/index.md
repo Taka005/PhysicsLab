@@ -7,7 +7,5 @@ description: サイトのドキュメントへようこそ
 
 ここでは、サイトの使い方や開発に関する情報をまとめています。
 
-## はじめに
-
-- [Getting Started](/docs/getting-started)
-- [インストール方法](/docs/guide/installation)
+ドキュメント一覧とサイドバーは、Markdown ファイルから自動生成されます。
+新しいページを追加する場合は、`src/content/` 以下に Markdown ファイルを作成してください。

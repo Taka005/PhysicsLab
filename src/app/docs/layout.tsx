@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import DocsPageList from "./DocsPageList";
 import "./docs.css";
 
 export default async function DocsLayout({
@@ -21,13 +22,11 @@ export default async function DocsLayout({
         <aside className="docs-sidebar" aria-label="ドキュメント">
           <nav>
             <Link href="/docs">ドキュメント</Link>
-            <Link href="/docs/getting-started">Getting Started</Link>
-            <Link href="/docs/guide/installation">インストール方法</Link>
+            <DocsPageList className="docs-page-list docs-sidebar-list" />
           </nav>
         </aside>
         <main className="docs-main">{children}</main>
       </div>
-      <footer className="docs-footer">PhysicsLab</footer>
     </div>
   );
 }
