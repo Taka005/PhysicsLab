@@ -66,7 +66,7 @@ export default function SliderField({
               }
             }}
             autoFocus
-            className="box-border h-7 w-24 rounded border border-gray-500 px-2 py-1 text-right text-sm leading-5 text-gray-700 font-mono focus:outline-none"
+            className="box-border h-7 w-15 rounded border border-gray-500 px-2 py-1 text-right text-sm leading-5 text-gray-700 font-mono focus:outline-none"
           />
         ) : (
           <button
