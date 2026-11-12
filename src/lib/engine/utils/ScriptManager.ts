@@ -64,6 +64,8 @@ export class ScriptManager{
     const uniqueIds = new Set(scripts);
     if (uniqueIds.size !== scripts.length) throw new EngineError("データ内に重複しているスクリプトIDが存在します");
 
+    this.globalVarMap.clear();
+
     this._scripts = scripts.map(body=>{
       return Script.from(body);
     });

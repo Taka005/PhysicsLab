@@ -2,27 +2,47 @@ import { generateAst } from "./parser/ast";
 import { transpiler } from "./Transpiler";
 
 const code = `
-  init {
-    t = 10;
-    x = 0;
-  }
+init {
+  t = 0.3;
+  target = find("g1");
+  flag = false;
+  initFlag = true;
+}
 
-  update {
-    if (!t){
-    t += 1;
-      a = 1
-    }else{
-      console("A");
-      find(target.position.X)
+update {
+
+  if(initFlag){
+    if(obj.start.y > 480){
+      initFlag = false;
     }
 
-    t = sin(max(startY,startX) * 0.05) * PI;
+      t = 0.3;
 
-    obj.start.Y += -1;
-    endY += t;
-    obj = 1;
-    console("obj.start.Y");
+      obj.start.y += t;
+      obj.end.y += t;
+  }else{
+  if(exist(target)){
+    if(flag){
+      if(obj.start.y < 440){
+      t = 0.3;
+      }
+
+      obj.start.y += t;
+      obj.end.y += t;
+
+      if(obj.start.y > 480){
+        flag = false;
+      }
+    }else{
+      if(distance(obj.start,target.start) < 10){
+        flag = true;
+        t = -0.3;
+      }
+    }
   }
+
+  }
+}
 `;
 
 try {

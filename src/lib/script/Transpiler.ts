@@ -82,6 +82,11 @@ export class Transpiler {
 
         case "IfStatement":
           this.collectGlobalVariables(statement.body);
+
+          if (statement.elseBody) {
+            this.collectGlobalVariables(statement.elseBody);
+          }
+
           break;
       }
     }
@@ -105,6 +110,11 @@ export class Transpiler {
 
         case "IfStatement":
           this.collectLocalVariables(statement.body);
+
+          if (statement.elseBody) {
+            this.collectLocalVariables(statement.elseBody);
+          }
+
           break;
       }
     }
@@ -241,11 +251,13 @@ export class Transpiler {
       return name;
     }
 
-    if (this.globalVariables.has(name)) {
+    const rootName = name.split(".")[0];
+
+    if (this.globalVariables.has(rootName)) {
       return `global.${name}`;
     }
 
-    if (scope === "update" && this.localVariables.has(name)) {
+    if (scope === "update" && this.localVariables.has(rootName)) {
       return name;
     }
 
