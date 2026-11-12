@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
+import HelpIcon from "./HelpIcon";
 
 type SliderFieldProps = {
   label: string;
+  help?: string;
   value: number;
   min: string;
   max: string;
@@ -13,6 +15,7 @@ type SliderFieldProps = {
 
 export default function SliderField({
   label,
+  help,
   value,
   min,
   max,
@@ -21,6 +24,9 @@ export default function SliderField({
 }: SliderFieldProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState(String(value));
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const sliderId = useId();
+  const helpId = `${sliderId}-help`;
 
   useEffect(() => {
     if (!isEditing) setInputValue(String(value));
@@ -51,7 +57,17 @@ export default function SliderField({
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between items-center">
-        <label className="text-sm font-semibold text-gray-700">{label}</label>
+        <div className="flex items-center gap-1">
+          <label htmlFor={sliderId} className="text-sm font-semibold text-gray-700">{label}</label>
+          {help && (
+            <HelpIcon
+              label={label}
+              isOpen={isHelpOpen}
+              controlsId={helpId}
+              onClick={() => setIsHelpOpen((previous) => !previous)}
+            />
+          )}
+        </div>
         {isEditing ? (
           <input
             type="text"
@@ -81,7 +97,18 @@ export default function SliderField({
           </button>
         )}
       </div>
+      {help && (
+        <p
+          id={helpId}
+          role="tooltip"
+          hidden={!isHelpOpen}
+          className="rounded-md bg-blue-50 px-3 py-2 text-xs leading-relaxed text-blue-900"
+        >
+          {help}
+        </p>
+      )}
       <input
+        id={sliderId}
         type="range"
         min={min}
         max={max}

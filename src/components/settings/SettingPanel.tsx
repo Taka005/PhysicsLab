@@ -174,6 +174,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="トラッキングモード"
+                help="円の過去位置を残像として表示します。記録間隔や保持数は下のスライダーで調整できます"
                 checked={state.isTrackingMode}
                 onChange={(checked) => {
                   engine.isTrackingMode = checked;
@@ -183,6 +184,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="動的トラッキングモード"
+                help="円がない場合にトラッキング履歴を消去します。円がある場合は通常どおり移動履歴を記録します"
                 checked={state.isDynamicTrackingMode}
                 onChange={(checked) => {
                   engine.isDynamicTrackingMode = checked;
@@ -192,6 +194,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="予測モード"
+                help="現在の速度と重力から円の位置を予測して表示します。衝突や地面、接続の影響は予測に含まれません"
                 checked={state.isPredictMode}
                 onChange={(checked) => {
                   engine.isPredictMode = checked;
@@ -201,6 +204,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="グリッド交点設置モード"
+                help="配置や移動の位置をグリッド交点に吸着させます。グリッド線の表示設定とは独立しています"
                 checked={state.isSetGridCrossMode}
                 onChange={(checked) => {
                   engine.isSetGridCrossMode = checked;
@@ -210,6 +214,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="グリッドを表示"
+                help="キャンバスにグリッド線を表示します。配置位置を吸着させるには、別途グリッド交点設置モードを有効にします"
                 checked={state.isDisplayGrid}
                 onChange={(checked) => {
                   engine.viewport.isDisplayGrid = checked;
@@ -219,6 +224,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="ベクトルを表示"
+                help="円の速度ベクトルをキャンバスに表示します"
                 checked={state.isDisplayVector}
                 onChange={(checked) => {
                   engine.viewport.isDisplayVector = checked;
@@ -228,6 +234,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="接続を表示"
+                help="円同士をつなぐ接続線をキャンバスに表示します"
                 checked={state.isDisplayConnection}
                 onChange={(checked) => {
                   engine.viewport.isDisplayConnection = checked;
@@ -237,6 +244,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="エッジを表示"
+                help="直線・曲線・加速器の端点を表示します。移動モードで端点をドラッグして形状を編集できます"
                 checked={state.isDisplayEdge}
                 onChange={(checked) => {
                   engine.viewport.isDisplayEdge = checked;
@@ -246,6 +254,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="角度計を表示"
+                help="キャンバスに角度計を表示します。中央のハンドルをドラッグして位置を移動できます"
                 checked={isProtractorVisible}
                 onChange={setIsProtractorVisible}
               />
@@ -253,6 +262,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="物体を非表示"
+                help="円の描画だけを隠します。円や物理計算は削除されません"
                 checked={state.isHiddenBody}
                 onChange={(checked) => {
                   engine.viewport.isHiddenBody = checked;
@@ -262,6 +272,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="エフェクトを非表示"
+                help="加速器の描画だけを隠します。加速器の効果は有効なままです"
                 checked={state.isHiddenEffect}
                 onChange={(checked) => {
                   engine.viewport.isHiddenEffect = checked;
@@ -271,6 +282,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="地面を非表示"
+                help="直線と曲線の描画だけを隠します。地面との衝突計算は有効なままです"
                 checked={state.isHiddenGround}
                 onChange={(checked) => {
                   engine.viewport.isHiddenGround = checked;
@@ -280,6 +292,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="スクリプトを無効化"
+                help="シミュレーション中のスクリプト実行を一時停止します。再度有効にすると実行が再開します"
                 checked={state.isDisabledScript}
                 onChange={(checked) => {
                   engine.isDisabledScript = checked;
@@ -289,6 +302,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="デバッグモード"
+                help="FPS、カーソル座標、オブジェクト数、カーソル位置のオブジェクト情報を表示します"
                 checked={state.isDebugMode}
                 onChange={(checked) => {
                   engine.isDebugMode = checked;
@@ -299,6 +313,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <SliderField
                 label="グリッド間隔"
+                help="グリッド線と、グリッド交点設置モードで吸着する間隔です"
                 value={state.gridWidth}
                 min="5"
                 max="100"
@@ -311,6 +326,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <SliderField
                 label="トラッキング間隔"
+                help="円の位置をトラッキング履歴に記録する時間間隔（ミリ秒）です。短くすると細かい軌跡になります"
                 value={state.trackingInterval}
                 min="100"
                 max="3000"
@@ -323,6 +339,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <SliderField
                 label="最大トラッキング数"
+                help="保持するトラッキング履歴数の上限です。増やすと長い軌跡を表示できます"
                 value={state.trackingLimit}
                 min="10"
                 max="1000"
@@ -335,6 +352,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <SliderField
                 label="最大予測数"
+                help="予測モードで各円について表示する予測点数です。増やすと、より先の位置まで表示します"
                 value={state.predictLimit}
                 min="1"
                 max="50"
@@ -347,6 +365,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <SliderField
                 label="スクリプト実行間隔"
+                help="スクリプトを実行するシミュレーション時間間隔（ミリ秒）です。短くすると更新が細かくなります"
                 value={state.scriptExecuteInterval}
                 min="10"
                 max="1000"
@@ -359,6 +378,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <SliderField
                 label="ワールドサイズ"
+                help="ワールド中心からの範囲を設定します。円の位置が境界を越えるとワールドから削除されます"
                 value={state.worldSize}
                 min="1000"
                 max="10000"
@@ -371,6 +391,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <SliderField
                 label="PPS"
+                help="1秒あたりの物理計算ステップ数です。大きくすると計算が細かくなりますが、処理負荷も増えます"
                 value={state.pps}
                 min="30"
                 max="300"
@@ -520,7 +541,20 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
                 className="group flex items-center gap-3 rounded-xl border border-gray-300 bg-white p-3 transition-all hover:border-gray-300 hover:bg-gray-50 hover:shadow-sm"
               >
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-700 transition-colors group-hover:bg-gray-200">
-
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-5 w-5"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M9.6 9a2.45 2.45 0 1 1 4.1 1.8c-1 .9-1.7 1.3-1.7 2.7M12 17h.01" />
+                  </svg>
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-xs font-semibold text-gray-800">
