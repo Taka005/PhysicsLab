@@ -10,7 +10,3 @@ description: はじめに
 ## 概要
 
 Markdown でドキュメントを記述できます。
-
-## 次のステップ
-
-[インストール方法](/docs/guide/installation) を確認してください。
