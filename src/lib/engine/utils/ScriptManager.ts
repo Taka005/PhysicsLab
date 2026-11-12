@@ -1,8 +1,10 @@
+import { Engine } from "../Engine";
 import { BaseObject } from "../objects/BaseObject";
 import { ScriptError, ScriptOption } from "../types";
 import { createId } from "./createId";
 import { EngineError } from "./EngineError";
 import { Script } from "./Script";
+import { ScriptFunction } from "./ScriptFunction";
 
 export class ScriptManager{
   private _scripts: Script[] = [];
@@ -10,6 +12,11 @@ export class ScriptManager{
   private listeners = new Set<() => void>();
   private _errors = new Map<string, ScriptError>();
   private errorSnapshot: readonly ScriptError[] = [];
+  private function: ScriptFunction;
+
+  constructor(engine: Engine){
+    this.function = new ScriptFunction(engine);
+  }
 
   public get scripts(): Script[]{
     return this._scripts;
@@ -78,14 +85,14 @@ export class ScriptManager{
         this.globalVarMap.set(obj.id, globalVar);
 
         try {
-          script.init(obj, globalVar);
+          script.init(obj, globalVar,this.function);
         } catch (error) {
           this.reportError(obj, script, error);
         }
       }
 
       try {
-        script.update(obj, globalVar);
+        script.update(obj, globalVar,this.function);
       } catch (error) {
         this.reportError(obj, script, error);
       }

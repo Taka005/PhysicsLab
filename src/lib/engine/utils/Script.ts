@@ -1,6 +1,7 @@
 import { generateAst, transpiler } from "@/lib/script";
 import { ScriptOption, TranspiledScript } from "../types";
 import { BaseObject } from "../objects/BaseObject";
+import { ScriptFunction } from "./ScriptFunction";
 
 export class Script{
   public id: string;
@@ -24,12 +25,12 @@ export class Script{
     this.build = this.transpileScript(this.code);
   }
 
-  public init(target: BaseObject,globalVar: { [key: string]: any }): void{
-    this.build.init(target,globalVar);
+  public init(target: BaseObject,globalVar: { [key: string]: any },func: ScriptFunction): void{
+    this.build.init(target,globalVar,func);
   }
 
-  public update(target: BaseObject, globalVar: { [key: string]: any }): void{
-    this.build.update(target,globalVar);
+  public update(target: BaseObject, globalVar: { [key: string]: any },func: ScriptFunction): void{
+    this.build.update(target,globalVar,func);
   }
 
   private transpileScript(code: string): TranspiledScript {

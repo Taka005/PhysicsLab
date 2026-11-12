@@ -23,7 +23,11 @@ export class Transpiler {
     "abs": "Math.abs",
     "max": "Math.max",
     "min": "Math.min",
-    "console": "console.log"
+    "console": "console.log",
+    "find": "func.find",
+    "exist": "func.exist",
+    "distance": "func.distance",
+    "destroy": "func.destroy",
   };
 
   public transpile(program: ProgramNode): string {
@@ -54,10 +58,10 @@ export class Transpiler {
     .join("\n");
 
     return `return {
-      init: function(obj, global) {
+      init: function(obj, global, func) {
       ${this.indent(initCode, 4)}
       },
-      update: function(obj, global) {
+      update: function(obj, global, func) {
       ${this.indent(updateCode, 4)}
       }
       };`;

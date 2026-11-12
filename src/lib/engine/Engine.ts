@@ -55,7 +55,7 @@ export class Engine extends EngineBase {
 
   private readonly content: ContentManager = new ContentManager();
 
-  public readonly scriptManager: ScriptManager = new ScriptManager();
+  public readonly scriptManager: ScriptManager = new ScriptManager(this);
 
   private listeners = new Set<() => void>();
 
@@ -350,11 +350,7 @@ export class Engine extends EngineBase {
       this.scriptExecuteCount += 1000/this.pps;
 
       if(this.scriptExecuteCount >= this.scriptExecuteInterval){
-        try{
-          this.scriptManager.updateAll(this.content.objects);
-        }catch(e){
-          console.log(e);
-        }
+        this.scriptManager.updateAll(this.content.objects);
 
         this.scriptExecuteCount %= this.scriptExecuteInterval;
       }

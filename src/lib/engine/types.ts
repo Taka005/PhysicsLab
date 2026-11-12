@@ -1,6 +1,7 @@
 import { BaseEffect } from "./objects/BaseEffect";
 import { BaseGround } from "./objects/BaseGround";
 import { BaseObject } from "./objects/BaseObject";
+import { ScriptFunction } from "./utils/ScriptFunction";
 
 export type VectorData = {
   x: number;
@@ -156,8 +157,8 @@ export type ScriptOption = {
 }
 
 export type TranspiledScript = {
-  init: (obj: BaseObject, globalVar: { [key: string]: any }) => void;
-  update: (obj: BaseObject, globalVar: { [key: string]: any }) => void;
+  init: (obj: BaseObject, globalVar: { [key: string]: any }, func: ScriptFunction) => void;
+  update: (obj: BaseObject, globalVar: { [key: string]: any }, func: ScriptFunction) => void;
 }
 
 export type SaveData = {

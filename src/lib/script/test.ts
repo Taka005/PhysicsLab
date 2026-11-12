@@ -13,6 +13,7 @@ const code = `
       a = 1
     }else{
       console("A");
+      find(target.position.X)
     }
 
     t = sin(max(startY,startX) * 0.05) * PI;
