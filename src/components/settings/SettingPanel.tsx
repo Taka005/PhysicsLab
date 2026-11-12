@@ -512,6 +512,29 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
                 </span>
               </a>
             </div>
+            <div className="grid grid-rows-1 gap-2">
+              <a
+                href="/docs"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-3 rounded-xl border border-gray-300 bg-white p-3 transition-all hover:border-gray-300 hover:bg-gray-50 hover:shadow-sm"
+              >
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-700 transition-colors group-hover:bg-gray-200">
+
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-xs font-semibold text-gray-800">
+                    ヘルプ
+                  </p>
+                  <p className="mt-1 truncate text-[10px] text-gray-400">
+                    ドキュメンテーション
+                  </p>
+                </div>
+                <span className="text-xs text-gray-400 transition-transform group-hover:translate-x-0.5 group-hover:text-gray-500">
+                  ↗
+                </span>
+              </a>
+            </div>
           </div>
         )}
       </div>

@@ -9,6 +9,7 @@ import { EditProvider } from "@/context/EditContext";
 import { FillProvider } from "@/context/FillContext";
 import { AnalysisProvider } from "@/context/AnalysisContext";
 import { CanvasExportProvider } from "@/context/CanvasExportContext";
+import WelcomePopup from "@/components/WelcomePopup";
 
 export default function Page() {
   return (
@@ -24,6 +25,7 @@ export default function Page() {
                       <CanvasExportProvider>
                         <PhysicsCanvas/>
                         <ControlPanel/>
+                        <WelcomePopup/>
                       </CanvasExportProvider>
                     </AnalysisProvider>
                   </ProtractorProvider>
