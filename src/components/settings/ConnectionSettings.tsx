@@ -30,6 +30,7 @@ export default function ConnectionSettings() {
         min="0.1"
         max="1"
         step="0.1"
+        help="値が大きいほど、接続距離を保とうとします"
         onChange={(value) => {
           updateConnectionConfig({ stiffness: value });
         }}

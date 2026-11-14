@@ -22,6 +22,7 @@ export default function EditSettings() {
             min="1"
             max="100"
             step="1"
+            help="値を大きくすると高速時に貫通しにくくなります"
             onChange={(value) => {
               updateEditConfig({ diameter: value });
             }}
@@ -32,6 +33,7 @@ export default function EditSettings() {
             min="0"
             max="100"
             step="1"
+            help="値が大きくなるほど、衝突時に動きにくくなり、摩擦の影響が増えます"
             onChange={(value) => {
               updateEditConfig({ mass: value });
             }}
@@ -42,6 +44,7 @@ export default function EditSettings() {
             min="0.1"
             max="1"
             step="0.1"
+            help="値が大きくなると物体が固くなり、衝突時に素早く干渉状態から戻ります"
             onChange={(value) => {
               updateEditConfig({ stiffness: value });
             }}
@@ -52,6 +55,7 @@ export default function EditSettings() {
             min="-500"
             max="500"
             step="1"
+            help="右方向が正の値になります"
             onChange={(value) => {
               updateEditConfig({ velocityX: value });
             }}
@@ -62,6 +66,7 @@ export default function EditSettings() {
             min="-500"
             max="500"
             step="1"
+            help="下方向が正の値になります"
             onChange={(value) => {
               updateEditConfig({ velocityY: value });
             }}
@@ -76,6 +81,7 @@ export default function EditSettings() {
             min="1"
             max="50"
             step="1"
+            help="大きくすると高速な物体を接触したときに貫通しにくくなります"
             onChange={(value) => {
               updateEditConfig({ width: value });
             }}
@@ -90,6 +96,7 @@ export default function EditSettings() {
             min="-500"
             max="500"
             step="1"
+            help="右方向が正の値になります"
             onChange={(value) => {
               updateEditConfig({ velocityX: value });
             }}
@@ -100,6 +107,7 @@ export default function EditSettings() {
             min="-500"
             max="500"
             step="1"
+            help="下方向が正の値になります"
             onChange={(value) => {
               updateEditConfig({ velocityY: value });
             }}

@@ -174,7 +174,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="トラッキングモード"
-                help="円の過去位置を残像として表示します。記録間隔や保持数は下のスライダーで調整できます"
+                help="物体の過去位置を残像として表示します。記録間隔や保持数は下のスライダーで調整できます"
                 checked={state.isTrackingMode}
                 onChange={(checked) => {
                   engine.isTrackingMode = checked;
@@ -184,7 +184,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="動的トラッキングモード"
-                help="円がない場合にトラッキング履歴を消去します。円がある場合は通常どおり移動履歴を記録します"
+                help="トラッキング数を物体数×トラッキング数に変更します"
                 checked={state.isDynamicTrackingMode}
                 onChange={(checked) => {
                   engine.isDynamicTrackingMode = checked;
@@ -194,7 +194,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="予測モード"
-                help="現在の速度と重力から円の位置を予測して表示します。衝突や地面、接続の影響は予測に含まれません"
+                help="現在の速度と重力から物体の位置を予測して表示します。衝突や地面、接続の影響は予測に含まれません"
                 checked={state.isPredictMode}
                 onChange={(checked) => {
                   engine.isPredictMode = checked;
@@ -224,7 +224,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="ベクトルを表示"
-                help="円の速度ベクトルをキャンバスに表示します"
+                help="物体の速度ベクトルをキャンバスに表示します"
                 checked={state.isDisplayVector}
                 onChange={(checked) => {
                   engine.viewport.isDisplayVector = checked;
@@ -234,7 +234,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="接続を表示"
-                help="円同士をつなぐ接続線をキャンバスに表示します"
+                help="エンティティー同士をつなぐ接続線をキャンバスに表示します"
                 checked={state.isDisplayConnection}
                 onChange={(checked) => {
                   engine.viewport.isDisplayConnection = checked;
@@ -262,7 +262,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <ToggleSwitch
                 label="物体を非表示"
-                help="円の描画だけを隠します。円や物理計算は削除されません"
+                help="物体の描画だけを隠します。物体や物理計算は削除されません"
                 checked={state.isHiddenBody}
                 onChange={(checked) => {
                   engine.viewport.isHiddenBody = checked;
@@ -352,7 +352,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <SliderField
                 label="最大予測数"
-                help="予測モードで各円について表示する予測点数です。増やすと、より先の位置まで表示します"
+                help="予測モードで各物体について表示する予測点数です。増やすと、より先の位置まで表示します"
                 value={state.predictLimit}
                 min="1"
                 max="50"
@@ -378,7 +378,7 @@ export default function SettingPanel({ onOpenScriptManager, onOpenWorldManager }
             <div className="flex-1 gap-2">
               <SliderField
                 label="ワールドサイズ"
-                help="ワールド中心からの範囲を設定します。円の位置が境界を越えるとワールドから削除されます"
+                help="ワールド中心からの範囲を設定します。物体の位置が境界を越えるとワールドから削除されます"
                 value={state.worldSize}
                 min="1000"
                 max="10000"

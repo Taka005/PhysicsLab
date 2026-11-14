@@ -34,6 +34,7 @@ export default function FillSettings() {
             min="1"
             max="100"
             step="1"
+            help="値を大きくすると高速時に貫通しにくくなります"
             onChange={(value) => {
               updateFillConfig({ diameter: value });
             }}
@@ -44,6 +45,7 @@ export default function FillSettings() {
             min="0"
             max="100"
             step="1"
+            help="値が大きくなるほど、衝突時に動きにくくなり、摩擦の影響が増えます"
             onChange={(value) => {
               updateFillConfig({ mass: value });
             }}
@@ -54,6 +56,7 @@ export default function FillSettings() {
             min="0.1"
             max="1"
             step="0.1"
+            help="値が大きくなると物体が固くなり、衝突時に素早く干渉状態から戻ります"
             onChange={(value) => {
               updateFillConfig({ stiffness: value });
             }}
@@ -64,6 +67,7 @@ export default function FillSettings() {
             min="-300"
             max="300"
             step="1"
+            help="右方向が正の値になります"
             onChange={(value) => {
               updateFillConfig({ velocityX: value });
             }}
@@ -74,6 +78,7 @@ export default function FillSettings() {
             min="-300"
             max="300"
             step="1"
+            help="下方向が正の値になります"
             onChange={(value) => {
               updateFillConfig({ velocityY: value });
             }}
