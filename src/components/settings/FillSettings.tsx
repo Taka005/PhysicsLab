@@ -34,7 +34,7 @@ export default function FillSettings() {
             min="1"
             max="100"
             step="1"
-            help="値を大きくすると高速時に貫通しにくくなります"
+            help="値を小さくしすぎると高速時に貫通しやすくなります"
             onChange={(value) => {
               updateFillConfig({ diameter: value });
             }}

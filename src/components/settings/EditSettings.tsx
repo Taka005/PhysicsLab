@@ -22,7 +22,7 @@ export default function EditSettings() {
             min="1"
             max="100"
             step="1"
-            help="値を大きくすると高速時に貫通しにくくなります"
+            help="値を小さくしすぎると高速時に貫通しやすくなります"
             onChange={(value) => {
               updateEditConfig({ diameter: value });
             }}
@@ -81,7 +81,7 @@ export default function EditSettings() {
             min="1"
             max="50"
             step="1"
-            help="大きくすると高速な物体を接触したときに貫通しにくくなります"
+            help="値を小さくしすぎると高速物体が貫通しやすくなります"
             onChange={(value) => {
               updateEditConfig({ width: value });
             }}
