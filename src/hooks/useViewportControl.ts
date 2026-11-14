@@ -52,6 +52,14 @@ export function useViewportControl(engine: Engine | null) {
         if (pressedKeysRef.current.has("Digit7")){
           setMode("disconnect");
         }
+
+        if (pressedKeysRef.current.has("Digit8")){
+          setMode("group");
+        }
+
+        if (pressedKeysRef.current.has("Digit9")){
+          setMode("ungroup");
+        }
       }
     };
 

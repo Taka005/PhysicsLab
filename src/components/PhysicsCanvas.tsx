@@ -14,6 +14,8 @@ import { useConnectMode } from "@/hooks/modes/useConnectMode";
 import { useDisconnectMode } from "@/hooks/modes/useDisconnect";
 import { useEditMode } from "@/hooks/modes/useEditMode";
 import { useFillMode } from "@/hooks/modes/useFillMode";
+import { useGroupMode } from "@/hooks/modes/useGroupMode";
+import { useUngroupMode } from "@/hooks/modes/useUngroupMode";
 import { BaseBody, Vector } from "@/lib/engine";
 import { useEngineState } from "@/hooks/useEngineState";
 import { useProtractor } from "@/context/ProtractorContext";
@@ -47,6 +49,8 @@ export default function PhysicsCanvas() {
   const editMode = useEditMode(engine);
   const connectMode = useConnectMode(engine);
   const disconnectMode = useDisconnectMode(engine);
+  const groupMode = useGroupMode(engine);
+  const ungroupMode = useUngroupMode(engine);
   const { mode } = useToolMode();
   const { isProtractorVisible } = useProtractor();
   const { selectedBodyId, setSelectedBodyId } = useAnalysis();
@@ -63,19 +67,25 @@ export default function PhysicsCanvas() {
       case "edit": return editMode;
       case "connect": return connectMode;
       case "disconnect": return disconnectMode;
+      case "group": return groupMode;
+      case "ungroup": return ungroupMode;
       default: return spawnMode;
     }
   })();
 
-  const { selectionRect } = deleteMode;
+  const selectionRect = mode === "delete"
+    ? deleteMode.selectionRect
+    : mode === "group"
+      ? groupMode.selectionRect
+      : mode === "ungroup"
+        ? ungroupMode.selectionRect
+        : null;
 
   const { currentPoint, handlers } = useCanvasInteraction({
     canvasRef,
     onDown: (point) => activeMode.onDown(point),
     onMove: (point, isDragging) => activeMode.onMove(point, isDragging),
-    onUp: (point) => {
-      deleteMode.onUp(point);
-    },
+    onUp: (point) => activeMode.onUp(point),
     onWheel: (e) => handleWheel(e),
   });
 
@@ -238,10 +248,16 @@ export default function PhysicsCanvas() {
         onClick={() => setBodyContextMenu(null)}
         onContextMenu={handleCanvasContextMenu}
       />
-      {mode === "delete" && selectionRect && (
+      {(mode === "delete" || mode === "group" || mode === "ungroup") && selectionRect && (
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute z-10 border border-red-500 bg-red-500/15"
+          className={`pointer-events-none absolute z-10 ${
+            mode === "delete"
+              ? "border border-red-500 bg-red-500/15"
+              : mode === "group"
+                ? "border border-blue-500 bg-blue-500/15"
+                : "border border-amber-500 bg-amber-500/15"
+          }`}
           style={{
             left: selectionRect.left,
             top: selectionRect.top,

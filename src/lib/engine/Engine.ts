@@ -36,6 +36,8 @@ export class Engine extends EngineBase {
 
   private _isDebugMode: boolean = false;
 
+  private velocityDampingGroup: Entity[] = [];
+
   private _playBackSpeed: number;
 
   private _trackingInterval: number;
@@ -304,6 +306,7 @@ export class Engine extends EngineBase {
 
   public clear(isAll: boolean = false): void {
     this.content.removeAllBodies();
+    this.velocityDampingGroup = [];
 
     if(isAll){
       this.content.removeAllEffects();
@@ -403,6 +406,14 @@ export class Engine extends EngineBase {
       this.solveVelocity(entity);
     }
 
+    this.velocityDampingGroup = this.velocityDampingGroup.filter(entity =>
+      this.content.getEntity(entity.id) === entity
+    );
+
+    if (this.velocityDampingGroup.length > 1) {
+      this.solveVelocityDamping(this.velocityDampingGroup, 0.3);
+    }
+
     for(let i = 0;i < this.content.bodiesCount;i++){
       const body = this.content.bodies[i];
 
@@ -474,6 +485,9 @@ export class Engine extends EngineBase {
     this.content.removeBody(id);
     this.content.removeGround(id);
     this.content.removeEffect(id);
+    this.velocityDampingGroup = this.velocityDampingGroup.filter(entity =>
+      this.content.getEntity(entity.id) === entity
+    );
     this.scriptManager.removeMap(id);
     this.scriptManager.clearErrorsByObject(id);
 
@@ -615,22 +629,34 @@ export class Engine extends EngineBase {
 
   public getEntitiesInRect(start: Vector,end: Vector): Entity[]{
     const entities: Entity[] = [];
-    const rect = Vector.add(start,end).divide(2);
+    const center = Vector.add(start,end).divide(2);
+    const halfWidth = Math.abs(start.x - end.x) / 2;
+    const halfHeight = Math.abs(start.y - end.y) / 2;
 
     for (let i = 0; i < this.content.entitiesCount; i++) {
       const entity = this.content.entities[i];
 
-      const diff = Vector.subtract(entity.position,rect);
-
-      if(
-        Math.abs(diff.x) < Math.abs(start.x - end.x)/2 &&
-        Math.abs(diff.y) < Math.abs(start.y - end.y)/2
-      ) continue;
-
-      entities.push(entity);
+      if (isPointInRect(entity.position, center, halfWidth, halfHeight)) {
+        entities.push(entity);
+      }
     }
 
     return entities;
+  }
+
+  public setVelocityDampingGroup(entities: Entity[]): void {
+    this.velocityDampingGroup = [...new Set(entities)].filter(entity =>
+      this.content.getEntity(entity.id) === entity
+    );
+  }
+
+  public ungroupVelocityDampingIfContains(entities: Entity[]): boolean {
+    if (!entities.some(entity => this.velocityDampingGroup.includes(entity))) {
+      return false;
+    }
+
+    this.velocityDampingGroup = [];
+    return true;
   }
 
   public getGroundsAt(target: Vector): BaseGround[]{

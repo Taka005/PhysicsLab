@@ -37,7 +37,9 @@ export default function ControlPanel() {
     { label: "削除", value: "delete" },
     { label: "編集", value: "edit" },
     { label: "接続", value: "connect" },
-    { label: "切断", value: "disconnect" }
+    { label: "切断", value: "disconnect" },
+    { label: "グループ", value: "group" },
+    { label: "グループ解除", value: "ungroup" }
   ];
 
   return (
