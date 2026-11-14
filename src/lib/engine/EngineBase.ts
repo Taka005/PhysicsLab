@@ -147,4 +147,61 @@ export class EngineBase{
     entity.position.x += entity.velocity.x*this.deltaTime;
     entity.position.y += entity.velocity.y*this.deltaTime;
   }
+
+  protected solveVelocityDamping(entities: Entity[],k: number): void{
+    let xcm = new Vector(0,0);
+    let vcm = new Vector(0,0);
+    let totalMass = 0;
+
+    for (let i = 0; i < entities.length; i++) {
+      const entity = entities[i];
+
+      xcm.x += entity.position.x*entity.mass;
+      xcm.y += entity.position.y*entity.mass;
+      vcm.x += entity.velocity.x*entity.mass;
+      vcm.y += entity.velocity.y*entity.mass;
+      totalMass += entity.mass;
+    }
+
+    if(totalMass != 0){
+      xcm.x /= totalMass;
+      xcm.y /= totalMass;
+      vcm.x /= totalMass;
+      vcm.y /= totalMass;
+    }
+
+    let angularMomentum = 0;
+    let inertiaTensor = 0;
+    const rs: Vector[] = new Array(entities.length);
+
+    for(let i = 0; i < entities.length; i++){
+      const entity = entities[i];
+
+      const r = Vector.subtract(entity.position,xcm);
+      rs[i] = r;
+
+      angularMomentum += r.x*(entity.velocity.y*entity.mass) - r.y*(entity.velocity.x*entity.mass);
+
+      const rSquared = r.x*r.x + r.y*r.y;
+      inertiaTensor += entity.mass*rSquared;
+    }
+
+    const omega = inertiaTensor > 1e-8 ? angularMomentum / inertiaTensor : 0;
+
+    for(let i = 0; i < entities.length; i++){
+      const entity = entities[i];
+
+      const rotationVelocity = new Vector(-omega*rs[i].y, omega*rs[i].x);
+
+      const rigidVelocity = Vector.add(vcm,rotationVelocity);
+
+      const deltaV = Vector.subtract(rigidVelocity,entity.velocity);
+
+      deltaV.x *= k;
+      deltaV.y *= k;
+
+      entity.velocity.x += deltaV.x;
+      entity.velocity.y += deltaV.y;
+    }
+  }
 }
