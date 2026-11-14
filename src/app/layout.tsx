@@ -40,8 +40,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
         <Toaster richColors position="bottom-left" />
       </body>
-      {process.env.GOOGLE_ANALYTICS_ID && (
-        <GoogleAnalytics gaId={process.env.GOOGLE_ANALYTICS_ID} />
+      {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && (
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID} />
       )}
     </html>
   );
