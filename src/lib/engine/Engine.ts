@@ -36,7 +36,7 @@ export class Engine extends EngineBase {
 
   private _isDebugMode: boolean = false;
 
-  private velocityDampingGroup: Entity[] = [];
+  private dampingGroup: string[] = [];
 
   private _playBackSpeed: number;
 
@@ -306,7 +306,7 @@ export class Engine extends EngineBase {
 
   public clear(isAll: boolean = false): void {
     this.content.removeAllBodies();
-    this.velocityDampingGroup = [];
+    this.dampingGroup = [];
 
     if(isAll){
       this.content.removeAllEffects();
@@ -406,12 +406,17 @@ export class Engine extends EngineBase {
       this.solveVelocity(entity);
     }
 
-    this.velocityDampingGroup = this.velocityDampingGroup.filter(entity =>
-      this.content.getEntity(entity.id) === entity
-    );
+    const velocityDampingEntities: Entity[] = [];
+    this.dampingGroup = this.dampingGroup.filter(entityId => {
+      const entity = this.content.getEntity(entityId);
+      if (!entity) return false;
 
-    if (this.velocityDampingGroup.length > 1) {
-      this.solveVelocityDamping(this.velocityDampingGroup, 0.3);
+      velocityDampingEntities.push(entity);
+      return true;
+    });
+
+    if (velocityDampingEntities.length > 1) {
+      this.solveVelocityDamping(velocityDampingEntities, 0.3);
     }
 
     for(let i = 0;i < this.content.bodiesCount;i++){
@@ -485,8 +490,8 @@ export class Engine extends EngineBase {
     this.content.removeBody(id);
     this.content.removeGround(id);
     this.content.removeEffect(id);
-    this.velocityDampingGroup = this.velocityDampingGroup.filter(entity =>
-      this.content.getEntity(entity.id) === entity
+    this.dampingGroup = this.dampingGroup.filter(entityId =>
+      this.content.getEntity(entityId) !== undefined
     );
     this.scriptManager.removeMap(id);
     this.scriptManager.clearErrorsByObject(id);
@@ -644,18 +649,18 @@ export class Engine extends EngineBase {
     return entities;
   }
 
-  public setVelocityDampingGroup(entities: Entity[]): void {
-    this.velocityDampingGroup = [...new Set(entities)].filter(entity =>
-      this.content.getEntity(entity.id) === entity
-    );
+  public setDampingGroup(entities: Entity[]): void {
+    this.dampingGroup = [...new Set(entities
+      .filter(entity => this.content.getEntity(entity.id) === entity)
+      .map(entity => entity.id))];
   }
 
   public ungroupVelocityDampingIfContains(entities: Entity[]): boolean {
-    if (!entities.some(entity => this.velocityDampingGroup.includes(entity))) {
+    if (!entities.some(entity => this.dampingGroup.includes(entity.id))) {
       return false;
     }
 
-    this.velocityDampingGroup = [];
+    this.dampingGroup = [];
     return true;
   }
 
