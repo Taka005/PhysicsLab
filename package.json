@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@next/third-parties": "^16.4.6",
     "chevrotain": "^13.2.0",
     "gifenc": "1.0.3",
     "next": "^16.4.2",
