@@ -15,6 +15,7 @@ import { EngineError } from "./utils/EngineError";
 import { ScriptManager } from "./utils/ScriptManager";
 import { Vector } from "./utils/Vector";
 import { Viewport } from "./utils/Viewport";
+import { isPointInRect } from "./utils/isPointInRect";
 
 export class Engine extends EngineBase {
   private static readonly SAVE_DATA_VERSION: number = 1;
@@ -543,6 +544,95 @@ export class Engine extends EngineBase {
     return bodies;
   }
 
+  public getBodiesInRect(start: Vector,end: Vector): BaseBody[]{
+    const bodies: BaseBody[] = [];
+    const center = Vector.add(start,end).divide(2);
+    const halfWidth = Math.abs(start.x - end.x) / 2;
+    const halfHeight = Math.abs(start.y - end.y) / 2;
+
+    for (let i = 0; i < this.content.bodiesCount; i++) {
+      const body = this.content.bodies[i];
+
+      if (!body.entities.some(entity =>
+        isPointInRect(entity.position, center, halfWidth, halfHeight)
+      )) continue;
+
+      bodies.push(body);
+    }
+
+    return bodies;
+  }
+
+  public getGroundsInRect(start: Vector,end: Vector): BaseGround[]{
+    const grounds: BaseGround[] = [];
+    const center = Vector.add(start,end).divide(2);
+    const halfWidth = Math.abs(start.x - end.x) / 2;
+    const halfHeight = Math.abs(start.y - end.y) / 2;
+
+    for (let i = 0; i < this.content.groundsCount; i++) {
+      const ground = this.content.grounds[i];
+      let points: Vector[];
+
+      if (ground instanceof Line) {
+        points = [ground.start, ground.end];
+      } else if (ground instanceof Curve) {
+        points = [ground.start, ground.middle, ground.end];
+      } else {
+        continue;
+      }
+
+      if (!points.some(point =>
+        isPointInRect(point, center, halfWidth, halfHeight)
+      )) continue;
+
+      grounds.push(ground);
+    }
+
+    return grounds;
+  }
+
+  public getEffectsInRect(start: Vector,end: Vector): BaseEffect[]{
+    const effects: BaseEffect[] = [];
+    const center = Vector.add(start,end).divide(2);
+    const halfWidth = Math.abs(start.x - end.x) / 2;
+    const halfHeight = Math.abs(start.y - end.y) / 2;
+
+    for (let i = 0; i < this.content.effectsCount; i++) {
+      const effect = this.content.effects[i];
+
+      if (!(effect instanceof Booster)) continue;
+
+      if (
+        !isPointInRect(effect.start, center, halfWidth, halfHeight) &&
+        !isPointInRect(effect.end, center, halfWidth, halfHeight)
+      ) continue;
+
+      effects.push(effect);
+    }
+
+    return effects;
+  }
+
+  public getEntitiesInRect(start: Vector,end: Vector): Entity[]{
+    const entities: Entity[] = [];
+    const rect = Vector.add(start,end).divide(2);
+
+    for (let i = 0; i < this.content.entitiesCount; i++) {
+      const entity = this.content.entities[i];
+
+      const diff = Vector.subtract(entity.position,rect);
+
+      if(
+        Math.abs(diff.x) < Math.abs(start.x - end.x)/2 &&
+        Math.abs(diff.y) < Math.abs(start.y - end.y)/2
+      ) continue;
+
+      entities.push(entity);
+    }
+
+    return entities;
+  }
+
   public getGroundsAt(target: Vector): BaseGround[]{
     const grounds: BaseGround[] = [];
 
@@ -568,6 +658,7 @@ export class Engine extends EngineBase {
 
     for (let i = 0; i < this.content.effectsCount; i++) {
       const effect = this.content.effects[i];
+
       if(effect instanceof Booster){
         const diff = Vector.subtract(target,Vector.add(effect.start,effect.end).divide(2));
 

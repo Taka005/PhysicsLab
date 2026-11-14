@@ -67,11 +67,15 @@ export default function PhysicsCanvas() {
     }
   })();
 
+  const { selectionRect } = deleteMode;
+
   const { currentPoint, handlers } = useCanvasInteraction({
     canvasRef,
     onDown: (point) => activeMode.onDown(point),
     onMove: (point, isDragging) => activeMode.onMove(point, isDragging),
-    onUp: () => activeMode.onUp(),
+    onUp: (point) => {
+      deleteMode.onUp(point);
+    },
     onWheel: (e) => handleWheel(e),
   });
 
@@ -234,6 +238,18 @@ export default function PhysicsCanvas() {
         onClick={() => setBodyContextMenu(null)}
         onContextMenu={handleCanvasContextMenu}
       />
+      {mode === "delete" && selectionRect && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute z-10 border border-red-500 bg-red-500/15"
+          style={{
+            left: selectionRect.left,
+            top: selectionRect.top,
+            width: selectionRect.width,
+            height: selectionRect.height
+          }}
+        />
+      )}
       <ProtractorOverlay visible={isProtractorVisible} />
       {bodyContextMenu && (
         <div

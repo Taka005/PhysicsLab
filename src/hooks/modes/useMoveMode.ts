@@ -64,7 +64,7 @@ export function useMoveMode(engine: Engine | null) {
     }
   }, [engine, selectedEntity, selectedGroundEdge, selectedEffectEdge]);
 
-  const onUp = useCallback(() => {
+  const onUp = useCallback((point: Point) => {
     setSelectedEntity(null);
     setSelectedGroundEdge(null);
     setSelectedEffectEdge(null);

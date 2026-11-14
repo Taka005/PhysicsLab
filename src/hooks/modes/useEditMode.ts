@@ -76,6 +76,6 @@ export function useEditMode(engine: Engine | null) {
   return {
     onDown,
     onMove: () => {},
-    onUp: () => {}
+    onUp: (point: Point) => {}
   };
 }

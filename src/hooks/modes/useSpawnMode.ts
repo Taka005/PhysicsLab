@@ -106,6 +106,6 @@ export function useSpawnMode(engine: Engine | null) {
   return {
     onDown,
     onMove: () => {},
-    onUp: () => {},
+    onUp: (point: Point) => {},
   };
 }
