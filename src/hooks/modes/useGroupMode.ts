@@ -50,7 +50,7 @@ export function useGroupMode(engine: Engine | null) {
       return;
     }
 
-    engine.setDampingGroup(entities);
+    engine.setGroup(entities);
     toast.success(`${entities.length}個のエンティティーをグループ化しました`);
   }, [engine]);
 

@@ -36,7 +36,7 @@ export class Engine extends EngineBase {
 
   private _isDebugMode: boolean = false;
 
-  private dampingGroup: string[] = [];
+  private group: string[] = [];
 
   private _playBackSpeed: number;
 
@@ -306,7 +306,7 @@ export class Engine extends EngineBase {
 
   public clear(isAll: boolean = false): void {
     this.content.removeAllBodies();
-    this.dampingGroup = [];
+    this.group = [];
 
     if(isAll){
       this.content.removeAllEffects();
@@ -407,7 +407,7 @@ export class Engine extends EngineBase {
     }
 
     const velocityDampingEntities: Entity[] = [];
-    this.dampingGroup = this.dampingGroup.filter(entityId => {
+    this.group = this.group.filter(entityId => {
       const entity = this.content.getEntity(entityId);
       if (!entity) return false;
 
@@ -490,7 +490,7 @@ export class Engine extends EngineBase {
     this.content.removeBody(id);
     this.content.removeGround(id);
     this.content.removeEffect(id);
-    this.dampingGroup = this.dampingGroup.filter(entityId =>
+    this.group = this.group.filter(entityId =>
       this.content.getEntity(entityId) !== undefined
     );
     this.scriptManager.removeMap(id);
@@ -649,18 +649,18 @@ export class Engine extends EngineBase {
     return entities;
   }
 
-  public setDampingGroup(entities: Entity[]): void {
-    this.dampingGroup = [...new Set(entities
+  public setGroup(entities: Entity[]): void {
+    this.group = [...new Set(entities
       .filter(entity => this.content.getEntity(entity.id) === entity)
       .map(entity => entity.id))];
   }
 
   public ungroupVelocityDampingIfContains(entities: Entity[]): boolean {
-    if (!entities.some(entity => this.dampingGroup.includes(entity.id))) {
+    if (!entities.some(entity => this.group.includes(entity.id))) {
       return false;
     }
 
-    this.dampingGroup = [];
+    this.group = [];
     return true;
   }
 
