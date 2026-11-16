@@ -27,7 +27,5 @@ export class PerformanceMonitor {
   public end(start: number, entityCount: number): void {
     this.stats.updateTime = performance.now() - start;
     this.stats.entityCount = entityCount;
-
-    console.log(this.stats);
   }
 }
