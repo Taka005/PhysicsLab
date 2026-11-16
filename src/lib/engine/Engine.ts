@@ -8,10 +8,12 @@ import { Circle } from "./objects/Circle";
 import { Curve } from "./objects/Curve";
 import { Entity } from "./objects/Entity";
 import { Line } from "./objects/Line";
+import { SpatialSystem } from "./systems/SpatialSystem";
 import { saveDataSchema } from "./typeSchema";
 import { BaseCreateOption, DEFAULT_ENGINE_VALUE, DEFAULT_VIEWPORT_VALUE, GroundEdgeData, EngineOption, EngineSnapShot, SaveData, ViewportOption, EffectEdgeData } from "./types";
 import { ContentManager } from "./utils/ContentManager";
 import { EngineError } from "./utils/EngineError";
+import { PerformanceMonitor } from "./utils/PerformanceMonitor";
 import { ScriptManager } from "./utils/ScriptManager";
 import { Vector } from "./utils/Vector";
 import { Viewport } from "./utils/Viewport";
@@ -59,6 +61,10 @@ export class Engine extends EngineBase {
   private readonly content: ContentManager = new ContentManager();
 
   public readonly scriptManager: ScriptManager = new ScriptManager(this);
+
+  private readonly spatial = new SpatialSystem();
+
+  private readonly monitor = new PerformanceMonitor();
 
   private listeners = new Set<() => void>();
 
@@ -208,6 +214,15 @@ export class Engine extends EngineBase {
     this.notify();
   }
 
+  private rebuildStaticSpatialIndex(): void {
+    this.spatial.rebuildGrounds(this.content.grounds);
+    this.spatial.rebuildEffects(this.content.effects);
+  }
+
+  public invalidateStaticSpatialIndex(): void {
+    this.rebuildStaticSpatialIndex();
+  }
+
   private createSnapshot(): EngineSnapShot{
     return {
       isStarted: this.isStarted,
@@ -330,6 +345,8 @@ export class Engine extends EngineBase {
   }
 
   public step(): void{
+    const startedAt = this.monitor.begin();
+
     const trackingLimit = this.isDynamicTrackingMode ? this.trackingLimit*this.content.bodiesCount : this.trackingLimit;
 
     this.trackingCount += 1000/this.pps;
@@ -363,38 +380,50 @@ export class Engine extends EngineBase {
     for(let i = 0;i < this.content.entitiesCount;i++){
       const entity = this.content.entities[i];
 
-      for (let i = 0; i < this.content.effectsCount; i++) {
-        const effect = this.content.effects[i];
-
-        effect.setEffect(entity,this.deltaTime);
+      for(let j = 0; j < this.content.effects.length; j++){
+        this.monitor.stats.effectChecks++;
+        this.content.effects[j].setEffect(entity, this.deltaTime);
       }
 
       this.updatePosition(entity);
     }
 
-    for(let i = 0;i < this.content.entitiesCount;i++){
+    this.spatial.rebuildEntities(this.content.entities);
+
+    for (let i = 0; i < this.content.entitiesCount; i++) {
       const source = this.content.entities[i];
 
-      for(let j = 0;j < this.content.groundsCount;j++){
-        const ground = this.content.grounds[j];
+      const grounds = this.spatial.queryGrounds(source);
 
-        this.solveGroundPosition(source,ground);
+      for (let j = 0; j < grounds.length; j++) {
+        this.monitor.stats.groundChecks++;
+        this.solveGroundPosition(source, grounds[j]);
       }
 
-      for(let j = i + 1;j < this.content.entitiesCount;j++){
-        const target = this.content.entities[j];
+      const targets = this.spatial.queryEntities(source);
 
-        this.solvePosition(source,target);
+      for (let j = 0; j < targets.length; j++) {
+        const target = targets[j];
+
+        if (source === target) continue;
+
+        if (source.id > target.id) continue;
+
+        this.monitor.stats.collisionChecks++;
+        this.solvePosition(source, target);
       }
 
-      for(let j = 0;j < source.connection.targets.length;j++){
+      for (let j = 0; j < source.connection.targets.length; j++) {
         const targetData = source.connection.targets[j];
-        const target = this.content.getEntity(targetData.entityId);
 
-        if(target == null){
+        const target = this.content.getEntity(
+          targetData.entityId
+        );
+
+        if (target == null) {
           source.connection.remove(targetData.entityId);
-        }else{
-          this.solveConnection(source,target,targetData);
+        } else {
+          this.solveConnection(source, target, targetData);
         }
       }
     }
@@ -441,6 +470,11 @@ export class Engine extends EngineBase {
         }
       }
     }
+
+    this.monitor.end(
+      startedAt,
+      this.content.entitiesCount
+    );
   }
 
   public spawn(option: BaseCreateOption): BaseObject {
@@ -453,6 +487,7 @@ export class Engine extends EngineBase {
       const circle = Circle.create(option);
 
       this.content.addBody(circle);
+      this.rebuildStaticSpatialIndex();
 
       this.notify();
 
@@ -461,6 +496,7 @@ export class Engine extends EngineBase {
       const line = Line.create(option);
 
       this.content.addGround(line);
+      this.rebuildStaticSpatialIndex();
 
       this.notify();
 
@@ -469,6 +505,7 @@ export class Engine extends EngineBase {
       const curve = Curve.create(option);
 
       this.content.addGround(curve);
+      this.rebuildStaticSpatialIndex();
 
       this.notify();
 
@@ -477,6 +514,7 @@ export class Engine extends EngineBase {
       const booster = Booster.create(option);
 
       this.content.addEffect(booster);
+      this.rebuildStaticSpatialIndex();
 
       this.notify();
 
@@ -495,6 +533,7 @@ export class Engine extends EngineBase {
     );
     this.scriptManager.removeMap(id);
     this.scriptManager.clearErrorsByObject(id);
+    this.rebuildStaticSpatialIndex();
 
     this.notify();
   }
@@ -842,6 +881,8 @@ export class Engine extends EngineBase {
     this.content.setGrounds(validData.objects.grounds);
 
     this.content.setEffects(validData.objects.effects);
+
+    this.rebuildStaticSpatialIndex();
 
     this.notify();
   }

@@ -1,4 +1,4 @@
-import { BaseEffect, BaseGround, Booster, Circle, Engine, Vector } from "@/lib/engine";
+import { BaseGround, Booster, Circle, Engine, Vector } from "@/lib/engine";
 import { Point } from "../useCanvasInteraction";
 import { useCallback, useEffect } from "react";
 import { useEditState } from "@/context/EditContext";
@@ -27,6 +27,8 @@ export function useEditMode(engine: Engine | null) {
       }else if(object instanceof Booster){
         object.velocity = new Vector(editConfig.velocityX ?? 0,editConfig.velocityY ?? 0);
       }
+
+      engine.invalidateStaticSpatialIndex();
     }
   }, [engine,editConfig, selectedObjectId]);
 
