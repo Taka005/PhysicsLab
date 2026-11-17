@@ -377,6 +377,9 @@ export class Engine extends EngineBase {
       }
     }
 
+    this.spatial.rebuildGrounds(this.content.grounds);
+    this.spatial.rebuildEffects(this.content.effects);
+
     for(let i = 0;i < this.content.entitiesCount;i++){
       const entity = this.content.entities[i];
 
