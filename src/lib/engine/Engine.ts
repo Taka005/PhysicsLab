@@ -214,15 +214,6 @@ export class Engine extends EngineBase {
     this.notify();
   }
 
-  private rebuildStaticSpatialIndex(): void {
-    this.spatial.rebuildGrounds(this.content.grounds);
-    this.spatial.rebuildEffects(this.content.effects);
-  }
-
-  public invalidateStaticSpatialIndex(): void {
-    this.rebuildStaticSpatialIndex();
-  }
-
   private createSnapshot(): EngineSnapShot{
     return {
       isStarted: this.isStarted,
@@ -490,7 +481,6 @@ export class Engine extends EngineBase {
       const circle = Circle.create(option);
 
       this.content.addBody(circle);
-      this.rebuildStaticSpatialIndex();
 
       this.notify();
 
@@ -499,7 +489,6 @@ export class Engine extends EngineBase {
       const line = Line.create(option);
 
       this.content.addGround(line);
-      this.rebuildStaticSpatialIndex();
 
       this.notify();
 
@@ -508,7 +497,6 @@ export class Engine extends EngineBase {
       const curve = Curve.create(option);
 
       this.content.addGround(curve);
-      this.rebuildStaticSpatialIndex();
 
       this.notify();
 
@@ -517,7 +505,6 @@ export class Engine extends EngineBase {
       const booster = Booster.create(option);
 
       this.content.addEffect(booster);
-      this.rebuildStaticSpatialIndex();
 
       this.notify();
 
@@ -536,7 +523,6 @@ export class Engine extends EngineBase {
     );
     this.scriptManager.removeMap(id);
     this.scriptManager.clearErrorsByObject(id);
-    this.rebuildStaticSpatialIndex();
 
     this.notify();
   }
@@ -884,8 +870,6 @@ export class Engine extends EngineBase {
     this.content.setGrounds(validData.objects.grounds);
 
     this.content.setEffects(validData.objects.effects);
-
-    this.rebuildStaticSpatialIndex();
 
     this.notify();
   }
